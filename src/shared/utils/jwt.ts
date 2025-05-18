@@ -11,7 +11,7 @@ class JWT implements JWTEntity {
   sub: number = 0;
   exp: number = 0;
   iat: number = Date.now();
-  aud: string = "Boilerplate";
+  aud: string = "Microservice";
 
   constructor(props: JWTEntity) {
     Object.assign(this, props);

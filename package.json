@@ -1,7 +1,7 @@
 {
-  "name": "boilerplate-logging-service",
+  "name": "microservice-logging-service",
   "version": "1.0.0",
-  "description": "Boilerplate logging service",
+  "description": "Microservice logging service",
   "main": "index.ts",
   "scripts": {
     "build": "rm -rf dist && tsc",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/christianmurillo10/boilerplate-logging-service.git.git"
+    "url": "git+https://github.com/christianmurillo10/microservice-logging-service.git.git"
   },
   "author": "Christian Murillo",
   "license": "ISC",
@@ -23,9 +23,9 @@
     "seed": "ts-node prisma/seeders"
   },
   "bugs": {
-    "url": "https://github.com/christianmurillo10/boilerplate-logging-service.git/issues"
+    "url": "https://github.com/christianmurillo10/microservice-logging-service.git/issues"
   },
-  "homepage": "https://github.com/christianmurillo10/boilerplate-logging-service.git#readme",
+  "homepage": "https://github.com/christianmurillo10/microservice-logging-service.git#readme",
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "bcryptjs": "^3.0.2",
