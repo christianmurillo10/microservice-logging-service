@@ -22,3 +22,35 @@ export const usersSubsets = {
   updated_at: true,
   deleted_at: true
 };
+
+export const userActionsSubsets = {
+  id: true,
+  service_name: true,
+  action: true,
+  action_details: true,
+  ip_address: true,
+  user_agent: true,
+  session_id: true,
+  user_id: true,
+  created_at: true
+};
+
+export const auditTrailsSubsets = {
+  id: true,
+  service_name: true,
+  entity_type: true,
+  entity_id: true,
+  action: true,
+  old_details: true,
+  new_details: true,
+  created_user_id: true,
+  created_at: true
+};
+
+export const eventLogsSubsets = {
+  id: true,
+  service_name: true,
+  event_type: true,
+  payload: true,
+  created_at: true
+};
