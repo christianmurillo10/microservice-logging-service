@@ -1,6 +1,6 @@
 import { GenericObject } from "../shared/types/common.type";
 
-export type AuditTrailsAction = "CREATE" | "UPDATE" | "DELETE";
+export type AuditTrailsAction = "CREATE" | "UPDATE" | "DELETE" | "DELETE_MANY" | "CHANGE_PASSWORD";
 
 export default interface AuditTrailsEntity {
   id?: string;
