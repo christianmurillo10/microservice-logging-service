@@ -49,14 +49,6 @@ export type FindByEmailArgs = {
   exclude?: string[] | undefined
 };
 
-export type FindByUsernameOrEmailArgs = {
-  username: string,
-  email: string,
-  condition?: GenericObject | undefined,
-  include?: string[] | undefined,
-  exclude?: string[] | undefined
-};
-
 export type CreateArgs<P> = {
   params: P,
   include?: string[] | undefined,

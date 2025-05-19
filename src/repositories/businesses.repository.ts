@@ -3,15 +3,13 @@ import Businesses from "../models/businesses.model";
 import BusinessesRepositoryInterface from "../shared/types/repositories/businesses.interface";
 import {
   FindAllArgs,
-  FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   FindByNameArgs,
   FindByApiKeyArgs,
   CreateArgs,
   UpdateArgs,
   SoftDeleteArgs,
-  SoftDeleteManyArgs,
-  CountArgs
+  SoftDeleteManyArgs
 } from "../shared/types/repository.type";
 import { GenericObject } from "../shared/types/common.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
@@ -45,27 +43,6 @@ export default class BusinessesRepository implements BusinessesRepositoryInterfa
       },
       skip: args.query?.offset,
       take: args.query?.limit
-    });
-
-    return res.map(item => new Businesses(item));
-  };
-
-  findAllBetweenCreatedAt = async (
-    args: FindAllBetweenCreatedAtArgs
-  ): Promise<Businesses[]> => {
-    const exclude = setSelectExclude(args.exclude!);
-    const betweenCreatedAt = args.date_from && args.date_to
-      ? { created_at: { gte: new Date(args.date_from), lte: new Date(args.date_to) } }
-      : undefined;
-    const res = await this.client.findMany({
-      select: {
-        ...businessesSubsets,
-        ...exclude
-      },
-      where: {
-        ...args.condition,
-        ...betweenCreatedAt,
-      }
     });
 
     return res.map(item => new Businesses(item));
@@ -197,20 +174,6 @@ export default class BusinessesRepository implements BusinessesRepositoryInterfa
       },
       data: {
         deleted_at: new Date(),
-      }
-    });
-
-    return data;
-  };
-
-  count = async (
-    args?: CountArgs
-  ): Promise<number> => {
-    const data = this.client.count({
-      where: {
-        deleted_at: null,
-        ...args?.condition,
-        ...parseQueryFilters(args?.query?.filters)
       }
     });
 

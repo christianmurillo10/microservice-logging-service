@@ -1,9 +1,7 @@
 import Businesses from "../../../models/businesses.model";
 import {
-  CountArgs,
   CreateArgs,
   FindAllArgs,
-  FindAllBetweenCreatedAtArgs,
   FindByApiKeyArgs,
   FindByIdArgs,
   FindByNameArgs,
@@ -15,8 +13,6 @@ import { GenericObject } from "../common.type";
 
 export default interface BusinessesRepositoryInterface {
   findAll: (args: FindAllArgs) => Promise<Businesses[]>;
-
-  findAllBetweenCreatedAt: (args: FindAllBetweenCreatedAtArgs) => Promise<Businesses[]>;
 
   findById: (args: FindByIdArgs<number>) => Promise<Businesses | null>;
 
@@ -31,6 +27,4 @@ export default interface BusinessesRepositoryInterface {
   softDelete: (args: SoftDeleteArgs<number>) => Promise<Businesses>;
 
   softDeleteMany: (args: SoftDeleteManyArgs<number>) => Promise<GenericObject>;
-
-  count: (args?: CountArgs) => Promise<number>;
 };

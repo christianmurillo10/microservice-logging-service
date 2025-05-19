@@ -3,14 +3,11 @@ import Users from "../models/users.model";
 import UsersRepositoryInterface from "../shared/types/repositories/users.interface";
 import {
   FindAllArgs,
-  FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
-  FindByUsernameOrEmailArgs,
   CreateArgs,
   UpdateArgs,
   SoftDeleteArgs,
-  SoftDeleteManyArgs,
-  CountArgs
+  SoftDeleteManyArgs
 } from "../shared/types/repository.type";
 import { GenericObject } from "../shared/types/common.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
@@ -56,34 +53,6 @@ export default class UsersRepository implements UsersRepositoryInterface {
     }));
   };
 
-  findAllBetweenCreatedAt = async (
-    args: FindAllBetweenCreatedAtArgs
-  ): Promise<Users[]> => {
-    const exclude = setSelectExclude(args.exclude!);
-    const businessesSelect = args.include?.includes("businesses")
-      ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
-      : undefined;
-    const betweenCreatedAt = args.date_from && args.date_to
-      ? { created_at: { gte: new Date(args.date_from), lte: new Date(args.date_to) } }
-      : undefined;
-    const res = await this.client.findMany({
-      select: {
-        ...usersSubsets,
-        ...exclude,
-        ...businessesSelect
-      },
-      where: {
-        ...args.condition,
-        ...betweenCreatedAt,
-      }
-    });
-
-    return res.map(item => new Users({
-      ...item,
-      access_type: item.access_type as AccessType
-    }));
-  };
-
   findById = async (
     args: FindByIdArgs<string>
   ): Promise<Users | null> => {
@@ -99,45 +68,6 @@ export default class UsersRepository implements UsersRepositoryInterface {
       },
       where: {
         id: args.id,
-        deleted_at: null,
-        ...args.condition
-      }
-    });
-
-    if (!res) return null;
-
-    return new Users({
-      ...res,
-      access_type: res.access_type as AccessType
-    });
-  };
-
-  findByUsernameOrEmail = async (
-    args: FindByUsernameOrEmailArgs
-  ): Promise<Users | null> => {
-    const exclude = setSelectExclude(args.exclude!);
-    const businessesSelect = args.include?.includes("businesses")
-      ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
-      : undefined;
-    const res = await this.client.findFirst({
-      select: {
-        ...usersSubsets,
-        ...exclude,
-        ...businessesSelect
-      },
-      where: {
-        OR: [
-          {
-            username: {
-              equals: args.username,
-            },
-          },
-          {
-            email: {
-              equals: args.email,
-            },
-          },
-        ],
         deleted_at: null,
         ...args.condition
       }
@@ -248,20 +178,6 @@ export default class UsersRepository implements UsersRepositoryInterface {
       },
       data: {
         deleted_at: new Date(),
-      }
-    });
-
-    return data;
-  };
-
-  count = async (
-    args?: CountArgs
-  ): Promise<number> => {
-    const data = this.client.count({
-      where: {
-        deleted_at: null,
-        ...args?.condition,
-        ...parseQueryFilters(args?.query?.filters)
       }
     });
 
