@@ -88,11 +88,6 @@ export type SoftDeleteManyArgs<I> = {
   ids: I[]
 };
 
-export type ChangePasswordArgs<I> = {
-  id: I,
-  new_password: string
-};
-
 export type CountArgs = {
   condition?: GenericObject | undefined,
   query?: Query | undefined
