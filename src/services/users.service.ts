@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import UsersRepository from "../repositories/users.repository";
 import Users from "../models/users.model";
