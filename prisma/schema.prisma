@@ -13,7 +13,6 @@ model businesses {
   name               String    @db.VarChar(100)
   api_key            String    @db.VarChar(255)
   domain             String?   @db.VarChar(255)
-  logo_path          String?   @db.VarChar(255)
   preferred_timezone String?   @db.VarChar(100)
   currency           String?   @db.VarChar(100)
   created_at         DateTime  @db.DateTime(0)

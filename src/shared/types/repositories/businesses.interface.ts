@@ -2,6 +2,7 @@ import Businesses from "../../../models/businesses.model";
 import {
   CreateArgs,
   FindAllArgs,
+  FindAllBetweenCreatedAtArgs,
   FindByApiKeyArgs,
   FindByIdArgs,
   FindByNameArgs,
@@ -13,6 +14,8 @@ import { GenericObject } from "../common.type";
 
 export default interface BusinessesRepositoryInterface {
   findAll: (args: FindAllArgs) => Promise<Businesses[]>;
+
+  findAllBetweenCreatedAt: (args: FindAllBetweenCreatedAtArgs) => Promise<Businesses[]>;
 
   findById: (args: FindByIdArgs<number>) => Promise<Businesses | null>;
 

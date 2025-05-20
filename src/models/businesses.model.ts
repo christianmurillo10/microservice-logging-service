@@ -6,7 +6,6 @@ class Businesses implements BusinessesEntity {
   name: string = "";
   api_key: string = `key-${uuidv4()}`;
   domain?: string | null = null;
-  logo_path?: string | null = null;
   preferred_timezone?: string | null = null;
   currency?: string | null = null;
   created_at: Date = new Date();

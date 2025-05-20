@@ -4,7 +4,6 @@ CREATE TABLE `businesses` (
     `name` VARCHAR(100) NOT NULL,
     `api_key` VARCHAR(255) NOT NULL,
     `domain` VARCHAR(255) NULL,
-    `logo_path` VARCHAR(255) NULL,
     `preferred_timezone` VARCHAR(100) NULL,
     `currency` VARCHAR(100) NULL,
     `created_at` DATETIME(0) NOT NULL,

@@ -3,6 +3,7 @@ import Businesses from "../models/businesses.model";
 import BusinessesRepositoryInterface from "../shared/types/repositories/businesses.interface";
 import {
   FindAllArgs,
+  FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   FindByNameArgs,
   FindByApiKeyArgs,
@@ -43,6 +44,27 @@ export default class BusinessesRepository implements BusinessesRepositoryInterfa
       },
       skip: args.query?.offset,
       take: args.query?.limit
+    });
+
+    return res.map(item => new Businesses(item));
+  };
+
+  findAllBetweenCreatedAt = async (
+    args: FindAllBetweenCreatedAtArgs
+  ): Promise<Businesses[]> => {
+    const exclude = setSelectExclude(args.exclude!);
+    const betweenCreatedAt = args.date_from && args.date_to
+      ? { created_at: { gte: new Date(args.date_from), lte: new Date(args.date_to) } }
+      : undefined;
+    const res = await this.client.findMany({
+      select: {
+        ...businessesSubsets,
+        ...exclude
+      },
+      where: {
+        ...args.condition,
+        ...betweenCreatedAt,
+      }
     });
 
     return res.map(item => new Businesses(item));

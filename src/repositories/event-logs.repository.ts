@@ -3,6 +3,7 @@ import EventLogs from "../models/event-logs.model";
 import EventLogsRepositoryInterface from "../shared/types/repositories/event-logs.interface";
 import {
   FindAllArgs,
+  FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
 } from "../shared/types/repository.type";
@@ -37,6 +38,30 @@ export default class EventLogsRepository implements EventLogsRepositoryInterface
       },
       skip: args.query?.offset,
       take: args.query?.limit
+    });
+
+    return res.map(item => new EventLogs({
+      ...item,
+      payload: item.payload as GenericObject
+    }));
+  };
+
+  findAllBetweenCreatedAt = async (
+    args: FindAllBetweenCreatedAtArgs
+  ): Promise<EventLogs[]> => {
+    const exclude = setSelectExclude(args.exclude!);
+    const betweenCreatedAt = args.date_from && args.date_to
+      ? { created_at: { gte: new Date(args.date_from), lte: new Date(args.date_to) } }
+      : undefined;
+    const res = await this.client.findMany({
+      select: {
+        ...eventLogsSubsets,
+        ...exclude
+      },
+      where: {
+        ...args.condition,
+        ...betweenCreatedAt,
+      }
     });
 
     return res.map(item => new EventLogs({
