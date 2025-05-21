@@ -9,16 +9,19 @@ datasource db {
 }
 
 model businesses {
-  id                 Int       @id @default(autoincrement())
-  name               String    @db.VarChar(100)
-  api_key            String    @db.VarChar(255)
-  domain             String?   @db.VarChar(255)
-  preferred_timezone String?   @db.VarChar(100)
-  currency           String?   @db.VarChar(100)
-  created_at         DateTime  @db.DateTime(0)
-  updated_at         DateTime? @db.DateTime(0)
-  deleted_at         DateTime? @db.DateTime(0)
+  id                 Int            @id @default(autoincrement())
+  name               String         @db.VarChar(100)
+  api_key            String         @db.VarChar(255)
+  domain             String?        @db.VarChar(255)
+  preferred_timezone String?        @db.VarChar(100)
+  currency           String?        @db.VarChar(100)
+  created_at         DateTime       @db.DateTime(0)
+  updated_at         DateTime?      @db.DateTime(0)
+  deleted_at         DateTime?      @db.DateTime(0)
   users              users[]
+  audit_trails       audit_trails[]
+  user_actions       user_actions[]
+  event_logs         event_logs[]
 }
 
 model users {
@@ -34,42 +37,54 @@ model users {
   businesses                 businesses?    @relation(fields: [business_id], references: [id], map: "users_ibfk_1")
   audit_trails_created_users audit_trails[] @relation("audit_trails_created_user_idTousers")
   user_actions_users         user_actions[] @relation("user_actions_user_idTousers")
+
+  @@index([business_id], map: "business_id")
 }
 
 model audit_trails {
-  id              String   @id @default(uuid()) @db.Char(36)
-  service_name    String   @db.VarChar(100)
-  entity_type     String   @db.VarChar(100)
-  entity_id       String   @db.VarChar(255)
-  action          String   @db.VarChar(100)
-  old_details     Json     @default("{}") @db.Json
-  new_details     Json     @default("{}") @db.Json
-  created_user_id String   @db.Char(36)
-  created_at      DateTime @db.DateTime(0)
-  created_users   users    @relation("audit_trails_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, map: "audit_trails_ibfk_1")
+  id              String      @id @default(uuid()) @db.Char(36)
+  service_name    String      @db.VarChar(100)
+  entity_type     String      @db.VarChar(100)
+  entity_id       String      @db.VarChar(255)
+  action          String      @db.VarChar(100)
+  old_details     Json        @default("{}") @db.Json
+  new_details     Json        @default("{}") @db.Json
+  business_id     Int?
+  created_user_id String      @db.Char(36)
+  created_at      DateTime    @db.DateTime(0)
+  businesses      businesses? @relation(fields: [business_id], references: [id], map: "audit_trails_ibfk_1")
+  created_users   users       @relation("audit_trails_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, map: "audit_trails_ibfk_2")
 
+  @@index([business_id], map: "business_id")
   @@index([created_user_id], map: "created_user_id")
 }
 
 model user_actions {
-  id             String   @id @default(uuid()) @db.Char(36)
-  service_name   String   @db.VarChar(100)
-  action         String   @db.VarChar(100)
-  action_details Json     @default("{}") @db.Json
-  ip_address     String   @db.VarChar(100)
-  user_agent     String   @db.VarChar(100)
-  session_id     String   @db.VarChar(255)
-  user_id        String   @db.Char(36)
-  created_at     DateTime @db.DateTime(0)
-  users          users    @relation("user_actions_user_idTousers", fields: [user_id], references: [id], onDelete: NoAction, map: "user_actions_ibfk_1")
+  id             String      @id @default(uuid()) @db.Char(36)
+  service_name   String      @db.VarChar(100)
+  action         String      @db.VarChar(100)
+  action_details Json        @default("{}") @db.Json
+  ip_address     String      @db.VarChar(100)
+  user_agent     String      @db.VarChar(100)
+  session_id     String      @db.VarChar(255)
+  business_id    Int?
+  user_id        String      @db.Char(36)
+  created_at     DateTime    @db.DateTime(0)
+  businesses     businesses? @relation(fields: [business_id], references: [id], map: "user_actions_ibfk_1")
+  users          users       @relation("user_actions_user_idTousers", fields: [user_id], references: [id], onDelete: NoAction, map: "user_actions_ibfk_2")
 
+  @@index([business_id], map: "business_id")
   @@index([user_id], map: "user_id")
 }
 
 model event_logs {
-  id           String   @id @default(uuid()) @db.Char(36)
-  service_name String   @db.VarChar(100)
-  event_type   String   @db.VarChar(100)
-  payload      Json     @default("{}") @db.Json
-  created_at   DateTime @db.DateTime(0)
+  id           String      @id @default(uuid()) @db.Char(36)
+  service_name String      @db.VarChar(100)
+  event_type   String      @db.VarChar(100)
+  payload      Json        @default("{}") @db.Json
+  business_id  Int?
+  created_at   DateTime    @db.DateTime(0)
+  businesses   businesses? @relation(fields: [business_id], references: [id], map: "event_logs_ibfk_1")
+
+  @@index([business_id], map: "business_id")
 }
