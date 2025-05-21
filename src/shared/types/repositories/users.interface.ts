@@ -1,26 +1,26 @@
 import Users from "../../../models/users.model";
 import {
-  FindAllArgs,
-  FindByIdArgs,
-  CreateArgs,
-  UpdateArgs,
-  SoftDeleteArgs,
-  SoftDeleteManyArgs
+  TFindAllArgs,
+  TFindByIdArgs,
+  TCreateArgs,
+  TUpdateArgs,
+  TSoftDeleteArgs,
+  TSoftDeleteManyArgs
 } from "../repository.type";
-import { GenericObject } from "../common.type";
+import { TGenericObject } from "../common.type";
 
-export default interface UsersRepositoryInterface {
-  findAll: (args: FindAllArgs) => Promise<Users[]>;
+export default interface IUsersRepository {
+  findAll: (args: TFindAllArgs) => Promise<Users[]>;
 
-  findById: (args: FindByIdArgs<string>) => Promise<Users | null>;
+  findById: (args: TFindByIdArgs<string>) => Promise<Users | null>;
 
-  create: (args: CreateArgs<Users>) => Promise<Users>;
+  create: (args: TCreateArgs<Users>) => Promise<Users>;
 
-  update: (args: UpdateArgs<string, Users>) => Promise<Users>;
+  update: (args: TUpdateArgs<string, Users>) => Promise<Users>;
 
-  softDelete: (args: SoftDeleteArgs<string>) => Promise<Users>;
+  softDelete: (args: TSoftDeleteArgs<string>) => Promise<Users>;
 
-  softDeleteMany: (args: SoftDeleteManyArgs<string>) => Promise<GenericObject>;
+  softDeleteMany: (args: TSoftDeleteManyArgs<string>) => Promise<TGenericObject>;
 
-  softDeleteManyByBusinessIds: (args: SoftDeleteManyArgs<number>) => Promise<GenericObject>;
+  softDeleteManyByBusinessIds: (args: TSoftDeleteManyArgs<number>) => Promise<TGenericObject>;
 };

@@ -1,19 +1,19 @@
 import { v4 as uuidv4 } from "uuid";
-import AuditTrailsEntity, { AuditTrailsAction } from "../entities/audit-trails.entity";
-import { GenericObject } from "../shared/types/common.type";
+import IAuditTrailsEntity, { TAuditTrailsAction } from "../entities/audit-trails.entity";
+import { TGenericObject } from "../shared/types/common.type";
 
-class AuditTrails implements AuditTrailsEntity {
+class AuditTrails implements IAuditTrailsEntity {
   id?: string = uuidv4();
   service_name: string = "";
   entity_type: string = "";
   entity_id!: string;
-  action: AuditTrailsAction = "CREATE";
-  old_details: GenericObject = {};
-  new_details: GenericObject = {};
+  action: TAuditTrailsAction = "CREATE";
+  old_details: TGenericObject = {};
+  new_details: TGenericObject = {};
   created_user_id!: string;
   created_at: Date = new Date();
 
-  constructor(props: AuditTrailsEntity) {
+  constructor(props: IAuditTrailsEntity) {
     Object.assign(this, props);
   };
 };

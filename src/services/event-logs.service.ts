@@ -2,7 +2,7 @@ import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import EventLogsRepository from "../repositories/event-logs.repository";
 import EventLogs from "../models/event-logs.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
+import { TCountAllArgs, TGetAllArgs, TGetAllBetweenCreatedAtArgs, TGetByIdArgs } from "../shared/types/service.type";
 
 export default class EventLogsService {
   private repository: EventLogsRepository;
@@ -11,7 +11,7 @@ export default class EventLogsService {
     this.repository = new EventLogsRepository();
   };
 
-  getAll = async (args?: GetAllArgs): Promise<EventLogs[]> => {
+  getAll = async (args?: TGetAllArgs): Promise<EventLogs[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -22,7 +22,7 @@ export default class EventLogsService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<EventLogs[]> => {
+  getAllBetweenCreatedAt = async (args: TGetAllBetweenCreatedAtArgs): Promise<EventLogs[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       // include: ["businesses"],
@@ -32,7 +32,7 @@ export default class EventLogsService {
     return record;
   };
 
-  getById = async (args: GetByIdArgs<string>): Promise<EventLogs> => {
+  getById = async (args: TGetByIdArgs<string>): Promise<EventLogs> => {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
@@ -55,7 +55,7 @@ export default class EventLogsService {
     });
   };
 
-  count = async (args: CountAllArgs): Promise<number> => {
+  count = async (args: TCountAllArgs): Promise<number> => {
     return await this.repository.count(args);
   };
 };

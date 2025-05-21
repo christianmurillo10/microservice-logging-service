@@ -1,19 +1,19 @@
 import { PrismaClient } from "@prisma/client";
-import UserActions from "../models/user-actions.model";
-import UserActionsRepositoryInterface from "../shared/types/repositories/user-actions.interface";
+import IUserActions from "../models/user-actions.model";
+import IUserActionsRepository from "../shared/types/repositories/user-actions.interface";
 import {
-  FindAllArgs,
-  FindAllBetweenCreatedAtArgs,
-  FindByIdArgs,
-  CreateArgs,
-  CountArgs,
+  TFindAllArgs,
+  TFindAllBetweenCreatedAtArgs,
+  TFindByIdArgs,
+  TCreateArgs,
+  TCountArgs,
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { businessesSubsets, userActionsSubsets } from "../shared/helpers/select-subset.helper";
-import { GenericObject } from "../shared/types/common.type";
+import { TGenericObject } from "../shared/types/common.type";
 
 
-export default class UserActionsRepository implements UserActionsRepositoryInterface {
+export default class UserActionsRepository implements IUserActionsRepository {
   private client;
 
   constructor() {
@@ -22,8 +22,8 @@ export default class UserActionsRepository implements UserActionsRepositoryInter
   };
 
   findAll = async (
-    args: FindAllArgs
-  ): Promise<UserActions[]> => {
+    args: TFindAllArgs
+  ): Promise<IUserActions[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -45,15 +45,15 @@ export default class UserActionsRepository implements UserActionsRepositoryInter
       take: args.query?.limit
     });
 
-    return res.map(item => new UserActions({
+    return res.map(item => new IUserActions({
       ...item,
-      action_details: item.action_details as GenericObject
+      action_details: item.action_details as TGenericObject
     }));
   };
 
   findAllBetweenCreatedAt = async (
-    args: FindAllBetweenCreatedAtArgs
-  ): Promise<UserActions[]> => {
+    args: TFindAllBetweenCreatedAtArgs
+  ): Promise<IUserActions[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -73,15 +73,15 @@ export default class UserActionsRepository implements UserActionsRepositoryInter
       }
     });
 
-    return res.map(item => new UserActions({
+    return res.map(item => new IUserActions({
       ...item,
-      action_details: item.action_details as GenericObject
+      action_details: item.action_details as TGenericObject
     }));
   };
 
   findById = async (
-    args: FindByIdArgs<string>
-  ): Promise<UserActions | null> => {
+    args: TFindByIdArgs<string>
+  ): Promise<IUserActions | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -100,15 +100,15 @@ export default class UserActionsRepository implements UserActionsRepositoryInter
 
     if (!res) return null;
 
-    return new UserActions({
+    return new IUserActions({
       ...res,
-      action_details: res.action_details as GenericObject
+      action_details: res.action_details as TGenericObject
     });
   };
 
   create = async (
-    args: CreateArgs<UserActions>
-  ): Promise<UserActions> => {
+    args: TCreateArgs<IUserActions>
+  ): Promise<IUserActions> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -122,14 +122,14 @@ export default class UserActionsRepository implements UserActionsRepositoryInter
       data: args.params
     });
 
-    return new UserActions({
+    return new IUserActions({
       ...data,
-      action_details: data.action_details as GenericObject
+      action_details: data.action_details as TGenericObject
     });
   };
 
   count = async (
-    args?: CountArgs
+    args?: TCountArgs
   ): Promise<number> => {
     const data = this.client.count({
       where: {

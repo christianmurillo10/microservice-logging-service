@@ -1,19 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 import EventLogs from "../models/event-logs.model";
-import EventLogsRepositoryInterface from "../shared/types/repositories/event-logs.interface";
+import IEventLogsRepository from "../shared/types/repositories/event-logs.interface";
 import {
-  FindAllArgs,
-  FindAllBetweenCreatedAtArgs,
-  FindByIdArgs,
-  CreateArgs,
-  CountArgs,
+  TFindAllArgs,
+  TFindAllBetweenCreatedAtArgs,
+  TFindByIdArgs,
+  TCreateArgs,
+  TCountArgs,
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { businessesSubsets, eventLogsSubsets } from "../shared/helpers/select-subset.helper";
-import { GenericObject } from "../shared/types/common.type";
+import { TGenericObject } from "../shared/types/common.type";
 
 
-export default class EventLogsRepository implements EventLogsRepositoryInterface {
+export default class EventLogsRepository implements IEventLogsRepository {
   private client;
 
   constructor() {
@@ -22,7 +22,7 @@ export default class EventLogsRepository implements EventLogsRepositoryInterface
   };
 
   findAll = async (
-    args: FindAllArgs
+    args: TFindAllArgs
   ): Promise<EventLogs[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -47,12 +47,12 @@ export default class EventLogsRepository implements EventLogsRepositoryInterface
 
     return res.map(item => new EventLogs({
       ...item,
-      payload: item.payload as GenericObject
+      payload: item.payload as TGenericObject
     }));
   };
 
   findAllBetweenCreatedAt = async (
-    args: FindAllBetweenCreatedAtArgs
+    args: TFindAllBetweenCreatedAtArgs
   ): Promise<EventLogs[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -75,12 +75,12 @@ export default class EventLogsRepository implements EventLogsRepositoryInterface
 
     return res.map(item => new EventLogs({
       ...item,
-      payload: item.payload as GenericObject
+      payload: item.payload as TGenericObject
     }));
   };
 
   findById = async (
-    args: FindByIdArgs<string>
+    args: TFindByIdArgs<string>
   ): Promise<EventLogs | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -102,12 +102,12 @@ export default class EventLogsRepository implements EventLogsRepositoryInterface
 
     return new EventLogs({
       ...res,
-      payload: res.payload as GenericObject
+      payload: res.payload as TGenericObject
     });
   };
 
   create = async (
-    args: CreateArgs<EventLogs>
+    args: TCreateArgs<EventLogs>
   ): Promise<EventLogs> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -124,12 +124,12 @@ export default class EventLogsRepository implements EventLogsRepositoryInterface
 
     return new EventLogs({
       ...data,
-      payload: data.payload as GenericObject
+      payload: data.payload as TGenericObject
     });
   };
 
   count = async (
-    args?: CountArgs
+    args?: TCountArgs
   ): Promise<number> => {
     const data = this.client.count({
       where: {

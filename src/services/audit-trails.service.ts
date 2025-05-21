@@ -2,7 +2,7 @@ import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import AuditTrailsRepository from "../repositories/audit-trails.repository";
 import AuditTrails from "../models/audit-trails.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
+import { TCountAllArgs, TGetAllArgs, TGetAllBetweenCreatedAtArgs, TGetByIdArgs } from "../shared/types/service.type";
 
 export default class AuditTrailsService {
   private repository: AuditTrailsRepository;
@@ -11,7 +11,7 @@ export default class AuditTrailsService {
     this.repository = new AuditTrailsRepository();
   };
 
-  getAll = async (args?: GetAllArgs): Promise<AuditTrails[]> => {
+  getAll = async (args?: TGetAllArgs): Promise<AuditTrails[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -22,7 +22,7 @@ export default class AuditTrailsService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<AuditTrails[]> => {
+  getAllBetweenCreatedAt = async (args: TGetAllBetweenCreatedAtArgs): Promise<AuditTrails[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       // include: ["businesses"],
@@ -32,7 +32,7 @@ export default class AuditTrailsService {
     return record;
   };
 
-  getById = async (args: GetByIdArgs<string>): Promise<AuditTrails> => {
+  getById = async (args: TGetByIdArgs<string>): Promise<AuditTrails> => {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
@@ -55,7 +55,7 @@ export default class AuditTrailsService {
     });
   };
 
-  count = async (args: CountAllArgs): Promise<number> => {
+  count = async (args: TCountAllArgs): Promise<number> => {
     return await this.repository.count(args);
   };
 };

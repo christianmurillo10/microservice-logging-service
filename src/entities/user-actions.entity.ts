@@ -1,10 +1,10 @@
-import { GenericObject } from "../shared/types/common.type";
+import { TGenericObject } from "../shared/types/common.type";
 
-export default interface UserActions {
+export default interface IUserActions {
   id?: string;
   service_name: string;
   action: string;
-  action_details: GenericObject;
+  action_details: TGenericObject;
   ip_address: string;
   user_agent: string;
   session_id: string;

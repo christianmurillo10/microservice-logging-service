@@ -1,8 +1,8 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import UserActionsRepository from "../repositories/user-actions.repository";
-import UserActions from "../models/user-actions.model";
+import IUserActions from "../models/user-actions.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
+import { TCountAllArgs, TGetAllArgs, TGetAllBetweenCreatedAtArgs, TGetByIdArgs } from "../shared/types/service.type";
 
 export default class UserActionsService {
   private repository: UserActionsRepository;
@@ -11,7 +11,7 @@ export default class UserActionsService {
     this.repository = new UserActionsRepository();
   };
 
-  getAll = async (args?: GetAllArgs): Promise<UserActions[]> => {
+  getAll = async (args?: TGetAllArgs): Promise<IUserActions[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -22,7 +22,7 @@ export default class UserActionsService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<UserActions[]> => {
+  getAllBetweenCreatedAt = async (args: TGetAllBetweenCreatedAtArgs): Promise<IUserActions[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       // include: ["businesses"],
@@ -32,7 +32,7 @@ export default class UserActionsService {
     return record;
   };
 
-  getById = async (args: GetByIdArgs<string>): Promise<UserActions> => {
+  getById = async (args: TGetByIdArgs<string>): Promise<IUserActions> => {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
@@ -47,15 +47,15 @@ export default class UserActionsService {
     return record;
   };
 
-  save = async (data: UserActions): Promise<UserActions> => {
+  save = async (data: IUserActions): Promise<IUserActions> => {
     return await this.repository.create({
-      params: new UserActions(data),
+      params: new IUserActions(data),
       // include: ["businesses"],
       exclude: ["deleted_at"]
     });
   };
 
-  count = async (args: CountAllArgs): Promise<number> => {
+  count = async (args: TCountAllArgs): Promise<number> => {
     return await this.repository.count(args);
   };
 };

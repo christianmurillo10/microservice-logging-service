@@ -1,20 +1,20 @@
-import UserActions from "../../../models/user-actions.model";
+import IUserActions from "../../../models/user-actions.model";
 import {
-  FindAllArgs,
-  FindAllBetweenCreatedAtArgs,
-  FindByIdArgs,
-  CreateArgs,
-  CountArgs,
+  TFindAllArgs,
+  TFindAllBetweenCreatedAtArgs,
+  TFindByIdArgs,
+  TCreateArgs,
+  TCountArgs,
 } from "../repository.type";
 
-export default interface UserActionsRepositoryInterface {
-  findAll: (args: FindAllArgs) => Promise<UserActions[]>;
+export default interface IUserActionsRepository {
+  findAll: (args: TFindAllArgs) => Promise<IUserActions[]>;
 
-  findAllBetweenCreatedAt: (args: FindAllBetweenCreatedAtArgs) => Promise<UserActions[]>;
+  findAllBetweenCreatedAt: (args: TFindAllBetweenCreatedAtArgs) => Promise<IUserActions[]>;
 
-  findById: (args: FindByIdArgs<string>) => Promise<UserActions | null>;
+  findById: (args: TFindByIdArgs<string>) => Promise<IUserActions | null>;
 
-  create: (args: CreateArgs<UserActions>) => Promise<UserActions>;
+  create: (args: TCreateArgs<IUserActions>) => Promise<IUserActions>;
 
-  count: (args?: CountArgs) => Promise<number>;
+  count: (args?: TCountArgs) => Promise<number>;
 };

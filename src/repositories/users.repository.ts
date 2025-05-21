@@ -1,20 +1,20 @@
 import { PrismaClient } from "@prisma/client";
 import Users from "../models/users.model";
-import UsersRepositoryInterface from "../shared/types/repositories/users.interface";
+import IUsersRepository from "../shared/types/repositories/users.interface";
 import {
-  FindAllArgs,
-  FindByIdArgs,
-  CreateArgs,
-  UpdateArgs,
-  SoftDeleteArgs,
-  SoftDeleteManyArgs
+  TFindAllArgs,
+  TFindByIdArgs,
+  TCreateArgs,
+  TUpdateArgs,
+  TSoftDeleteArgs,
+  TSoftDeleteManyArgs
 } from "../shared/types/repository.type";
-import { GenericObject } from "../shared/types/common.type";
+import { TGenericObject } from "../shared/types/common.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { usersSubsets, businessesSubsets } from "../shared/helpers/select-subset.helper";
-import { AccessType } from "../entities/users.entity";
+import { TAccessType } from "../entities/users.entity";
 
-export default class UsersRepository implements UsersRepositoryInterface {
+export default class UsersRepository implements IUsersRepository {
   private client;
 
   constructor() {
@@ -23,7 +23,7 @@ export default class UsersRepository implements UsersRepositoryInterface {
   };
 
   findAll = async (
-    args: FindAllArgs
+    args: TFindAllArgs
   ): Promise<Users[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -49,12 +49,12 @@ export default class UsersRepository implements UsersRepositoryInterface {
 
     return res.map(item => new Users({
       ...item,
-      access_type: item.access_type as AccessType
+      access_type: item.access_type as TAccessType
     }));
   };
 
   findById = async (
-    args: FindByIdArgs<string>
+    args: TFindByIdArgs<string>
   ): Promise<Users | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -77,12 +77,12 @@ export default class UsersRepository implements UsersRepositoryInterface {
 
     return new Users({
       ...res,
-      access_type: res.access_type as AccessType
+      access_type: res.access_type as TAccessType
     });
   };
 
   create = async (
-    args: CreateArgs<Users>
+    args: TCreateArgs<Users>
   ): Promise<Users> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -99,12 +99,12 @@ export default class UsersRepository implements UsersRepositoryInterface {
 
     return new Users({
       ...data,
-      access_type: data.access_type as AccessType
+      access_type: data.access_type as TAccessType
     });
   };
 
   update = async (
-    args: UpdateArgs<string, Users>
+    args: TUpdateArgs<string, Users>
   ): Promise<Users> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -125,12 +125,12 @@ export default class UsersRepository implements UsersRepositoryInterface {
 
     return new Users({
       ...data,
-      access_type: data.access_type as AccessType
+      access_type: data.access_type as TAccessType
     });
   };
 
   softDelete = async (
-    args: SoftDeleteArgs<string>
+    args: TSoftDeleteArgs<string>
   ): Promise<Users> => {
     const exclude = setSelectExclude(args.exclude!);
     const data = await this.client.update({
@@ -146,13 +146,13 @@ export default class UsersRepository implements UsersRepositoryInterface {
 
     return new Users({
       ...data,
-      access_type: data.access_type as AccessType
+      access_type: data.access_type as TAccessType
     });
   };
 
   softDeleteMany = async (
-    args: SoftDeleteManyArgs<string>
-  ): Promise<GenericObject> => {
+    args: TSoftDeleteManyArgs<string>
+  ): Promise<TGenericObject> => {
     const data = await this.client.updateMany({
       where: {
         id: {
@@ -168,8 +168,8 @@ export default class UsersRepository implements UsersRepositoryInterface {
   };
 
   softDeleteManyByBusinessIds = async (
-    args: SoftDeleteManyArgs<number>
-  ): Promise<GenericObject> => {
+    args: TSoftDeleteManyArgs<number>
+  ): Promise<TGenericObject> => {
     const data = await this.client.updateMany({
       where: {
         business_id: {

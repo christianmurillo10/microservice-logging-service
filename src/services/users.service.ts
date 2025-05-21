@@ -1,7 +1,7 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import UsersRepository from "../repositories/users.repository";
 import Users from "../models/users.model";
-import { GetAllArgs, GetByIdArgs } from "../shared/types/service.type";
+import { TGetAllArgs, TGetByIdArgs } from "../shared/types/service.type";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 
 export default class UsersService {
@@ -11,7 +11,7 @@ export default class UsersService {
     this.repository = new UsersRepository();
   };
 
-  getAll = async (args?: GetAllArgs): Promise<Users[]> => {
+  getAll = async (args?: TGetAllArgs): Promise<Users[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -22,7 +22,7 @@ export default class UsersService {
     return record;
   };
 
-  getById = async (args: GetByIdArgs<string>): Promise<Users> => {
+  getById = async (args: TGetByIdArgs<string>): Promise<Users> => {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,

@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 import UserActionsEntity from "../entities/user-actions.entity";
-import { GenericObject } from "../shared/types/common.type";
+import { TGenericObject } from "../shared/types/common.type";
 
-class UserActions implements UserActionsEntity {
+class IUserActions implements UserActionsEntity {
   id?: string = uuidv4();
   service_name: string = "";
   action: string = "";
-  action_details: GenericObject = {};
+  action_details: TGenericObject = {};
   ip_address: string = "";
   user_agent: string = "";
   session_id!: string;
@@ -18,4 +18,4 @@ class UserActions implements UserActionsEntity {
   };
 };
 
-export default UserActions;
+export default IUserActions;

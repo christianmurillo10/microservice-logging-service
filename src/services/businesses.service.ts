@@ -2,7 +2,7 @@ import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import BusinessesRepository from "../repositories/businesses.repository";
 import Businesses from "../models/businesses.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
+import { TGetAllArgs, TGetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
 
 export default class BusinessesService {
   private repository: BusinessesRepository;
@@ -11,7 +11,7 @@ export default class BusinessesService {
     this.repository = new BusinessesRepository();
   };
 
-  getAll = async (args?: GetAllArgs): Promise<Businesses[]> => {
+  getAll = async (args?: TGetAllArgs): Promise<Businesses[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -21,7 +21,7 @@ export default class BusinessesService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<Businesses[]> => {
+  getAllBetweenCreatedAt = async (args: TGetAllBetweenCreatedAtArgs): Promise<Businesses[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       exclude: ["deleted_at"]

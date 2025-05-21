@@ -1,20 +1,20 @@
 import { PrismaClient } from "@prisma/client";
 import AuditTrails from "../models/audit-trails.model";
-import AuditTrailsRepositoryInterface from "../shared/types/repositories/audit-trails.interface";
+import IAuditTrailsRepository from "../shared/types/repositories/audit-trails.interface";
 import {
-  FindAllArgs,
-  FindAllBetweenCreatedAtArgs,
-  FindByIdArgs,
-  CreateArgs,
-  CountArgs,
+  TFindAllArgs,
+  TFindAllBetweenCreatedAtArgs,
+  TFindByIdArgs,
+  TCreateArgs,
+  TCountArgs,
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { auditTrailsSubsets, businessesSubsets } from "../shared/helpers/select-subset.helper";
-import { GenericObject } from "../shared/types/common.type";
-import { AuditTrailsAction } from "../entities/audit-trails.entity";
+import { TGenericObject } from "../shared/types/common.type";
+import { TAuditTrailsAction } from "../entities/audit-trails.entity";
 
 
-export default class AuditTrailsRepository implements AuditTrailsRepositoryInterface {
+export default class AuditTrailsRepository implements IAuditTrailsRepository {
   private client;
 
   constructor() {
@@ -23,7 +23,7 @@ export default class AuditTrailsRepository implements AuditTrailsRepositoryInter
   };
 
   findAll = async (
-    args: FindAllArgs
+    args: TFindAllArgs
   ): Promise<AuditTrails[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -48,14 +48,14 @@ export default class AuditTrailsRepository implements AuditTrailsRepositoryInter
 
     return res.map(item => new AuditTrails({
       ...item,
-      action: item.action as AuditTrailsAction,
-      old_details: item.old_details as GenericObject,
-      new_details: item.new_details as GenericObject
+      action: item.action as TAuditTrailsAction,
+      old_details: item.old_details as TGenericObject,
+      new_details: item.new_details as TGenericObject
     }));
   };
 
   findAllBetweenCreatedAt = async (
-    args: FindAllBetweenCreatedAtArgs
+    args: TFindAllBetweenCreatedAtArgs
   ): Promise<AuditTrails[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -78,14 +78,14 @@ export default class AuditTrailsRepository implements AuditTrailsRepositoryInter
 
     return res.map(item => new AuditTrails({
       ...item,
-      action: item.action as AuditTrailsAction,
-      old_details: item.old_details as GenericObject,
-      new_details: item.new_details as GenericObject
+      action: item.action as TAuditTrailsAction,
+      old_details: item.old_details as TGenericObject,
+      new_details: item.new_details as TGenericObject
     }));
   };
 
   findById = async (
-    args: FindByIdArgs<string>
+    args: TFindByIdArgs<string>
   ): Promise<AuditTrails | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -107,14 +107,14 @@ export default class AuditTrailsRepository implements AuditTrailsRepositoryInter
 
     return new AuditTrails({
       ...res,
-      action: res.action as AuditTrailsAction,
-      old_details: res.old_details as GenericObject,
-      new_details: res.new_details as GenericObject
+      action: res.action as TAuditTrailsAction,
+      old_details: res.old_details as TGenericObject,
+      new_details: res.new_details as TGenericObject
     });
   };
 
   create = async (
-    args: CreateArgs<AuditTrails>
+    args: TCreateArgs<AuditTrails>
   ): Promise<AuditTrails> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
@@ -131,14 +131,14 @@ export default class AuditTrailsRepository implements AuditTrailsRepositoryInter
 
     return new AuditTrails({
       ...data,
-      action: data.action as AuditTrailsAction,
-      old_details: data.old_details as GenericObject,
-      new_details: data.new_details as GenericObject
+      action: data.action as TAuditTrailsAction,
+      old_details: data.old_details as TGenericObject,
+      new_details: data.new_details as TGenericObject
     });
   };
 
   count = async (
-    args?: CountArgs
+    args?: TCountArgs
   ): Promise<number> => {
     const data = this.client.count({
       where: {
