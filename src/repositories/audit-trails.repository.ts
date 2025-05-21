@@ -9,7 +9,7 @@ import {
   CountArgs,
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
-import { auditTrailsSubsets } from "../shared/helpers/select-subset.helper";
+import { auditTrailsSubsets, businessesSubsets } from "../shared/helpers/select-subset.helper";
 import { GenericObject } from "../shared/types/common.type";
 import { AuditTrailsAction } from "../entities/audit-trails.entity";
 
@@ -26,10 +26,14 @@ export default class AuditTrailsRepository implements AuditTrailsRepositoryInter
     args: FindAllArgs
   ): Promise<AuditTrails[]> => {
     const exclude = setSelectExclude(args.exclude!);
+    const businessesSelect = args.include?.includes("businesses")
+      ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
+      : undefined;
     const res = await this.client.findMany({
       select: {
         ...auditTrailsSubsets,
-        ...exclude
+        ...exclude,
+        ...businessesSelect
       },
       where: {
         ...args.condition,
@@ -54,13 +58,17 @@ export default class AuditTrailsRepository implements AuditTrailsRepositoryInter
     args: FindAllBetweenCreatedAtArgs
   ): Promise<AuditTrails[]> => {
     const exclude = setSelectExclude(args.exclude!);
+    const businessesSelect = args.include?.includes("businesses")
+      ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
+      : undefined;
     const betweenCreatedAt = args.date_from && args.date_to
       ? { created_at: { gte: new Date(args.date_from), lte: new Date(args.date_to) } }
       : undefined;
     const res = await this.client.findMany({
       select: {
         ...auditTrailsSubsets,
-        ...exclude
+        ...exclude,
+        ...businessesSelect
       },
       where: {
         ...args.condition,
@@ -80,10 +88,14 @@ export default class AuditTrailsRepository implements AuditTrailsRepositoryInter
     args: FindByIdArgs<string>
   ): Promise<AuditTrails | null> => {
     const exclude = setSelectExclude(args.exclude!);
+    const businessesSelect = args.include?.includes("businesses")
+      ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
+      : undefined;
     const res = await this.client.findFirst({
       select: {
         ...auditTrailsSubsets,
-        ...exclude
+        ...exclude,
+        ...businessesSelect
       },
       where: {
         id: args.id,
@@ -105,10 +117,14 @@ export default class AuditTrailsRepository implements AuditTrailsRepositoryInter
     args: CreateArgs<AuditTrails>
   ): Promise<AuditTrails> => {
     const exclude = setSelectExclude(args.exclude!);
+    const businessesSelect = args.include?.includes("businesses")
+      ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
+      : undefined;
     const data = await this.client.create({
       select: {
         ...auditTrailsSubsets,
-        ...exclude
+        ...exclude,
+        ...businessesSelect
       },
       data: args.params
     });

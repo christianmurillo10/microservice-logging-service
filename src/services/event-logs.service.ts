@@ -2,7 +2,7 @@ import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import EventLogsRepository from "../repositories/event-logs.repository";
 import EventLogs from "../models/event-logs.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
+import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
 
 export default class EventLogsService {
   private repository: EventLogsRepository;
@@ -15,6 +15,7 @@ export default class EventLogsService {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
+      // include: ["businesses"],
       exclude: ["deleted_at"]
     });
 
@@ -24,14 +25,20 @@ export default class EventLogsService {
   getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<EventLogs[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
+      // include: ["businesses"],
       exclude: ["deleted_at"]
     });
 
     return record;
   };
 
-  getById = async (id: string): Promise<EventLogs> => {
-    const record = await this.repository.findById({ id: id });
+  getById = async (args: GetByIdArgs<string>): Promise<EventLogs> => {
+    const record = await this.repository.findById({
+      id: args.id,
+      condition: args?.condition,
+      // include: ["businesses"],
+      exclude: ["deleted_at"]
+    });
 
     if (!record) {
       throw new NotFoundException([MESSAGE_DATA_NOT_EXIST]);
@@ -43,6 +50,7 @@ export default class EventLogsService {
   save = async (data: EventLogs): Promise<EventLogs> => {
     return await this.repository.create({
       params: new EventLogs(data),
+      // include: ["businesses"],
       exclude: ["deleted_at"]
     });
   };

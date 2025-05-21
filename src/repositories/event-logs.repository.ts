@@ -9,7 +9,7 @@ import {
   CountArgs,
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
-import { eventLogsSubsets } from "../shared/helpers/select-subset.helper";
+import { businessesSubsets, eventLogsSubsets } from "../shared/helpers/select-subset.helper";
 import { GenericObject } from "../shared/types/common.type";
 
 
@@ -25,10 +25,14 @@ export default class EventLogsRepository implements EventLogsRepositoryInterface
     args: FindAllArgs
   ): Promise<EventLogs[]> => {
     const exclude = setSelectExclude(args.exclude!);
+    const businessesSelect = args.include?.includes("businesses")
+      ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
+      : undefined;
     const res = await this.client.findMany({
       select: {
         ...eventLogsSubsets,
-        ...exclude
+        ...exclude,
+        ...businessesSelect
       },
       where: {
         ...args.condition,
@@ -51,13 +55,17 @@ export default class EventLogsRepository implements EventLogsRepositoryInterface
     args: FindAllBetweenCreatedAtArgs
   ): Promise<EventLogs[]> => {
     const exclude = setSelectExclude(args.exclude!);
+    const businessesSelect = args.include?.includes("businesses")
+      ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
+      : undefined;
     const betweenCreatedAt = args.date_from && args.date_to
       ? { created_at: { gte: new Date(args.date_from), lte: new Date(args.date_to) } }
       : undefined;
     const res = await this.client.findMany({
       select: {
         ...eventLogsSubsets,
-        ...exclude
+        ...exclude,
+        ...businessesSelect
       },
       where: {
         ...args.condition,
@@ -75,10 +83,14 @@ export default class EventLogsRepository implements EventLogsRepositoryInterface
     args: FindByIdArgs<string>
   ): Promise<EventLogs | null> => {
     const exclude = setSelectExclude(args.exclude!);
+    const businessesSelect = args.include?.includes("businesses")
+      ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
+      : undefined;
     const res = await this.client.findFirst({
       select: {
         ...eventLogsSubsets,
-        ...exclude
+        ...exclude,
+        ...businessesSelect
       },
       where: {
         id: args.id,
@@ -98,10 +110,14 @@ export default class EventLogsRepository implements EventLogsRepositoryInterface
     args: CreateArgs<EventLogs>
   ): Promise<EventLogs> => {
     const exclude = setSelectExclude(args.exclude!);
+    const businessesSelect = args.include?.includes("businesses")
+      ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
+      : undefined;
     const data = await this.client.create({
       select: {
         ...eventLogsSubsets,
-        ...exclude
+        ...exclude,
+        ...businessesSelect
       },
       data: args.params
     });
