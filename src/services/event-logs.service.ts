@@ -2,7 +2,7 @@ import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import EventLogsRepository from "../repositories/event-logs.repository";
 import EventLogs from "../models/event-logs.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
+import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
 
 export default class EventLogsService {
   private repository: EventLogsRepository;
@@ -45,5 +45,9 @@ export default class EventLogsService {
       params: new EventLogs(data),
       exclude: ["deleted_at"]
     });
+  };
+
+  count = async (args: CountAllArgs): Promise<number> => {
+    return await this.repository.count(args);
   };
 };

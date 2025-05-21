@@ -2,7 +2,7 @@ import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import UserActionsRepository from "../repositories/user-actions.repository";
 import UserActions from "../models/user-actions.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
+import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
 
 export default class UserActionsService {
   private repository: UserActionsRepository;
@@ -45,5 +45,9 @@ export default class UserActionsService {
       params: new UserActions(data),
       exclude: ["deleted_at"]
     });
+  };
+
+  count = async (args: CountAllArgs): Promise<number> => {
+    return await this.repository.count(args);
   };
 };

@@ -6,6 +6,7 @@ import {
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
+  CountArgs,
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { auditTrailsSubsets } from "../shared/helpers/select-subset.helper";
@@ -118,5 +119,18 @@ export default class AuditTrailsRepository implements AuditTrailsRepositoryInter
       old_details: data.old_details as GenericObject,
       new_details: data.new_details as GenericObject
     });
+  };
+
+  count = async (
+    args?: CountArgs
+  ): Promise<number> => {
+    const data = this.client.count({
+      where: {
+        ...args?.condition,
+        ...parseQueryFilters(args?.query?.filters)
+      }
+    });
+
+    return data;
   };
 };

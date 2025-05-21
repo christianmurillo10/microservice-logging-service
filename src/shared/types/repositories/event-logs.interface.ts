@@ -4,6 +4,7 @@ import {
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
+  CountArgs,
 } from "../repository.type";
 
 export default interface EventLogsRepositoryInterface {
@@ -14,4 +15,6 @@ export default interface EventLogsRepositoryInterface {
   findById: (args: FindByIdArgs<string>) => Promise<EventLogs | null>;
 
   create: (args: CreateArgs<EventLogs>) => Promise<EventLogs>;
+
+  count: (args?: CountArgs) => Promise<number>;
 };

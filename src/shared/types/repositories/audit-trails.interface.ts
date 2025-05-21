@@ -4,6 +4,7 @@ import {
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
+  CountArgs,
 } from "../repository.type";
 
 export default interface AuditTrailsRepositoryInterface {
@@ -14,4 +15,6 @@ export default interface AuditTrailsRepositoryInterface {
   findById: (args: FindByIdArgs<string>) => Promise<AuditTrails | null>;
 
   create: (args: CreateArgs<AuditTrails>) => Promise<AuditTrails>;
+
+  count: (args?: CountArgs) => Promise<number>;
 };

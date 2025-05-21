@@ -2,7 +2,7 @@ import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import AuditTrailsRepository from "../repositories/audit-trails.repository";
 import AuditTrails from "../models/audit-trails.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
+import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
 
 export default class AuditTrailsService {
   private repository: AuditTrailsRepository;
@@ -45,5 +45,9 @@ export default class AuditTrailsService {
       params: new AuditTrails(data),
       exclude: ["deleted_at"]
     });
+  };
+
+  count = async (args: CountAllArgs): Promise<number> => {
+    return await this.repository.count(args);
   };
 };

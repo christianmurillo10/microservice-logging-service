@@ -6,6 +6,7 @@ import {
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
+  CountArgs,
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { userActionsSubsets } from "../shared/helpers/select-subset.helper";
@@ -109,5 +110,18 @@ export default class UserActionsRepository implements UserActionsRepositoryInter
       ...data,
       action_details: data.action_details as GenericObject
     });
+  };
+
+  count = async (
+    args?: CountArgs
+  ): Promise<number> => {
+    const data = this.client.count({
+      where: {
+        ...args?.condition,
+        ...parseQueryFilters(args?.query?.filters)
+      }
+    });
+
+    return data;
   };
 };

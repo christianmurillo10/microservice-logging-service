@@ -6,6 +6,7 @@ import {
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
+  CountArgs,
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { eventLogsSubsets } from "../shared/helpers/select-subset.helper";
@@ -109,5 +110,18 @@ export default class EventLogsRepository implements EventLogsRepositoryInterface
       ...data,
       payload: data.payload as GenericObject
     });
+  };
+
+  count = async (
+    args?: CountArgs
+  ): Promise<number> => {
+    const data = this.client.count({
+      where: {
+        ...args?.condition,
+        ...parseQueryFilters(args?.query?.filters)
+      }
+    });
+
+    return data;
   };
 };

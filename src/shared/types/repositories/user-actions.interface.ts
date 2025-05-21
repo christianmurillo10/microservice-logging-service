@@ -4,6 +4,7 @@ import {
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
+  CountArgs,
 } from "../repository.type";
 
 export default interface UserActionsRepositoryInterface {
@@ -14,4 +15,6 @@ export default interface UserActionsRepositoryInterface {
   findById: (args: FindByIdArgs<string>) => Promise<UserActions | null>;
 
   create: (args: CreateArgs<UserActions>) => Promise<UserActions>;
+
+  count: (args?: CountArgs) => Promise<number>;
 };
