@@ -1,8 +1,8 @@
-import { TGenericObject } from "../shared/types/common.type";
+import { TGenericObject, TServiceName } from "../shared/types/common.type";
 
 export default interface IEventLogsEntity {
   id?: string;
-  service_name: string;
+  service_name: TServiceName;
   event_type: string;
   payload: TGenericObject;
   created_at: Date;

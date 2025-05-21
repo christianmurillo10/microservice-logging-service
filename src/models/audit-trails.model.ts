@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 import IAuditTrailsEntity, { TAuditTrailsAction } from "../entities/audit-trails.entity";
-import { TGenericObject } from "../shared/types/common.type";
+import { TGenericObject, TServiceName } from "../shared/types/common.type";
 
 class AuditTrails implements IAuditTrailsEntity {
   id?: string = uuidv4();
-  service_name: string = "";
+  service_name: TServiceName = "USER_SERVICE";
   entity_type: string = "";
   entity_id!: string;
   action: TAuditTrailsAction = "CREATE";

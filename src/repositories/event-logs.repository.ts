@@ -10,7 +10,7 @@ import {
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { businessesSubsets, eventLogsSubsets } from "../shared/helpers/select-subset.helper";
-import { TGenericObject } from "../shared/types/common.type";
+import { TGenericObject, TServiceName } from "../shared/types/common.type";
 
 
 export default class EventLogsRepository implements IEventLogsRepository {
@@ -47,6 +47,7 @@ export default class EventLogsRepository implements IEventLogsRepository {
 
     return res.map(item => new EventLogs({
       ...item,
+      service_name: item.service_name as TServiceName,
       payload: item.payload as TGenericObject
     }));
   };
@@ -75,6 +76,7 @@ export default class EventLogsRepository implements IEventLogsRepository {
 
     return res.map(item => new EventLogs({
       ...item,
+      service_name: item.service_name as TServiceName,
       payload: item.payload as TGenericObject
     }));
   };
@@ -102,6 +104,7 @@ export default class EventLogsRepository implements IEventLogsRepository {
 
     return new EventLogs({
       ...res,
+      service_name: res.service_name as TServiceName,
       payload: res.payload as TGenericObject
     });
   };
@@ -124,6 +127,7 @@ export default class EventLogsRepository implements IEventLogsRepository {
 
     return new EventLogs({
       ...data,
+      service_name: data.service_name as TServiceName,
       payload: data.payload as TGenericObject
     });
   };

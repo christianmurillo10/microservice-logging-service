@@ -1,8 +1,8 @@
-import { TGenericObject } from "../shared/types/common.type";
+import { TGenericObject, TServiceName } from "../shared/types/common.type";
 
 export default interface IUserActions {
   id?: string;
-  service_name: string;
+  service_name: TServiceName;
   action: string;
   action_details: TGenericObject;
   ip_address: string;

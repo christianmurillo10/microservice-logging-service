@@ -10,7 +10,7 @@ import {
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { auditTrailsSubsets, businessesSubsets } from "../shared/helpers/select-subset.helper";
-import { TGenericObject } from "../shared/types/common.type";
+import { TGenericObject, TServiceName } from "../shared/types/common.type";
 import { TAuditTrailsAction } from "../entities/audit-trails.entity";
 
 
@@ -48,6 +48,7 @@ export default class AuditTrailsRepository implements IAuditTrailsRepository {
 
     return res.map(item => new AuditTrails({
       ...item,
+      service_name: item.service_name as TServiceName,
       action: item.action as TAuditTrailsAction,
       old_details: item.old_details as TGenericObject,
       new_details: item.new_details as TGenericObject
@@ -78,6 +79,7 @@ export default class AuditTrailsRepository implements IAuditTrailsRepository {
 
     return res.map(item => new AuditTrails({
       ...item,
+      service_name: item.service_name as TServiceName,
       action: item.action as TAuditTrailsAction,
       old_details: item.old_details as TGenericObject,
       new_details: item.new_details as TGenericObject
@@ -107,6 +109,7 @@ export default class AuditTrailsRepository implements IAuditTrailsRepository {
 
     return new AuditTrails({
       ...res,
+      service_name: res.service_name as TServiceName,
       action: res.action as TAuditTrailsAction,
       old_details: res.old_details as TGenericObject,
       new_details: res.new_details as TGenericObject
@@ -131,6 +134,7 @@ export default class AuditTrailsRepository implements IAuditTrailsRepository {
 
     return new AuditTrails({
       ...data,
+      service_name: data.service_name as TServiceName,
       action: data.action as TAuditTrailsAction,
       old_details: data.old_details as TGenericObject,
       new_details: data.new_details as TGenericObject
