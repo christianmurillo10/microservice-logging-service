@@ -9,6 +9,7 @@ class IUserActions implements UserActionsEntity {
   action_details: TGenericObject = {};
   ip_address: string = "";
   user_agent: string = "";
+  business_id?: number;
   session_id!: string;
   user_id!: string;
   created_at: Date = new Date();

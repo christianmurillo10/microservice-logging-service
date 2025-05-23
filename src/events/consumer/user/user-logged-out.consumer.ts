@@ -1,23 +1,30 @@
-// import { Message } from "kafkajs";
-// import UsersRepository from "../../../repositories/users.repository";
-// import Users from "../../../models/users.model";
+import { Message } from "kafkajs";
+import UsersService from "../../../services/users.service";
+import EventLogsService from "../../../services/event-logs.service";
+import NotFoundException from "../../../shared/exceptions/not-found.exception";
 
-// const usersRepository = new UsersRepository();
+const usersService = new UsersService();
+const eventLogsService = new EventLogsService();
 
-// const subscribeUserLoggedOut = async (message: Message): Promise<void> => {
-//   const value = JSON.parse(message.value?.toString() ?? '{}');
-//   const record = await usersRepository.findById(value.id);
-//   const data = {
-//     ...record,
-//     is_logged: value.is_logged,
-//     last_logged_at: value.last_logged_at,
-//     updated_at: new Date(),
-//   } as Users;
-//   await usersRepository.update({
-//     id: value.id,
-//     params: data
-//   });
-//   console.info(`Event Notification: Successfully logged out user ${data.id}.`);
-// };
+const subscribeUserLoggedOut = async (message: Message): Promise<void> => {
+  const value = JSON.parse(message.value?.toString() ?? '{}');
+  const record = await usersService.getById(value.id)
+    .catch(err => {
+      if (err instanceof NotFoundException) {
+        console.log(`User ${value.id} not exist!`);
+      }
 
-// export default subscribeUserLoggedOut;
+      throw err;
+    });
+
+  await eventLogsService.save({
+    service_name: "AUTH_SERVICE",
+    event_type: "user-logged-out",
+    payload: value,
+    business_id: record?.business_id ?? undefined,
+    created_at: new Date()
+  });
+  console.info(`Event Notification: Successfully logged out user ${record.id}.`);
+};
+
+export default subscribeUserLoggedOut;

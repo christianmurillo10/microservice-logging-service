@@ -10,6 +10,7 @@ class AuditTrails implements IAuditTrailsEntity {
   action: TAuditTrailsAction = "CREATE";
   old_details: TGenericObject = {};
   new_details: TGenericObject = {};
+  business_id?: number;
   created_user_id!: string;
   created_at: Date = new Date();
 
