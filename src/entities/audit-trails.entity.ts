@@ -1,6 +1,8 @@
 import { TGenericObject, TServiceName } from "../shared/types/common.type";
 
 export type TAuditTrailsAction =
+  "LOGIN" |
+  "LOGOUT" |
   "CREATE" |
   "UPDATE" |
   "DELETE" |
