@@ -1,4 +1,5 @@
 import { Message } from "kafkajs";
+import EventLogs from "../../../models/event-logs.model";
 import UsersService from "../../../services/users.service";
 import EventLogsService from "../../../services/event-logs.service";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
@@ -12,20 +13,27 @@ const subscribeUserLoggedIn = async (message: Message): Promise<void> => {
     .catch(err => {
       if (err instanceof NotFoundException) {
         console.log(`User ${value.id} not exist!`);
+        return;
       }
 
       throw err;
     });
 
-  await eventLogsService.save({
+  if (!record) {
+    return;
+  }
+  
+  const data = {
     service_name: "AUTH_SERVICE",
     event_type: message.key!.toString(),
     payload: value,
     business_id: record?.business_id,
     created_at: new Date()
-  })
+  } as EventLogs;
+
+  await eventLogsService.save(data)
     .catch(err => {
-      console.log("ERROR", err);
+      console.log("Error on saving event logs", err);
     });
   console.info(`Event Notification: Successfully logged in user ${record.id}.`);
 };
