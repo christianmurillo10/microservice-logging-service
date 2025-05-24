@@ -1,6 +1,6 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import UserActionsRepository from "../repositories/user-actions.repository";
-import IUserActions from "../models/user-actions.model";
+import UserActions from "../models/user-actions.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 import { TCountAllArgs, TGetAllArgs, TGetAllBetweenCreatedAtArgs, TGetByIdArgs } from "../shared/types/service.type";
 
@@ -11,7 +11,7 @@ export default class UserActionsService {
     this.repository = new UserActionsRepository();
   };
 
-  getAll = async (args?: TGetAllArgs): Promise<IUserActions[]> => {
+  getAll = async (args?: TGetAllArgs): Promise<UserActions[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -21,7 +21,7 @@ export default class UserActionsService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: TGetAllBetweenCreatedAtArgs): Promise<IUserActions[]> => {
+  getAllBetweenCreatedAt = async (args: TGetAllBetweenCreatedAtArgs): Promise<UserActions[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       // include: ["businesses"],
@@ -30,7 +30,7 @@ export default class UserActionsService {
     return record;
   };
 
-  getById = async (args: TGetByIdArgs<string>): Promise<IUserActions> => {
+  getById = async (args: TGetByIdArgs<string>): Promise<UserActions> => {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
@@ -44,9 +44,9 @@ export default class UserActionsService {
     return record;
   };
 
-  save = async (data: IUserActions): Promise<IUserActions> => {
+  save = async (data: UserActions): Promise<UserActions> => {
     return await this.repository.create({
-      params: new IUserActions(data),
+      params: new UserActions(data),
       // include: ["businesses"],
     });
   };

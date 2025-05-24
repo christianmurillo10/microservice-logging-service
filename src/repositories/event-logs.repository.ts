@@ -12,7 +12,6 @@ import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.he
 import { businessesSubsets, eventLogsSubsets } from "../shared/helpers/select-subset.helper";
 import { TGenericObject, TServiceName } from "../shared/types/common.type";
 
-
 export default class EventLogsRepository implements IEventLogsRepository {
   private client;
 

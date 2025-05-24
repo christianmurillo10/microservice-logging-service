@@ -13,7 +13,6 @@ import { auditTrailsSubsets, businessesSubsets } from "../shared/helpers/select-
 import { TGenericObject, TServiceName } from "../shared/types/common.type";
 import { TAuditTrailsAction } from "../entities/audit-trails.entity";
 
-
 export default class AuditTrailsRepository implements IAuditTrailsRepository {
   private client;
 

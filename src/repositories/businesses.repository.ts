@@ -16,7 +16,6 @@ import { TGenericObject } from "../shared/types/common.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { businessesSubsets } from "../shared/helpers/select-subset.helper";
 
-
 export default class BusinessesRepository implements IBusinessesRepository {
   private client;
 

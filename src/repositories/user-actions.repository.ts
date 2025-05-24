@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import IUserActions from "../models/user-actions.model";
+import UserActions from "../models/user-actions.model";
 import IUserActionsRepository from "../shared/types/repositories/user-actions.interface";
 import {
   TFindAllArgs,
@@ -11,7 +11,7 @@ import {
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { businessesSubsets, userActionsSubsets } from "../shared/helpers/select-subset.helper";
 import { TGenericObject, TServiceName } from "../shared/types/common.type";
-
+import { TUserActionsAction } from "../entities/user-actions.entity";
 
 export default class UserActionsRepository implements IUserActionsRepository {
   private client;
@@ -23,7 +23,7 @@ export default class UserActionsRepository implements IUserActionsRepository {
 
   findAll = async (
     args: TFindAllArgs
-  ): Promise<IUserActions[]> => {
+  ): Promise<UserActions[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -45,16 +45,17 @@ export default class UserActionsRepository implements IUserActionsRepository {
       take: args.query?.limit
     });
 
-    return res.map(item => new IUserActions({
+    return res.map(item => new UserActions({
       ...item,
       service_name: item.service_name as TServiceName,
+      action: item.action as TUserActionsAction,
       action_details: item.action_details as TGenericObject
     }));
   };
 
   findAllBetweenCreatedAt = async (
     args: TFindAllBetweenCreatedAtArgs
-  ): Promise<IUserActions[]> => {
+  ): Promise<UserActions[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -74,16 +75,17 @@ export default class UserActionsRepository implements IUserActionsRepository {
       }
     });
 
-    return res.map(item => new IUserActions({
+    return res.map(item => new UserActions({
       ...item,
       service_name: item.service_name as TServiceName,
+      action: item.action as TUserActionsAction,
       action_details: item.action_details as TGenericObject
     }));
   };
 
   findById = async (
     args: TFindByIdArgs<string>
-  ): Promise<IUserActions | null> => {
+  ): Promise<UserActions | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -102,16 +104,17 @@ export default class UserActionsRepository implements IUserActionsRepository {
 
     if (!res) return null;
 
-    return new IUserActions({
+    return new UserActions({
       ...res,
       service_name: res.service_name as TServiceName,
+      action: res.action as TUserActionsAction,
       action_details: res.action_details as TGenericObject
     });
   };
 
   create = async (
-    args: TCreateArgs<IUserActions>
-  ): Promise<IUserActions> => {
+    args: TCreateArgs<UserActions>
+  ): Promise<UserActions> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -125,9 +128,10 @@ export default class UserActionsRepository implements IUserActionsRepository {
       data: args.params
     });
 
-    return new IUserActions({
+    return new UserActions({
       ...data,
       service_name: data.service_name as TServiceName,
+      action: data.action as TUserActionsAction,
       action_details: data.action_details as TGenericObject
     });
   };

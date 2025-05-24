@@ -1,6 +1,11 @@
 import { TGenericObject, TServiceName } from "../shared/types/common.type";
 
-export type TAuditTrailsAction = "CREATE" | "UPDATE" | "DELETE" | "DELETE_MANY" | "CHANGE_PASSWORD";
+export type TAuditTrailsAction =
+  "CREATE" |
+  "UPDATE" |
+  "DELETE" |
+  "DELETE_MANY" |
+  "CHANGE_PASSWORD";
 
 export default interface IAuditTrailsEntity {
   id?: string;
