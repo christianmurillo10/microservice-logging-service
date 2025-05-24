@@ -7,7 +7,7 @@ export default interface IUserActions {
   action_details: TGenericObject;
   ip_address: string;
   user_agent: string;
-  business_id?: number;
+  business_id?: number | null;
   session_id: string;
   user_id: string;
   created_at: Date;

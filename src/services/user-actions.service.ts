@@ -16,7 +16,6 @@ export default class UserActionsService {
       condition: args?.condition,
       query: args?.query,
       // include: ["businesses"],
-      exclude: ["deleted_at"]
     });
 
     return record;
@@ -26,7 +25,6 @@ export default class UserActionsService {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       // include: ["businesses"],
-      exclude: ["deleted_at"]
     });
 
     return record;
@@ -37,7 +35,6 @@ export default class UserActionsService {
       id: args.id,
       condition: args?.condition,
       // include: ["businesses"],
-      exclude: ["deleted_at"]
     });
 
     if (!record) {
@@ -51,7 +48,6 @@ export default class UserActionsService {
     return await this.repository.create({
       params: new IUserActions(data),
       // include: ["businesses"],
-      exclude: ["deleted_at"]
     });
   };
 

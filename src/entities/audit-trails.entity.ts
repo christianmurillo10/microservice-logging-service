@@ -10,7 +10,7 @@ export default interface IAuditTrailsEntity {
   action: TAuditTrailsAction;
   old_details: TGenericObject;
   new_details: TGenericObject;
-  business_id?: number;
+  business_id?: number | null;
   created_user_id: string;
   created_at: Date;
 };

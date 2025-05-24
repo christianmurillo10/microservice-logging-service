@@ -5,6 +5,6 @@ export default interface IEventLogsEntity {
   service_name: TServiceName;
   event_type: string;
   payload: TGenericObject;
-  business_id?: number;
+  business_id?: number | null;
   created_at: Date;
 };

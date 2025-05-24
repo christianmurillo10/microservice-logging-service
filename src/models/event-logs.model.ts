@@ -7,7 +7,7 @@ class EventLogs implements IEventLogsEntity {
   service_name: TServiceName = "USER_SERVICE";
   event_type: string = "";
   payload: TGenericObject = {};
-  business_id?: number;
+  business_id: number | null = null;
   created_at: Date = new Date();
 
   constructor(props: IEventLogsEntity) {

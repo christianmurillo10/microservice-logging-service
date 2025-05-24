@@ -30,6 +30,7 @@ export const userActionsSubsets = {
   action_details: true,
   ip_address: true,
   user_agent: true,
+  business_id: true,
   session_id: true,
   user_id: true,
   created_at: true
@@ -43,6 +44,7 @@ export const auditTrailsSubsets = {
   action: true,
   old_details: true,
   new_details: true,
+  business_id: true,
   created_user_id: true,
   created_at: true
 };
@@ -52,5 +54,6 @@ export const eventLogsSubsets = {
   service_name: true,
   event_type: true,
   payload: true,
+  business_id: true,
   created_at: true
 };

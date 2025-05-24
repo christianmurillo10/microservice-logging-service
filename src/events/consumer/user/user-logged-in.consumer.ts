@@ -19,11 +19,14 @@ const subscribeUserLoggedIn = async (message: Message): Promise<void> => {
 
   await eventLogsService.save({
     service_name: "AUTH_SERVICE",
-    event_type: "user-logged-in",
+    event_type: message.key!.toString(),
     payload: value,
-    business_id: record?.business_id ?? undefined,
+    business_id: record?.business_id,
     created_at: new Date()
-  });
+  })
+    .catch(err => {
+      console.log("ERROR", err);
+    });
   console.info(`Event Notification: Successfully logged in user ${record.id}.`);
 };
 
