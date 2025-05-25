@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import joi from "joi";
 import _ from "lodash";
 import { validateInput } from "../../shared/helpers/common.helper";
-import { EServiceName } from "../../shared/types/common.type";
+import { ServiceName } from "../../shared/types/common.type";
 
 export const list = async (
   req: Request,
@@ -17,7 +17,7 @@ export const list = async (
       filters: joi.object({
         created_at: joi.date().label("Date Created").empty(),
         user_id: joi.string().label("User").max(100).empty(),
-        service_name: joi.string().label("Service Name").valid(EServiceName.AUTH_SERVICE, EServiceName.USER_SERVICE).max(100).empty(),
+        service_name: joi.string().label("Service Name").valid(ServiceName.AuthService, ServiceName.UserService).max(100).empty(),
         action: joi.string().label("Action").max(100).empty(),
       }).label("Filters").empty(),
       sorting: joi.object({

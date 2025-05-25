@@ -1,17 +1,17 @@
-export enum EUserAccess {
-  PORTAL = "PORTAL",
-  BUSINESS = "BUSINESS",
-  APP_RECOGNIZED = "APP_RECOGNIZED"
+export enum UsersAccessType {
+  Portal = "PORTAL",
+  Business = "BUSINESS",
+  AppRecognized = "APP_RECOGNIZED"
 };
 
-export type TAccessType = EUserAccess.PORTAL | EUserAccess.BUSINESS | EUserAccess.APP_RECOGNIZED;
+export type UsersAccessTypeValue = UsersAccessType.Portal | UsersAccessType.Business | UsersAccessType.AppRecognized;
 
-export default interface IUsersEntity {
+export default interface Users {
   id?: string;
   name: string;
   username: string;
   email: string;
-  access_type: TAccessType;
+  access_type: UsersAccessTypeValue;
   business_id?: number | null;
   created_at: Date;
   updated_at?: Date | null;

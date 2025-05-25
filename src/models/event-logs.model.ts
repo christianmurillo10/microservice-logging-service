@@ -1,18 +1,18 @@
 import { v4 as uuidv4 } from "uuid";
-import IEventLogsEntity from "../entities/event-logs.entity";
-import { TGenericObject, TServiceName } from "../shared/types/common.type";
+import EventLogs from "../entities/event-logs.entity";
+import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
 
-class EventLogs implements IEventLogsEntity {
+class EventLogsModel implements EventLogs {
   id?: string = uuidv4();
-  service_name: TServiceName = "USER_SERVICE";
+  service_name: ServiceNameValue = "USER_SERVICE";
   event_type: string = "";
-  payload: TGenericObject = {};
+  payload: GenericObject = {};
   business_id: number | null = null;
   created_at: Date = new Date();
 
-  constructor(props: IEventLogsEntity) {
+  constructor(props: EventLogs) {
     Object.assign(this, props);
   };
 };
 
-export default EventLogs;
+export default EventLogsModel;

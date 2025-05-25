@@ -1,19 +1,19 @@
 import { PrismaClient } from "@prisma/client";
-import AuditTrails from "../models/audit-trails.model";
-import IAuditTrailsRepository from "../shared/types/repositories/audit-trails.interface";
+import AuditTrailsModel from "../models/audit-trails.model";
+import AuditTrailsRepository from "../shared/types/repositories/audit-trails.interface";
 import {
-  TFindAllArgs,
-  TFindAllBetweenCreatedAtArgs,
-  TFindByIdArgs,
-  TCreateArgs,
-  TCountArgs,
+  FindAllArgs,
+  FindAllBetweenCreatedAtArgs,
+  FindByIdArgs,
+  CreateArgs,
+  CountArgs,
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { auditTrailsSubsets, businessesSubsets } from "../shared/helpers/select-subset.helper";
-import { TGenericObject, TServiceName } from "../shared/types/common.type";
-import { TAuditTrailsAction } from "../entities/audit-trails.entity";
+import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
+import { AuditTrailsActionValue } from "../entities/audit-trails.entity";
 
-export default class AuditTrailsRepository implements IAuditTrailsRepository {
+export default class PrismaAuditTrailsRepository implements AuditTrailsRepository {
   private client;
 
   constructor() {
@@ -22,8 +22,8 @@ export default class AuditTrailsRepository implements IAuditTrailsRepository {
   };
 
   findAll = async (
-    args: TFindAllArgs
-  ): Promise<AuditTrails[]> => {
+    args: FindAllArgs
+  ): Promise<AuditTrailsModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -45,18 +45,18 @@ export default class AuditTrailsRepository implements IAuditTrailsRepository {
       take: args.query?.limit
     });
 
-    return res.map(item => new AuditTrails({
+    return res.map(item => new AuditTrailsModel({
       ...item,
-      service_name: item.service_name as TServiceName,
-      action: item.action as TAuditTrailsAction,
-      old_details: item.old_details as TGenericObject,
-      new_details: item.new_details as TGenericObject
+      service_name: item.service_name as ServiceNameValue,
+      action: item.action as AuditTrailsActionValue,
+      old_details: item.old_details as GenericObject,
+      new_details: item.new_details as GenericObject
     }));
   };
 
   findAllBetweenCreatedAt = async (
-    args: TFindAllBetweenCreatedAtArgs
-  ): Promise<AuditTrails[]> => {
+    args: FindAllBetweenCreatedAtArgs
+  ): Promise<AuditTrailsModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -76,18 +76,18 @@ export default class AuditTrailsRepository implements IAuditTrailsRepository {
       }
     });
 
-    return res.map(item => new AuditTrails({
+    return res.map(item => new AuditTrailsModel({
       ...item,
-      service_name: item.service_name as TServiceName,
-      action: item.action as TAuditTrailsAction,
-      old_details: item.old_details as TGenericObject,
-      new_details: item.new_details as TGenericObject
+      service_name: item.service_name as ServiceNameValue,
+      action: item.action as AuditTrailsActionValue,
+      old_details: item.old_details as GenericObject,
+      new_details: item.new_details as GenericObject
     }));
   };
 
   findById = async (
-    args: TFindByIdArgs<string>
-  ): Promise<AuditTrails | null> => {
+    args: FindByIdArgs<string>
+  ): Promise<AuditTrailsModel | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -106,18 +106,18 @@ export default class AuditTrailsRepository implements IAuditTrailsRepository {
 
     if (!res) return null;
 
-    return new AuditTrails({
+    return new AuditTrailsModel({
       ...res,
-      service_name: res.service_name as TServiceName,
-      action: res.action as TAuditTrailsAction,
-      old_details: res.old_details as TGenericObject,
-      new_details: res.new_details as TGenericObject
+      service_name: res.service_name as ServiceNameValue,
+      action: res.action as AuditTrailsActionValue,
+      old_details: res.old_details as GenericObject,
+      new_details: res.new_details as GenericObject
     });
   };
 
   create = async (
-    args: TCreateArgs<AuditTrails>
-  ): Promise<AuditTrails> => {
+    args: CreateArgs<AuditTrailsModel>
+  ): Promise<AuditTrailsModel> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -131,17 +131,17 @@ export default class AuditTrailsRepository implements IAuditTrailsRepository {
       data: args.params
     });
 
-    return new AuditTrails({
+    return new AuditTrailsModel({
       ...data,
-      service_name: data.service_name as TServiceName,
-      action: data.action as TAuditTrailsAction,
-      old_details: data.old_details as TGenericObject,
-      new_details: data.new_details as TGenericObject
+      service_name: data.service_name as ServiceNameValue,
+      action: data.action as AuditTrailsActionValue,
+      old_details: data.old_details as GenericObject,
+      new_details: data.new_details as GenericObject
     });
   };
 
   count = async (
-    args?: TCountArgs
+    args?: CountArgs
   ): Promise<number> => {
     const data = this.client.count({
       where: {

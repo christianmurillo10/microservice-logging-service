@@ -1,20 +1,20 @@
-import EventLogs from "../../../models/event-logs.model";
+import EventLogsModel from "../../../models/event-logs.model";
 import {
-  TFindAllArgs,
-  TFindAllBetweenCreatedAtArgs,
-  TFindByIdArgs,
-  TCreateArgs,
-  TCountArgs,
+  FindAllArgs,
+  FindAllBetweenCreatedAtArgs,
+  FindByIdArgs,
+  CreateArgs,
+  CountArgs,
 } from "../repository.type";
 
-export default interface IEventLogsRepository {
-  findAll: (args: TFindAllArgs) => Promise<EventLogs[]>;
+export default interface EventLogsRepository {
+  findAll: (args: FindAllArgs) => Promise<EventLogsModel[]>;
 
-  findAllBetweenCreatedAt: (args: TFindAllBetweenCreatedAtArgs) => Promise<EventLogs[]>;
+  findAllBetweenCreatedAt: (args: FindAllBetweenCreatedAtArgs) => Promise<EventLogsModel[]>;
 
-  findById: (args: TFindByIdArgs<string>) => Promise<EventLogs | null>;
+  findById: (args: FindByIdArgs<string>) => Promise<EventLogsModel | null>;
 
-  create: (args: TCreateArgs<EventLogs>) => Promise<EventLogs>;
+  create: (args: CreateArgs<EventLogsModel>) => Promise<EventLogsModel>;
 
-  count: (args?: TCountArgs) => Promise<number>;
+  count: (args?: CountArgs) => Promise<number>;
 };

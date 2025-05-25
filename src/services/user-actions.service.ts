@@ -1,17 +1,17 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
-import UserActionsRepository from "../repositories/user-actions.repository";
-import UserActions from "../models/user-actions.model";
+import PrismaUserActionsRepository from "../repositories/user-actions.repository";
+import UserActionsModel from "../models/user-actions.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { TCountAllArgs, TGetAllArgs, TGetAllBetweenCreatedAtArgs, TGetByIdArgs } from "../shared/types/service.type";
+import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
 
 export default class UserActionsService {
-  private repository: UserActionsRepository;
+  private repository: PrismaUserActionsRepository;
 
   constructor() {
-    this.repository = new UserActionsRepository();
+    this.repository = new PrismaUserActionsRepository();
   };
 
-  getAll = async (args?: TGetAllArgs): Promise<UserActions[]> => {
+  getAll = async (args?: GetAllArgs): Promise<UserActionsModel[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -21,7 +21,7 @@ export default class UserActionsService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: TGetAllBetweenCreatedAtArgs): Promise<UserActions[]> => {
+  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<UserActionsModel[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       // include: ["businesses"],
@@ -30,7 +30,7 @@ export default class UserActionsService {
     return record;
   };
 
-  getById = async (args: TGetByIdArgs<string>): Promise<UserActions> => {
+  getById = async (args: GetByIdArgs<string>): Promise<UserActionsModel> => {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
@@ -44,14 +44,14 @@ export default class UserActionsService {
     return record;
   };
 
-  save = async (data: UserActions): Promise<UserActions> => {
+  save = async (data: UserActionsModel): Promise<UserActionsModel> => {
     return await this.repository.create({
-      params: new UserActions(data),
+      params: new UserActionsModel(data),
       // include: ["businesses"],
     });
   };
 
-  count = async (args: TCountAllArgs): Promise<number> => {
+  count = async (args: CountAllArgs): Promise<number> => {
     return await this.repository.count(args);
   };
 };

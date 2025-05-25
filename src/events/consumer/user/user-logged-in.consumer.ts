@@ -1,7 +1,7 @@
 import { Message } from "kafkajs";
-import EventLogs from "../../../models/event-logs.model";
-import AuditTrails from "../../../models/audit-trails.model";
-import UserActions from "../../../models/user-actions.model";
+import EventLogsModel from "../../../models/event-logs.model";
+import AuditTrailsModel from "../../../models/audit-trails.model";
+import UserActionsModel from "../../../models/user-actions.model";
 import UsersService from "../../../services/users.service";
 import EventLogsService from "../../../services/event-logs.service";
 import AuditTrailsService from "../../../services/audit-trails.service";
@@ -36,7 +36,7 @@ const subscribeUserLoggedIn = async (message: Message): Promise<void> => {
     payload: value,
     business_id: record?.business_id,
     created_at: new Date()
-  } as EventLogs;
+  } as EventLogsModel;
   await eventLogsService.save(eventLogs)
     .catch(err => {
       console.log("Error on saving event logs", err);
@@ -53,7 +53,7 @@ const subscribeUserLoggedIn = async (message: Message): Promise<void> => {
     business_id: record?.business_id,
     created_user_id: value.id,
     created_at: new Date()
-  } as AuditTrails;
+  } as AuditTrailsModel;
   await auditTrailsService.save(auditTrails)
     .catch(err => {
       console.log("Error on saving audit trails", err);
@@ -69,7 +69,7 @@ const subscribeUserLoggedIn = async (message: Message): Promise<void> => {
     business_id: record?.business_id,
     user_id: value.id,
     created_at: new Date()
-  } as UserActions;
+  } as UserActionsModel;
   await userActionsService.save(userActions)
     .catch(err => {
       console.log("Error on saving user actions", err);

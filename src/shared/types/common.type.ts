@@ -1,18 +1,18 @@
 // Type
-export type TGenericObject = Record<string, string> | object;
+export type GenericObject = Record<string, string> | object;
 
-export type TGenericArray = any[];
+export type GenericArray = any[];
 
-export type TUniqueId = number | string | null;
+export type UniqueId = number | string | null;
 
-export type TQuery = {
-  filters?: TGenericObject,
-  sorting?: TGenericObject,
+export type Query = {
+  filters?: GenericObject,
+  sorting?: GenericObject,
   offset?: number,
   limit?: number
 };
 
-export type TApiResponseInput = {
+export type ApiResponseInput = {
   service?: string,
   version?: string,
   status_code: number,
@@ -22,10 +22,10 @@ export type TApiResponseInput = {
   result?: unknown,
 };
 
-export type TServiceName = "AUTH_SERVICE" | "USER_SERVICE";
+export type ServiceNameValue = "AUTH_SERVICE" | "USER_SERVICE";
 
 // Enum
-export enum EServiceName {
-  AUTH_SERVICE = "AUTH_SERVICE",
-  USER_SERVICE = "BUSINESS"
+export enum ServiceName {
+  AuthService = "AUTH_SERVICE",
+  UserService = "BUSINESS"
 };

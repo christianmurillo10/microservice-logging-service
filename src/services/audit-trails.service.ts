@@ -1,17 +1,17 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
-import AuditTrailsRepository from "../repositories/audit-trails.repository";
-import AuditTrails from "../models/audit-trails.model";
+import PrismaAuditTrailsRepository from "../repositories/audit-trails.repository";
+import AuditTrailsModel from "../models/audit-trails.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { TCountAllArgs, TGetAllArgs, TGetAllBetweenCreatedAtArgs, TGetByIdArgs } from "../shared/types/service.type";
+import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
 
 export default class AuditTrailsService {
-  private repository: AuditTrailsRepository;
+  private repository: PrismaAuditTrailsRepository;
 
   constructor() {
-    this.repository = new AuditTrailsRepository();
+    this.repository = new PrismaAuditTrailsRepository();
   };
 
-  getAll = async (args?: TGetAllArgs): Promise<AuditTrails[]> => {
+  getAll = async (args?: GetAllArgs): Promise<AuditTrailsModel[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -21,7 +21,7 @@ export default class AuditTrailsService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: TGetAllBetweenCreatedAtArgs): Promise<AuditTrails[]> => {
+  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<AuditTrailsModel[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       // include: ["businesses"],
@@ -30,7 +30,7 @@ export default class AuditTrailsService {
     return record;
   };
 
-  getById = async (args: TGetByIdArgs<string>): Promise<AuditTrails> => {
+  getById = async (args: GetByIdArgs<string>): Promise<AuditTrailsModel> => {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
@@ -44,14 +44,14 @@ export default class AuditTrailsService {
     return record;
   };
 
-  save = async (data: AuditTrails): Promise<AuditTrails> => {
+  save = async (data: AuditTrailsModel): Promise<AuditTrailsModel> => {
     return await this.repository.create({
-      params: new AuditTrails(data),
+      params: new AuditTrailsModel(data),
       // include: ["businesses"],
     });
   };
 
-  count = async (args: TCountAllArgs): Promise<number> => {
+  count = async (args: CountAllArgs): Promise<number> => {
     return await this.repository.count(args);
   };
 };

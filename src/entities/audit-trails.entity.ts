@@ -1,6 +1,6 @@
-import { TGenericObject, TServiceName } from "../shared/types/common.type";
+import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
 
-export type TAuditTrailsAction =
+export type AuditTrailsActionValue =
   "LOGIN" |
   "LOGOUT" |
   "CREATE" |
@@ -9,14 +9,14 @@ export type TAuditTrailsAction =
   "DELETE_MANY" |
   "CHANGE_PASSWORD";
 
-export default interface IAuditTrailsEntity {
+export default interface AuditTrails {
   id?: string;
-  service_name: TServiceName;
+  service_name: ServiceNameValue;
   entity_type: string;
   entity_id: string;
-  action: TAuditTrailsAction;
-  old_details: TGenericObject;
-  new_details: TGenericObject;
+  action: AuditTrailsActionValue;
+  old_details: GenericObject;
+  new_details: GenericObject;
   business_id?: number | null;
   created_user_id: string;
   created_at: Date;

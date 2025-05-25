@@ -1,17 +1,17 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
-import UsersRepository from "../repositories/users.repository";
-import Users from "../models/users.model";
-import { TGetAllArgs, TGetByIdArgs } from "../shared/types/service.type";
+import PrismaUsersRepository from "../repositories/users.repository";
+import UsersModel from "../models/users.model";
+import { GetAllArgs, GetByIdArgs } from "../shared/types/service.type";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 
 export default class UsersService {
-  private repository: UsersRepository;
+  private repository: PrismaUsersRepository;
 
   constructor() {
-    this.repository = new UsersRepository();
+    this.repository = new PrismaUsersRepository();
   };
 
-  getAll = async (args?: TGetAllArgs): Promise<Users[]> => {
+  getAll = async (args?: GetAllArgs): Promise<UsersModel[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -22,7 +22,7 @@ export default class UsersService {
     return record;
   };
 
-  getById = async (args: TGetByIdArgs<string>): Promise<Users> => {
+  getById = async (args: GetByIdArgs<string>): Promise<UsersModel> => {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
@@ -37,9 +37,9 @@ export default class UsersService {
     return record;
   };
 
-  save = async (data: Users): Promise<Users> => {
-    let record: Users;
-    let newData = new Users(data);
+  save = async (data: UsersModel): Promise<UsersModel> => {
+    let record: UsersModel;
+    let newData = new UsersModel(data);
     let option = {
       params: newData,
       // include: ["roles", "businesses"],
@@ -60,7 +60,7 @@ export default class UsersService {
     return record;
   };
 
-  delete = async (id: string): Promise<Users> => {
+  delete = async (id: string): Promise<UsersModel> => {
     return await this.repository.softDelete({
       id: id,
       exclude: ["password"]

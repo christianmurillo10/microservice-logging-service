@@ -1,17 +1,17 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
-import EventLogsRepository from "../repositories/event-logs.repository";
-import EventLogs from "../models/event-logs.model";
+import PrismaEventLogsRepository from "../repositories/event-logs.repository";
+import EventLogsModel from "../models/event-logs.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { TCountAllArgs, TGetAllArgs, TGetAllBetweenCreatedAtArgs, TGetByIdArgs } from "../shared/types/service.type";
+import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
 
 export default class EventLogsService {
-  private repository: EventLogsRepository;
+  private repository: PrismaEventLogsRepository;
 
   constructor() {
-    this.repository = new EventLogsRepository();
+    this.repository = new PrismaEventLogsRepository();
   };
 
-  getAll = async (args?: TGetAllArgs): Promise<EventLogs[]> => {
+  getAll = async (args?: GetAllArgs): Promise<EventLogsModel[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -21,7 +21,7 @@ export default class EventLogsService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: TGetAllBetweenCreatedAtArgs): Promise<EventLogs[]> => {
+  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<EventLogsModel[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       // include: ["businesses"],
@@ -30,7 +30,7 @@ export default class EventLogsService {
     return record;
   };
 
-  getById = async (args: TGetByIdArgs<string>): Promise<EventLogs> => {
+  getById = async (args: GetByIdArgs<string>): Promise<EventLogsModel> => {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
@@ -44,14 +44,14 @@ export default class EventLogsService {
     return record;
   };
 
-  save = async (data: EventLogs): Promise<EventLogs> => {
+  save = async (data: EventLogsModel): Promise<EventLogsModel> => {
     return await this.repository.create({
-      params: new EventLogs(data),
+      params: new EventLogsModel(data),
       // include: ["businesses"],
     });
   };
 
-  count = async (args: TCountAllArgs): Promise<number> => {
+  count = async (args: CountAllArgs): Promise<number> => {
     return await this.repository.count(args);
   };
 };

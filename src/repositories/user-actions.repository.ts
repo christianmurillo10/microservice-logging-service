@@ -1,19 +1,19 @@
 import { PrismaClient } from "@prisma/client";
-import UserActions from "../models/user-actions.model";
-import IUserActionsRepository from "../shared/types/repositories/user-actions.interface";
+import UserActionsModel from "../models/user-actions.model";
+import UserActionsRepository from "../shared/types/repositories/user-actions.interface";
 import {
-  TFindAllArgs,
-  TFindAllBetweenCreatedAtArgs,
-  TFindByIdArgs,
-  TCreateArgs,
-  TCountArgs,
+  FindAllArgs,
+  FindAllBetweenCreatedAtArgs,
+  FindByIdArgs,
+  CreateArgs,
+  CountArgs,
 } from "../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
 import { businessesSubsets, userActionsSubsets } from "../shared/helpers/select-subset.helper";
-import { TGenericObject, TServiceName } from "../shared/types/common.type";
-import { TUserActionsAction } from "../entities/user-actions.entity";
+import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
+import { UserActionsActionValue } from "../entities/user-actions.entity";
 
-export default class UserActionsRepository implements IUserActionsRepository {
+export default class PrismaUserActionsRepository implements UserActionsRepository {
   private client;
 
   constructor() {
@@ -22,8 +22,8 @@ export default class UserActionsRepository implements IUserActionsRepository {
   };
 
   findAll = async (
-    args: TFindAllArgs
-  ): Promise<UserActions[]> => {
+    args: FindAllArgs
+  ): Promise<UserActionsModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -45,17 +45,17 @@ export default class UserActionsRepository implements IUserActionsRepository {
       take: args.query?.limit
     });
 
-    return res.map(item => new UserActions({
+    return res.map(item => new UserActionsModel({
       ...item,
-      service_name: item.service_name as TServiceName,
-      action: item.action as TUserActionsAction,
-      action_details: item.action_details as TGenericObject
+      service_name: item.service_name as ServiceNameValue,
+      action: item.action as UserActionsActionValue,
+      action_details: item.action_details as GenericObject
     }));
   };
 
   findAllBetweenCreatedAt = async (
-    args: TFindAllBetweenCreatedAtArgs
-  ): Promise<UserActions[]> => {
+    args: FindAllBetweenCreatedAtArgs
+  ): Promise<UserActionsModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -75,17 +75,17 @@ export default class UserActionsRepository implements IUserActionsRepository {
       }
     });
 
-    return res.map(item => new UserActions({
+    return res.map(item => new UserActionsModel({
       ...item,
-      service_name: item.service_name as TServiceName,
-      action: item.action as TUserActionsAction,
-      action_details: item.action_details as TGenericObject
+      service_name: item.service_name as ServiceNameValue,
+      action: item.action as UserActionsActionValue,
+      action_details: item.action_details as GenericObject
     }));
   };
 
   findById = async (
-    args: TFindByIdArgs<string>
-  ): Promise<UserActions | null> => {
+    args: FindByIdArgs<string>
+  ): Promise<UserActionsModel | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -104,17 +104,17 @@ export default class UserActionsRepository implements IUserActionsRepository {
 
     if (!res) return null;
 
-    return new UserActions({
+    return new UserActionsModel({
       ...res,
-      service_name: res.service_name as TServiceName,
-      action: res.action as TUserActionsAction,
-      action_details: res.action_details as TGenericObject
+      service_name: res.service_name as ServiceNameValue,
+      action: res.action as UserActionsActionValue,
+      action_details: res.action_details as GenericObject
     });
   };
 
   create = async (
-    args: TCreateArgs<UserActions>
-  ): Promise<UserActions> => {
+    args: CreateArgs<UserActionsModel>
+  ): Promise<UserActionsModel> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -128,16 +128,16 @@ export default class UserActionsRepository implements IUserActionsRepository {
       data: args.params
     });
 
-    return new UserActions({
+    return new UserActionsModel({
       ...data,
-      service_name: data.service_name as TServiceName,
-      action: data.action as TUserActionsAction,
-      action_details: data.action_details as TGenericObject
+      service_name: data.service_name as ServiceNameValue,
+      action: data.action as UserActionsActionValue,
+      action_details: data.action_details as GenericObject
     });
   };
 
   count = async (
-    args?: TCountArgs
+    args?: CountArgs
   ): Promise<number> => {
     const data = this.client.count({
       where: {

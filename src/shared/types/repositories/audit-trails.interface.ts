@@ -1,20 +1,20 @@
-import AuditTrails from "../../../models/audit-trails.model";
+import AuditTrailsModel from "../../../models/audit-trails.model";
 import {
-  TFindAllArgs,
-  TFindAllBetweenCreatedAtArgs,
-  TFindByIdArgs,
-  TCreateArgs,
-  TCountArgs,
+  FindAllArgs,
+  FindAllBetweenCreatedAtArgs,
+  FindByIdArgs,
+  CreateArgs,
+  CountArgs,
 } from "../repository.type";
 
-export default interface IAuditTrailsRepository {
-  findAll: (args: TFindAllArgs) => Promise<AuditTrails[]>;
+export default interface AuditTrailsRepository {
+  findAll: (args: FindAllArgs) => Promise<AuditTrailsModel[]>;
 
-  findAllBetweenCreatedAt: (args: TFindAllBetweenCreatedAtArgs) => Promise<AuditTrails[]>;
+  findAllBetweenCreatedAt: (args: FindAllBetweenCreatedAtArgs) => Promise<AuditTrailsModel[]>;
 
-  findById: (args: TFindByIdArgs<string>) => Promise<AuditTrails | null>;
+  findById: (args: FindByIdArgs<string>) => Promise<AuditTrailsModel | null>;
 
-  create: (args: TCreateArgs<AuditTrails>) => Promise<AuditTrails>;
+  create: (args: CreateArgs<AuditTrailsModel>) => Promise<AuditTrailsModel>;
 
-  count: (args?: TCountArgs) => Promise<number>;
+  count: (args?: CountArgs) => Promise<number>;
 };

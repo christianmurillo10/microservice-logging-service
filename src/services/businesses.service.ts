@@ -1,17 +1,17 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
-import BusinessesRepository from "../repositories/businesses.repository";
-import Businesses from "../models/businesses.model";
+import PrismaBusinessesRepository from "../repositories/businesses.repository";
+import BusinessesModel from "../models/businesses.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { TGetAllArgs, TGetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
+import { GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
 
 export default class BusinessesService {
-  private repository: BusinessesRepository;
+  private repository: PrismaBusinessesRepository;
 
   constructor() {
-    this.repository = new BusinessesRepository();
+    this.repository = new PrismaBusinessesRepository();
   };
 
-  getAll = async (args?: TGetAllArgs): Promise<Businesses[]> => {
+  getAll = async (args?: GetAllArgs): Promise<BusinessesModel[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -21,7 +21,7 @@ export default class BusinessesService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: TGetAllBetweenCreatedAtArgs): Promise<Businesses[]> => {
+  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<BusinessesModel[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       exclude: ["deleted_at"]
@@ -30,7 +30,7 @@ export default class BusinessesService {
     return record;
   };
 
-  getById = async (id: number): Promise<Businesses> => {
+  getById = async (id: number): Promise<BusinessesModel> => {
     const record = await this.repository.findById({ id: id });
 
     if (!record) {
@@ -40,7 +40,7 @@ export default class BusinessesService {
     return record;
   };
 
-  getByName = async (name: string): Promise<Businesses> => {
+  getByName = async (name: string): Promise<BusinessesModel> => {
     const record = await this.repository.findByName({ name: name });
 
     if (!record) {
@@ -50,7 +50,7 @@ export default class BusinessesService {
     return record;
   };
 
-  getByApiKey = async (api_key: string): Promise<Businesses> => {
+  getByApiKey = async (api_key: string): Promise<BusinessesModel> => {
     const record = await this.repository.findByApiKey({ api_key: api_key });
 
     if (!record) {
@@ -60,9 +60,9 @@ export default class BusinessesService {
     return record;
   };
 
-  save = async (data: Businesses): Promise<Businesses> => {
-    let record: Businesses;
-    let newData = new Businesses(data);
+  save = async (data: BusinessesModel): Promise<BusinessesModel> => {
+    let record: BusinessesModel;
+    let newData = new BusinessesModel(data);
     let option = {
       params: newData,
       exclude: ["deleted_at"]
@@ -82,7 +82,7 @@ export default class BusinessesService {
     return record;
   };
 
-  delete = async (id: number): Promise<Businesses> => {
+  delete = async (id: number): Promise<BusinessesModel> => {
     return await this.repository.softDelete({ id: id });
   };
 

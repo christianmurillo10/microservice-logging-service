@@ -1,6 +1,6 @@
-import { TGenericObject, TServiceName } from "../shared/types/common.type";
+import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
 
-export type TUserActionsAction =
+export type UserActionsActionValue =
   "LOGIN" |
   "LOGOUT" |
   "CREATE" |
@@ -9,11 +9,11 @@ export type TUserActionsAction =
   "DELETE_MANY" |
   "CHANGE_PASSWORD";
 
-export default interface IUserActions {
+export default interface UserActions {
   id?: string;
-  service_name: TServiceName;
-  action: TUserActionsAction;
-  action_details: TGenericObject;
+  service_name: ServiceNameValue;
+  action: UserActionsActionValue;
+  action_details: GenericObject;
   ip_address: string;
   user_agent: string;
   business_id?: number | null;
