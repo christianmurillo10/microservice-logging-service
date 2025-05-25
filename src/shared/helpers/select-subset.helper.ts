@@ -31,7 +31,6 @@ export const userActionsSubsets = {
   ip_address: true,
   user_agent: true,
   business_id: true,
-  session_id: true,
   user_id: true,
   created_at: true
 };

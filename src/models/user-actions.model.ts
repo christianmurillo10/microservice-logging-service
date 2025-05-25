@@ -10,7 +10,6 @@ class UserActions implements UserActionsEntity {
   ip_address: string = "";
   user_agent: string = "";
   business_id: number | null = null;
-  session_id!: string;
   user_id!: string;
   created_at: Date = new Date();
 

@@ -67,7 +67,6 @@ const subscribeUserLoggedIn = async (message: Message): Promise<void> => {
     ip_address: message.headers!.ip_address!.toString(),
     user_agent: message.headers!.user_agent!.toString(),
     business_id: record?.business_id,
-    session_id: "",
     user_id: value.id,
     created_at: new Date()
   } as UserActions;

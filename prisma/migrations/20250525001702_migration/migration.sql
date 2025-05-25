@@ -55,7 +55,6 @@ CREATE TABLE `user_actions` (
     `action_details` JSON NOT NULL,
     `ip_address` VARCHAR(100) NOT NULL,
     `user_agent` VARCHAR(100) NOT NULL,
-    `session_id` VARCHAR(255) NOT NULL,
     `business_id` INTEGER NULL,
     `user_id` CHAR(36) NOT NULL,
     `created_at` DATETIME(0) NOT NULL,

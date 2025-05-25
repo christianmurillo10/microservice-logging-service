@@ -66,7 +66,6 @@ model user_actions {
   action_details Json        @default("{}") @db.Json
   ip_address     String      @db.VarChar(100)
   user_agent     String      @db.VarChar(100)
-  session_id     String      @db.VarChar(255)
   business_id    Int?
   user_id        String      @db.Char(36)
   created_at     DateTime    @db.DateTime(0)
