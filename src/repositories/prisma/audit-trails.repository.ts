@@ -1,35 +1,36 @@
 import { PrismaClient } from "@prisma/client";
-import EventLogsModel from "../models/event-logs.model";
-import EventLogsRepository from "../shared/types/repositories/event-logs.interface";
+import AuditTrailsModel from "../../models/audit-trails.model";
+import AuditTrailsRepository from "../audit-trails.interface";
 import {
   FindAllArgs,
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
   CountArgs,
-} from "../shared/types/repository.type";
-import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
-import { businessesSubsets, eventLogsSubsets } from "../shared/helpers/select-subset.helper";
-import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
+} from "../../shared/types/repository.type";
+import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
+import { auditTrailsSubsets, businessesSubsets } from "../../shared/helpers/select-subset.helper";
+import { GenericObject, ServiceNameValue } from "../../shared/types/common.type";
+import { AuditTrailsActionValue } from "../../entities/audit-trails.entity";
 
-export default class PrismaEventLogsRepository implements EventLogsRepository {
+export default class PrismaAuditTrailsRepository implements AuditTrailsRepository {
   private client;
 
   constructor() {
     const prisma = new PrismaClient();
-    this.client = prisma.event_logs;
+    this.client = prisma.audit_trails;
   };
 
   findAll = async (
     args: FindAllArgs
-  ): Promise<EventLogsModel[]> => {
+  ): Promise<AuditTrailsModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
       : undefined;
     const res = await this.client.findMany({
       select: {
-        ...eventLogsSubsets,
+        ...auditTrailsSubsets,
         ...exclude,
         ...businessesSelect
       },
@@ -44,16 +45,18 @@ export default class PrismaEventLogsRepository implements EventLogsRepository {
       take: args.query?.limit
     });
 
-    return res.map(item => new EventLogsModel({
+    return res.map(item => new AuditTrailsModel({
       ...item,
       service_name: item.service_name as ServiceNameValue,
-      payload: item.payload as GenericObject
+      action: item.action as AuditTrailsActionValue,
+      old_details: item.old_details as GenericObject,
+      new_details: item.new_details as GenericObject
     }));
   };
 
   findAllBetweenCreatedAt = async (
     args: FindAllBetweenCreatedAtArgs
-  ): Promise<EventLogsModel[]> => {
+  ): Promise<AuditTrailsModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -63,7 +66,7 @@ export default class PrismaEventLogsRepository implements EventLogsRepository {
       : undefined;
     const res = await this.client.findMany({
       select: {
-        ...eventLogsSubsets,
+        ...auditTrailsSubsets,
         ...exclude,
         ...businessesSelect
       },
@@ -73,23 +76,25 @@ export default class PrismaEventLogsRepository implements EventLogsRepository {
       }
     });
 
-    return res.map(item => new EventLogsModel({
+    return res.map(item => new AuditTrailsModel({
       ...item,
       service_name: item.service_name as ServiceNameValue,
-      payload: item.payload as GenericObject
+      action: item.action as AuditTrailsActionValue,
+      old_details: item.old_details as GenericObject,
+      new_details: item.new_details as GenericObject
     }));
   };
 
   findById = async (
     args: FindByIdArgs<string>
-  ): Promise<EventLogsModel | null> => {
+  ): Promise<AuditTrailsModel | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
       : undefined;
     const res = await this.client.findFirst({
       select: {
-        ...eventLogsSubsets,
+        ...auditTrailsSubsets,
         ...exclude,
         ...businessesSelect
       },
@@ -101,33 +106,37 @@ export default class PrismaEventLogsRepository implements EventLogsRepository {
 
     if (!res) return null;
 
-    return new EventLogsModel({
+    return new AuditTrailsModel({
       ...res,
       service_name: res.service_name as ServiceNameValue,
-      payload: res.payload as GenericObject
+      action: res.action as AuditTrailsActionValue,
+      old_details: res.old_details as GenericObject,
+      new_details: res.new_details as GenericObject
     });
   };
 
   create = async (
-    args: CreateArgs<EventLogsModel>
-  ): Promise<EventLogsModel> => {
+    args: CreateArgs<AuditTrailsModel>
+  ): Promise<AuditTrailsModel> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
       : undefined;
     const data = await this.client.create({
       select: {
-        ...eventLogsSubsets,
+        ...auditTrailsSubsets,
         ...exclude,
         ...businessesSelect
       },
       data: args.params
     });
 
-    return new EventLogsModel({
+    return new AuditTrailsModel({
       ...data,
       service_name: data.service_name as ServiceNameValue,
-      payload: data.payload as GenericObject
+      action: data.action as AuditTrailsActionValue,
+      old_details: data.old_details as GenericObject,
+      new_details: data.new_details as GenericObject
     });
   };
 

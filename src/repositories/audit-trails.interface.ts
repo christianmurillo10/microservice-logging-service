@@ -1,11 +1,11 @@
-import AuditTrailsModel from "../../../models/audit-trails.model";
+import AuditTrailsModel from "../models/audit-trails.model";
 import {
   FindAllArgs,
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
   CountArgs,
-} from "../repository.type";
+} from "../shared/types/repository.type";
 
 export default interface AuditTrailsRepository {
   findAll: (args: FindAllArgs) => Promise<AuditTrailsModel[]>;

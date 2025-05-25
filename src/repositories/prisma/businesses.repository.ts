@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import BusinessesModel from "../models/businesses.model";
-import BusinessesRepository from "../shared/types/repositories/businesses.interface";
+import BusinessesModel from "../../models/businesses.model";
+import BusinessesRepository from "../businesses.interface";
 import {
   FindAllArgs,
   FindAllBetweenCreatedAtArgs,
@@ -11,10 +11,10 @@ import {
   UpdateArgs,
   SoftDeleteArgs,
   SoftDeleteManyArgs
-} from "../shared/types/repository.type";
-import { GenericObject } from "../shared/types/common.type";
-import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
-import { businessesSubsets } from "../shared/helpers/select-subset.helper";
+} from "../../shared/types/repository.type";
+import { GenericObject } from "../../shared/types/common.type";
+import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
+import { businessesSubsets } from "../../shared/helpers/select-subset.helper";
 
 export default class PrismaBusinessesRepository implements BusinessesRepository {
   private client;

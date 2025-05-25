@@ -1,36 +1,36 @@
 import { PrismaClient } from "@prisma/client";
-import AuditTrailsModel from "../models/audit-trails.model";
-import AuditTrailsRepository from "../shared/types/repositories/audit-trails.interface";
+import UserActionsModel from "../../models/user-actions.model";
+import UserActionsRepository from "../user-actions.interface";
 import {
   FindAllArgs,
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
   CountArgs,
-} from "../shared/types/repository.type";
-import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
-import { auditTrailsSubsets, businessesSubsets } from "../shared/helpers/select-subset.helper";
-import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
-import { AuditTrailsActionValue } from "../entities/audit-trails.entity";
+} from "../../shared/types/repository.type";
+import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
+import { businessesSubsets, userActionsSubsets } from "../../shared/helpers/select-subset.helper";
+import { GenericObject, ServiceNameValue } from "../../shared/types/common.type";
+import { UserActionsActionValue } from "../../entities/user-actions.entity";
 
-export default class PrismaAuditTrailsRepository implements AuditTrailsRepository {
+export default class PrismaUserActionsRepository implements UserActionsRepository {
   private client;
 
   constructor() {
     const prisma = new PrismaClient();
-    this.client = prisma.audit_trails;
+    this.client = prisma.user_actions;
   };
 
   findAll = async (
     args: FindAllArgs
-  ): Promise<AuditTrailsModel[]> => {
+  ): Promise<UserActionsModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
       : undefined;
     const res = await this.client.findMany({
       select: {
-        ...auditTrailsSubsets,
+        ...userActionsSubsets,
         ...exclude,
         ...businessesSelect
       },
@@ -45,18 +45,17 @@ export default class PrismaAuditTrailsRepository implements AuditTrailsRepositor
       take: args.query?.limit
     });
 
-    return res.map(item => new AuditTrailsModel({
+    return res.map(item => new UserActionsModel({
       ...item,
       service_name: item.service_name as ServiceNameValue,
-      action: item.action as AuditTrailsActionValue,
-      old_details: item.old_details as GenericObject,
-      new_details: item.new_details as GenericObject
+      action: item.action as UserActionsActionValue,
+      action_details: item.action_details as GenericObject
     }));
   };
 
   findAllBetweenCreatedAt = async (
     args: FindAllBetweenCreatedAtArgs
-  ): Promise<AuditTrailsModel[]> => {
+  ): Promise<UserActionsModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -66,7 +65,7 @@ export default class PrismaAuditTrailsRepository implements AuditTrailsRepositor
       : undefined;
     const res = await this.client.findMany({
       select: {
-        ...auditTrailsSubsets,
+        ...userActionsSubsets,
         ...exclude,
         ...businessesSelect
       },
@@ -76,25 +75,24 @@ export default class PrismaAuditTrailsRepository implements AuditTrailsRepositor
       }
     });
 
-    return res.map(item => new AuditTrailsModel({
+    return res.map(item => new UserActionsModel({
       ...item,
       service_name: item.service_name as ServiceNameValue,
-      action: item.action as AuditTrailsActionValue,
-      old_details: item.old_details as GenericObject,
-      new_details: item.new_details as GenericObject
+      action: item.action as UserActionsActionValue,
+      action_details: item.action_details as GenericObject
     }));
   };
 
   findById = async (
     args: FindByIdArgs<string>
-  ): Promise<AuditTrailsModel | null> => {
+  ): Promise<UserActionsModel | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
       : undefined;
     const res = await this.client.findFirst({
       select: {
-        ...auditTrailsSubsets,
+        ...userActionsSubsets,
         ...exclude,
         ...businessesSelect
       },
@@ -106,37 +104,35 @@ export default class PrismaAuditTrailsRepository implements AuditTrailsRepositor
 
     if (!res) return null;
 
-    return new AuditTrailsModel({
+    return new UserActionsModel({
       ...res,
       service_name: res.service_name as ServiceNameValue,
-      action: res.action as AuditTrailsActionValue,
-      old_details: res.old_details as GenericObject,
-      new_details: res.new_details as GenericObject
+      action: res.action as UserActionsActionValue,
+      action_details: res.action_details as GenericObject
     });
   };
 
   create = async (
-    args: CreateArgs<AuditTrailsModel>
-  ): Promise<AuditTrailsModel> => {
+    args: CreateArgs<UserActionsModel>
+  ): Promise<UserActionsModel> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
       : undefined;
     const data = await this.client.create({
       select: {
-        ...auditTrailsSubsets,
+        ...userActionsSubsets,
         ...exclude,
         ...businessesSelect
       },
       data: args.params
     });
 
-    return new AuditTrailsModel({
+    return new UserActionsModel({
       ...data,
       service_name: data.service_name as ServiceNameValue,
-      action: data.action as AuditTrailsActionValue,
-      old_details: data.old_details as GenericObject,
-      new_details: data.new_details as GenericObject
+      action: data.action as UserActionsActionValue,
+      action_details: data.action_details as GenericObject
     });
   };
 

@@ -1,5 +1,5 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
-import PrismaUsersRepository from "../repositories/users.repository";
+import PrismaUsersRepository from "../repositories/prisma/users.repository";
 import UsersModel from "../models/users.model";
 import { GetAllArgs, GetByIdArgs } from "../shared/types/service.type";
 import NotFoundException from "../shared/exceptions/not-found.exception";

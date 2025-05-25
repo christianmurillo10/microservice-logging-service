@@ -1,36 +1,35 @@
 import { PrismaClient } from "@prisma/client";
-import UserActionsModel from "../models/user-actions.model";
-import UserActionsRepository from "../shared/types/repositories/user-actions.interface";
+import EventLogsModel from "../../models/event-logs.model";
+import EventLogsRepository from "../event-logs.interface";
 import {
   FindAllArgs,
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
   CountArgs,
-} from "../shared/types/repository.type";
-import { parseQueryFilters, setSelectExclude } from "../shared/helpers/common.helper";
-import { businessesSubsets, userActionsSubsets } from "../shared/helpers/select-subset.helper";
-import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
-import { UserActionsActionValue } from "../entities/user-actions.entity";
+} from "../../shared/types/repository.type";
+import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
+import { businessesSubsets, eventLogsSubsets } from "../../shared/helpers/select-subset.helper";
+import { GenericObject, ServiceNameValue } from "../../shared/types/common.type";
 
-export default class PrismaUserActionsRepository implements UserActionsRepository {
+export default class PrismaEventLogsRepository implements EventLogsRepository {
   private client;
 
   constructor() {
     const prisma = new PrismaClient();
-    this.client = prisma.user_actions;
+    this.client = prisma.event_logs;
   };
 
   findAll = async (
     args: FindAllArgs
-  ): Promise<UserActionsModel[]> => {
+  ): Promise<EventLogsModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
       : undefined;
     const res = await this.client.findMany({
       select: {
-        ...userActionsSubsets,
+        ...eventLogsSubsets,
         ...exclude,
         ...businessesSelect
       },
@@ -45,17 +44,16 @@ export default class PrismaUserActionsRepository implements UserActionsRepositor
       take: args.query?.limit
     });
 
-    return res.map(item => new UserActionsModel({
+    return res.map(item => new EventLogsModel({
       ...item,
       service_name: item.service_name as ServiceNameValue,
-      action: item.action as UserActionsActionValue,
-      action_details: item.action_details as GenericObject
+      payload: item.payload as GenericObject
     }));
   };
 
   findAllBetweenCreatedAt = async (
     args: FindAllBetweenCreatedAtArgs
-  ): Promise<UserActionsModel[]> => {
+  ): Promise<EventLogsModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
@@ -65,7 +63,7 @@ export default class PrismaUserActionsRepository implements UserActionsRepositor
       : undefined;
     const res = await this.client.findMany({
       select: {
-        ...userActionsSubsets,
+        ...eventLogsSubsets,
         ...exclude,
         ...businessesSelect
       },
@@ -75,24 +73,23 @@ export default class PrismaUserActionsRepository implements UserActionsRepositor
       }
     });
 
-    return res.map(item => new UserActionsModel({
+    return res.map(item => new EventLogsModel({
       ...item,
       service_name: item.service_name as ServiceNameValue,
-      action: item.action as UserActionsActionValue,
-      action_details: item.action_details as GenericObject
+      payload: item.payload as GenericObject
     }));
   };
 
   findById = async (
     args: FindByIdArgs<string>
-  ): Promise<UserActionsModel | null> => {
+  ): Promise<EventLogsModel | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
       : undefined;
     const res = await this.client.findFirst({
       select: {
-        ...userActionsSubsets,
+        ...eventLogsSubsets,
         ...exclude,
         ...businessesSelect
       },
@@ -104,35 +101,33 @@ export default class PrismaUserActionsRepository implements UserActionsRepositor
 
     if (!res) return null;
 
-    return new UserActionsModel({
+    return new EventLogsModel({
       ...res,
       service_name: res.service_name as ServiceNameValue,
-      action: res.action as UserActionsActionValue,
-      action_details: res.action_details as GenericObject
+      payload: res.payload as GenericObject
     });
   };
 
   create = async (
-    args: CreateArgs<UserActionsModel>
-  ): Promise<UserActionsModel> => {
+    args: CreateArgs<EventLogsModel>
+  ): Promise<EventLogsModel> => {
     const exclude = setSelectExclude(args.exclude!);
     const businessesSelect = args.include?.includes("businesses")
       ? { businesses: { select: { ...businessesSubsets, deleted_at: false } } }
       : undefined;
     const data = await this.client.create({
       select: {
-        ...userActionsSubsets,
+        ...eventLogsSubsets,
         ...exclude,
         ...businessesSelect
       },
       data: args.params
     });
 
-    return new UserActionsModel({
+    return new EventLogsModel({
       ...data,
       service_name: data.service_name as ServiceNameValue,
-      action: data.action as UserActionsActionValue,
-      action_details: data.action_details as GenericObject
+      payload: data.payload as GenericObject
     });
   };
 

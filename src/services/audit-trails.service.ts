@@ -1,5 +1,5 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
-import PrismaAuditTrailsRepository from "../repositories/audit-trails.repository";
+import PrismaAuditTrailsRepository from "../repositories/prisma/audit-trails.repository";
 import AuditTrailsModel from "../models/audit-trails.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";

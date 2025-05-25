@@ -1,11 +1,11 @@
-import EventLogsModel from "../../../models/event-logs.model";
+import EventLogsModel from "../models/event-logs.model";
 import {
   FindAllArgs,
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   CreateArgs,
   CountArgs,
-} from "../repository.type";
+} from "../shared/types/repository.type";
 
 export default interface EventLogsRepository {
   findAll: (args: FindAllArgs) => Promise<EventLogsModel[]>;

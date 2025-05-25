@@ -1,4 +1,4 @@
-import BusinessesModel from "../../../models/businesses.model";
+import BusinessesModel from "../models/businesses.model";
 import {
   CreateArgs,
   FindAllArgs,
@@ -9,8 +9,8 @@ import {
   SoftDeleteArgs,
   SoftDeleteManyArgs,
   UpdateArgs
-} from "../repository.type";
-import { GenericObject } from "../common.type";
+} from "../shared/types/repository.type";
+import { GenericObject } from "../shared/types/common.type";
 
 export default interface BusinessesRepository {
   findAll: (args: FindAllArgs) => Promise<BusinessesModel[]>;

@@ -1,5 +1,5 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
-import PrismaBusinessesRepository from "../repositories/businesses.repository";
+import PrismaBusinessesRepository from "../repositories/prisma/businesses.repository";
 import BusinessesModel from "../models/businesses.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 import { GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";

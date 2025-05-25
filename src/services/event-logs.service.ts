@@ -1,5 +1,5 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
-import PrismaEventLogsRepository from "../repositories/event-logs.repository";
+import PrismaEventLogsRepository from "../repositories/prisma/event-logs.repository";
 import EventLogsModel from "../models/event-logs.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
