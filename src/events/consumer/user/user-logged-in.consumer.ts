@@ -65,7 +65,7 @@ const subscribeUserLoggedIn = async (message: Message): Promise<void> => {
   const userActions = {
     service_name: "AUTH_SERVICE",
     action: "LOGIN",
-    action_details: value,
+    action_details: value.new_details,
     ip_address: message.headers!.ip_address!.toString(),
     user_agent: message.headers!.user_agent!.toString(),
     business_id: record?.business_id,
