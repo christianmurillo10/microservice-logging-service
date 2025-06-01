@@ -1,11 +1,11 @@
 import { v4 as uuidv4 } from "uuid";
-import UserActions, { UserActionsActionValue } from "../entities/user-actions.entity";
-import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
+import UserActions from "../entities/user-actions.entity";
+import { ActionValue, GenericObject, ServiceNameValue } from "../shared/types/common.type";
 
 class UserActionsModel implements UserActions {
   id?: string = uuidv4();
   service_name: ServiceNameValue = "USER_SERVICE";
-  action: UserActionsActionValue = "LOGIN";
+  action: ActionValue = "LOGIN";
   action_details: GenericObject = {};
   ip_address: string = "";
   user_agent: string = "";

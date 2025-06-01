@@ -10,8 +10,7 @@ import {
 } from "../../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
 import { auditTrailsSubsets, businessesSubsets } from "../../shared/helpers/select-subset.helper";
-import { GenericObject, ServiceNameValue } from "../../shared/types/common.type";
-import { AuditTrailsActionValue } from "../../entities/audit-trails.entity";
+import { ActionValue, GenericObject, ServiceNameValue } from "../../shared/types/common.type";
 
 export default class PrismaAuditTrailsRepository implements AuditTrailsRepository {
   private client;
@@ -48,7 +47,7 @@ export default class PrismaAuditTrailsRepository implements AuditTrailsRepositor
     return res.map(item => new AuditTrailsModel({
       ...item,
       service_name: item.service_name as ServiceNameValue,
-      action: item.action as AuditTrailsActionValue,
+      action: item.action as ActionValue,
       old_details: item.old_details as GenericObject,
       new_details: item.new_details as GenericObject
     }));
@@ -79,7 +78,7 @@ export default class PrismaAuditTrailsRepository implements AuditTrailsRepositor
     return res.map(item => new AuditTrailsModel({
       ...item,
       service_name: item.service_name as ServiceNameValue,
-      action: item.action as AuditTrailsActionValue,
+      action: item.action as ActionValue,
       old_details: item.old_details as GenericObject,
       new_details: item.new_details as GenericObject
     }));
@@ -109,7 +108,7 @@ export default class PrismaAuditTrailsRepository implements AuditTrailsRepositor
     return new AuditTrailsModel({
       ...res,
       service_name: res.service_name as ServiceNameValue,
-      action: res.action as AuditTrailsActionValue,
+      action: res.action as ActionValue,
       old_details: res.old_details as GenericObject,
       new_details: res.new_details as GenericObject
     });
@@ -134,7 +133,7 @@ export default class PrismaAuditTrailsRepository implements AuditTrailsRepositor
     return new AuditTrailsModel({
       ...data,
       service_name: data.service_name as ServiceNameValue,
-      action: data.action as AuditTrailsActionValue,
+      action: data.action as ActionValue,
       old_details: data.old_details as GenericObject,
       new_details: data.new_details as GenericObject
     });

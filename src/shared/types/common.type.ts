@@ -24,6 +24,15 @@ export type ApiResponseInput = {
 
 export type ServiceNameValue = "AUTH_SERVICE" | "USER_SERVICE";
 
+export type ActionValue =
+  "LOGIN" |
+  "LOGOUT" |
+  "CREATE" |
+  "UPDATE" |
+  "DELETE" |
+  "DELETE_MANY" |
+  "CHANGE_PASSWORD";
+
 // Enum
 export enum ServiceName {
   AuthService = "AUTH_SERVICE",

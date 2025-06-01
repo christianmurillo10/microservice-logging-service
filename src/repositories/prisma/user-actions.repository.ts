@@ -10,8 +10,7 @@ import {
 } from "../../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
 import { businessesSubsets, userActionsSubsets } from "../../shared/helpers/select-subset.helper";
-import { GenericObject, ServiceNameValue } from "../../shared/types/common.type";
-import { UserActionsActionValue } from "../../entities/user-actions.entity";
+import { ActionValue, GenericObject, ServiceNameValue } from "../../shared/types/common.type";
 
 export default class PrismaUserActionsRepository implements UserActionsRepository {
   private client;
@@ -48,7 +47,7 @@ export default class PrismaUserActionsRepository implements UserActionsRepositor
     return res.map(item => new UserActionsModel({
       ...item,
       service_name: item.service_name as ServiceNameValue,
-      action: item.action as UserActionsActionValue,
+      action: item.action as ActionValue,
       action_details: item.action_details as GenericObject
     }));
   };
@@ -78,7 +77,7 @@ export default class PrismaUserActionsRepository implements UserActionsRepositor
     return res.map(item => new UserActionsModel({
       ...item,
       service_name: item.service_name as ServiceNameValue,
-      action: item.action as UserActionsActionValue,
+      action: item.action as ActionValue,
       action_details: item.action_details as GenericObject
     }));
   };
@@ -107,7 +106,7 @@ export default class PrismaUserActionsRepository implements UserActionsRepositor
     return new UserActionsModel({
       ...res,
       service_name: res.service_name as ServiceNameValue,
-      action: res.action as UserActionsActionValue,
+      action: res.action as ActionValue,
       action_details: res.action_details as GenericObject
     });
   };
@@ -131,7 +130,7 @@ export default class PrismaUserActionsRepository implements UserActionsRepositor
     return new UserActionsModel({
       ...data,
       service_name: data.service_name as ServiceNameValue,
-      action: data.action as UserActionsActionValue,
+      action: data.action as ActionValue,
       action_details: data.action_details as GenericObject
     });
   };

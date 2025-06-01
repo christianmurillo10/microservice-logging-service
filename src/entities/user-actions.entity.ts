@@ -1,18 +1,9 @@
-import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
-
-export type UserActionsActionValue =
-  "LOGIN" |
-  "LOGOUT" |
-  "CREATE" |
-  "UPDATE" |
-  "DELETE" |
-  "DELETE_MANY" |
-  "CHANGE_PASSWORD";
+import { ActionValue, GenericObject, ServiceNameValue } from "../shared/types/common.type";
 
 export default interface UserActions {
   id?: string;
   service_name: ServiceNameValue;
-  action: UserActionsActionValue;
+  action: ActionValue;
   action_details: GenericObject;
   ip_address: string;
   user_agent: string;

@@ -1,20 +1,11 @@
-import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
-
-export type AuditTrailsActionValue =
-  "LOGIN" |
-  "LOGOUT" |
-  "CREATE" |
-  "UPDATE" |
-  "DELETE" |
-  "DELETE_MANY" |
-  "CHANGE_PASSWORD";
+import { ActionValue, GenericObject, ServiceNameValue } from "../shared/types/common.type";
 
 export default interface AuditTrails {
   id?: string;
   service_name: ServiceNameValue;
   entity_type: string;
   entity_id: string;
-  action: AuditTrailsActionValue;
+  action: ActionValue;
   old_details: GenericObject;
   new_details: GenericObject;
   business_id?: number | null;

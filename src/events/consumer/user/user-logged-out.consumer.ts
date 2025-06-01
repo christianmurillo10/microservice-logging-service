@@ -32,14 +32,14 @@ const subscribeUserLoggedOut = async (message: Message): Promise<void> => {
   }
 
   // Saving record in Event Logs
-  const data = {
+  const eventLogs = {
     service_name: "AUTH_SERVICE",
     event_type: message.key!.toString(),
     payload: value,
     business_id: record?.business_id,
     created_at: new Date()
   } as EventLogsModel;
-  await eventLogsService.save(data)
+  await eventLogsService.save(eventLogs)
     .catch(err => {
       console.log("Error on saving event logs", err);
     });
