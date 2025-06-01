@@ -2,6 +2,7 @@ import { Message } from "kafkajs";
 import UsersModel from "../../../models/users.model";
 import UsersService from "../../../services/users.service";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
+import LoggingService from "../../../services/logging.service";
 
 const usersService = new UsersService();
 
@@ -33,10 +34,28 @@ const subscribeUserUpdated = async (message: Message): Promise<void> => {
     updated_at: value.updated_at,
   } as UsersModel;
 
-  await usersService.save(data)
+  const newValue = await usersService.save(data)
     .catch(err => {
       console.log("Error on updating users", err);
     });
+
+  const loggingService = new LoggingService({
+    service_name: "USER_SERVICE",
+    action: "UPDATE",
+    event_type: message.key!.toString(),
+    payload: {
+      old_details: record,
+      new_details: newValue
+    },
+    header: {
+      ip_address: message.headers!.ip_address!.toString(),
+      user_agent: message.headers!.user_agent!.toString()
+    },
+    user_id: record.id!,
+    business_id: record.business_id ?? undefined
+  });
+  await loggingService.execute();
+
   console.info(`Event Notification: Successfully updated user ${data.id}.`);
 };
 
