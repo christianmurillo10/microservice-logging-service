@@ -22,6 +22,11 @@ export type ApiResponseInput = {
   result?: unknown,
 };
 
+export type EventMessageData<T> = {
+  old_details: T,
+  new_details: T
+};
+
 export type ServiceNameValue = "AUTH_SERVICE" | "USER_SERVICE";
 
 export type ActionValue =

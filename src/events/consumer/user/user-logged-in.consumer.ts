@@ -1,13 +1,14 @@
 import { Message } from "kafkajs";
 import UsersService from "../../../services/users.service";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
-import { UserLoggedInData } from "../../../shared/types/events/users.type";
+import { EventMessageData } from "../../../shared/types/common.type";
+import { UserLoggedIn } from "../../../shared/types/events/users.type";
 import LoggingService from "../../../services/logging.service";
 
 const usersService = new UsersService();
 
 const subscribeUserLoggedIn = async (message: Message): Promise<void> => {
-  const value: UserLoggedInData = JSON.parse(message.value?.toString() ?? '{}');
+  const value: EventMessageData<UserLoggedIn> = JSON.parse(message.value?.toString() ?? '{}');
   const userId = value.new_details.id;
   const record = await usersService.getById({ id: userId })
     .catch(err => {
