@@ -34,25 +34,27 @@ const subscribeUserUpdated = async (message: Message): Promise<void> => {
     updated_at: value.updated_at,
   } as UsersModel;
 
-  const newValue = await usersService.save(data)
+  const newRecord = await usersService.save(data)
     .catch(err => {
       console.log("Error on updating users", err);
+      return null;
     });
+
+  if (!newRecord) {
+    return;
+  }
 
   const loggingService = new LoggingService({
     service_name: "USER_SERVICE",
     action: "UPDATE",
     event_type: message.key!.toString(),
-    payload: {
-      old_details: record,
-      new_details: newValue
-    },
+    payload: value,
     header: {
       ip_address: message.headers!.ip_address!.toString(),
       user_agent: message.headers!.user_agent!.toString()
     },
-    user_id: record.id!,
-    business_id: record.business_id ?? undefined
+    user_id: newRecord.id!,
+    business_id: newRecord.business_id ?? undefined
   });
   await loggingService.execute();
 

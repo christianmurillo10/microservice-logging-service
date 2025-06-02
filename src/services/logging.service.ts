@@ -1,15 +1,10 @@
 import AuditTrailsModel from "../models/audit-trails.model";
 import EventLogsModel from "../models/event-logs.model";
 import UserActionsModel from "../models/user-actions.model";
-import { ActionValue, ServiceNameValue } from "../shared/types/common.type";
+import { ActionValue, EventMessageData, ServiceNameValue } from "../shared/types/common.type";
 import AuditTrailsService from "./audit-trails.service";
 import EventLogsService from "./event-logs.service";
 import UserActionsService from "./user-actions.service";
-
-type Payload = {
-  old_details: unknown,
-  new_details: unknown
-};
 
 type Header = {
   ip_address: string,
@@ -20,7 +15,7 @@ export type Input = {
   service_name: ServiceNameValue
   action: ActionValue,
   event_type: string,
-  payload: Payload,
+  payload: EventMessageData<unknown>,
   header: Header,
   user_id: string,
   business_id?: number

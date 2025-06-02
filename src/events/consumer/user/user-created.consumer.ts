@@ -21,6 +21,7 @@ const subscribeUserCreated = async (message: Message): Promise<void> => {
   const record = await usersService.save(data)
     .catch(err => {
       console.log("Error on creating users", err);
+      return null;
     });
 
   if (!record) {
@@ -31,10 +32,7 @@ const subscribeUserCreated = async (message: Message): Promise<void> => {
     service_name: "USER_SERVICE",
     action: "CREATE",
     event_type: message.key!.toString(),
-    payload: {
-      old_details: {},
-      new_details: value
-    },
+    payload: value,
     header: {
       ip_address: message.headers!.ip_address!.toString(),
       user_agent: message.headers!.user_agent!.toString()
