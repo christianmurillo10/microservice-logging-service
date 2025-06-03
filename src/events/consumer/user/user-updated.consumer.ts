@@ -8,10 +8,11 @@ const usersService = new UsersService();
 
 const subscribeUserUpdated = async (message: Message): Promise<void> => {
   const value = JSON.parse(message.value?.toString() ?? '{}');
-  const record = await usersService.getById(value.id)
+  const userId = value.new_details.id;
+  const record = await usersService.getById(userId)
     .catch(err => {
       if (err instanceof NotFoundException) {
-        console.log(`User ${value.id} not exist!`);
+        console.log(`User ${userId} not exist!`);
         return;
       }
 
@@ -24,14 +25,14 @@ const subscribeUserUpdated = async (message: Message): Promise<void> => {
 
   const data = {
     ...record,
-    id: value.id,
-    name: value.name,
-    username: value.username,
-    email: value.email,
-    access_type: value.access_type,
-    business_id: value.business_id,
-    created_at: value.created_at,
-    updated_at: value.updated_at,
+    id: value.new_details.id,
+    name: value.new_details.name,
+    username: value.new_details.username,
+    email: value.new_details.email,
+    access_type: value.new_details.access_type,
+    business_id: value.new_details.business_id,
+    created_at: value.new_details.created_at,
+    updated_at: value.new_details.updated_at,
   } as UsersModel;
 
   const newRecord = await usersService.save(data)
