@@ -15,6 +15,8 @@ export type Input = {
   service_name: ServiceNameValue
   action: ActionValue,
   event_type: string,
+  entity_type: string,
+  entity_id: string | number,
   payload: EventMessageData<unknown>,
   header: Header,
   user_id?: string,
@@ -51,11 +53,11 @@ export default class LoggingService {
   };
 
   private saveAuditTrails = async () => {
-    const { service_name, action, payload, user_id, business_id } = this.input;
+    const { service_name, action, entity_type, entity_id, payload, user_id, business_id } = this.input;
     const auditTrails = {
       service_name: service_name,
-      entity_type: "users",
-      entity_id: user_id,
+      entity_type: entity_type,
+      entity_id: entity_id,
       action: action,
       old_details: payload.old_details,
       new_details: payload.new_details,

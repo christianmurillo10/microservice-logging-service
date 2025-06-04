@@ -32,6 +32,8 @@ const subscribeUserCreated = async (message: Message): Promise<void> => {
     service_name: "USER_SERVICE",
     action: "CREATE",
     event_type: message.key!.toString(),
+    entity_type: "users",
+    entity_id: value.new_details.id,
     payload: value,
     header: {
       ip_address: message.headers!.ip_address!.toString(),

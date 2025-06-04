@@ -47,6 +47,8 @@ export default class UserKafkaConsumer {
         service_name: "USER_SERVICE",
         action: action,
         event_type: message.key!.toString(),
+        entity_type: "roles",
+        entity_id: value.new_details.id,
         payload: value,
         header: {
           ip_address: message.headers!.ip_address!.toString(),
