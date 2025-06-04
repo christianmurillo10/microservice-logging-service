@@ -1,18 +1,18 @@
 import { Message } from "kafkajs";
-import UsersModel from "../../../models/users.model";
-import UsersService from "../../../services/users.service";
+import BusinessesModel from "../../../models/businesses.model";
+import BusinessesService from "../../../services/businesses.service";
 import LoggingService from "../../../services/logging.service";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 
-const usersService = new UsersService();
+const businessService = new BusinessesService();
 
-const subscribeUserUpdated = async (message: Message): Promise<void> => {
+const subscribeUserDeleted = async (message: Message): Promise<void> => {
   const value = JSON.parse(message.value?.toString() ?? '{}');
-  const userId = value.new_details.id;
-  const record = await usersService.getById(userId)
+  const businessId = value.new_details.id;
+  const record = await businessService.getById(businessId)
     .catch(err => {
       if (err instanceof NotFoundException) {
-        console.log(`User ${userId} not exist!`);
+        console.log(`Business ${businessId} not exist!`);
         return;
       }
 
@@ -27,17 +27,18 @@ const subscribeUserUpdated = async (message: Message): Promise<void> => {
     ...record,
     id: value.new_details.id,
     name: value.new_details.name,
-    username: value.new_details.username,
-    email: value.new_details.email,
-    access_type: value.new_details.access_type,
-    business_id: value.new_details.business_id,
+    api_key: value.new_details.api_key,
+    domain: value.new_details.domain,
+    preferred_timezone: value.new_details.preferred_timezone,
+    currency: value.new_details.currency,
     created_at: value.new_details.created_at,
     updated_at: value.new_details.updated_at,
-  } as UsersModel;
+    deleted_at: value.new_details.deleted_at,
+  } as BusinessesModel;
 
-  const newRecord = await usersService.save(data)
+  const newRecord = await businessService.save(data)
     .catch(err => {
-      console.log("Error on updating users", err);
+      console.log("Error on deleting business", err);
       return null;
     });
 
@@ -54,12 +55,12 @@ const subscribeUserUpdated = async (message: Message): Promise<void> => {
       ip_address: message.headers!.ip_address!.toString(),
       user_agent: message.headers!.user_agent!.toString()
     },
-    user_id: newRecord.id!,
-    business_id: newRecord.business_id ?? undefined
+    user_id: undefined,
+    business_id: undefined
   });
   await loggingService.execute();
 
-  console.info(`Event Notification: Successfully updated user ${data.id}.`);
+  console.info(`Event Notification: Successfully deleted business ${data.id}.`);
 };
 
-export default subscribeUserUpdated;
+export default subscribeUserDeleted;

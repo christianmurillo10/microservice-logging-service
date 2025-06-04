@@ -2,12 +2,16 @@ import KafkaService from "../services/kafka.service";
 import UserKafkaConsumer from "./consumer/user";
 import kafkaConfig from "../config/kafka.config";
 import { EVENT_USER } from "../shared/constants/events.constant";
+import BusinessKafkaConsumer from "./consumer/business";
 
 export default class KafkaServer {
   static listen = async () => {
     // Consumers
     const userConsumer = new UserKafkaConsumer();
     await userConsumer.execute();
+
+    const businessConsumer = new BusinessKafkaConsumer();
+    await businessConsumer.execute();
   };
 
   static disconnect = async () => {

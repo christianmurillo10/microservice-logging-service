@@ -1,8 +1,8 @@
 import { Message } from "kafkajs";
 import UsersModel from "../../../models/users.model";
 import UsersService from "../../../services/users.service";
-import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../../services/logging.service";
+import NotFoundException from "../../../shared/exceptions/not-found.exception";
 
 const usersService = new UsersService();
 
@@ -60,7 +60,7 @@ const subscribeUserDeleted = async (message: Message): Promise<void> => {
   });
   await loggingService.execute();
 
-  console.info(`Event Notification: Successfully deleted user ${userId}.`);
+  console.info(`Event Notification: Successfully deleted user ${data.id}.`);
 };
 
 export default subscribeUserDeleted;

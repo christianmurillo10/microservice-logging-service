@@ -17,7 +17,7 @@ export type Input = {
   event_type: string,
   payload: EventMessageData<unknown>,
   header: Header,
-  user_id: string,
+  user_id?: string,
   business_id?: number
 };
 
