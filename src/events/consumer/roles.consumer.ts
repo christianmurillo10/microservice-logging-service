@@ -10,7 +10,7 @@ import {
 import { ActionValue } from "../../shared/types/common.type";
 import LoggingService from "../../services/logging.service";
 
-export default class UserKafkaConsumer {
+export default class RoleKafkaConsumer {
   private kafkaService: KafkaService;
 
   constructor() {
