@@ -3,8 +3,8 @@ import { ActionValue, GenericObject, ServiceNameValue } from "../shared/types/co
 export default interface AuditTrails {
   id?: string;
   service_name: ServiceNameValue;
-  entity_type: string;
-  entity_id: string;
+  table_name: string;
+  table_id: string;
   action: ActionValue;
   old_details: GenericObject;
   new_details: GenericObject;

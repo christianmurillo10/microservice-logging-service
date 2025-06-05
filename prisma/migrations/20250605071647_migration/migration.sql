@@ -33,8 +33,8 @@ CREATE TABLE `users` (
 CREATE TABLE `audit_trails` (
     `id` CHAR(36) NOT NULL,
     `service_name` VARCHAR(100) NOT NULL,
-    `entity_type` VARCHAR(100) NOT NULL,
-    `entity_id` VARCHAR(255) NOT NULL,
+    `table_name` VARCHAR(100) NOT NULL,
+    `table_id` VARCHAR(255) NOT NULL,
     `action` VARCHAR(100) NOT NULL,
     `old_details` JSON NOT NULL,
     `new_details` JSON NOT NULL,
@@ -51,6 +51,8 @@ CREATE TABLE `audit_trails` (
 CREATE TABLE `user_actions` (
     `id` CHAR(36) NOT NULL,
     `service_name` VARCHAR(100) NOT NULL,
+    `table_name` VARCHAR(100) NOT NULL,
+    `table_id` VARCHAR(255) NOT NULL,
     `action` VARCHAR(100) NOT NULL,
     `action_details` JSON NOT NULL,
     `ip_address` VARCHAR(100) NOT NULL,

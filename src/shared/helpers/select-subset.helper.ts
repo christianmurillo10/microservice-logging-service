@@ -26,6 +26,8 @@ export const usersSubsets = {
 export const userActionsSubsets = {
   id: true,
   service_name: true,
+  table_name: true,
+  table_id: true,
   action: true,
   action_details: true,
   ip_address: true,
@@ -38,8 +40,8 @@ export const userActionsSubsets = {
 export const auditTrailsSubsets = {
   id: true,
   service_name: true,
-  entity_type: true,
-  entity_id: true,
+  table_name: true,
+  table_id: true,
   action: true,
   old_details: true,
   new_details: true,

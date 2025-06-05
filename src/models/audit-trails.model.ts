@@ -5,8 +5,8 @@ import { ActionValue, GenericObject, ServiceNameValue } from "../shared/types/co
 class AuditTrailsModel implements AuditTrails {
   id?: string = uuidv4();
   service_name: ServiceNameValue = "USER_SERVICE";
-  entity_type: string = "";
-  entity_id!: string;
+  table_name: string = "";
+  table_id!: string;
   action: ActionValue = "CREATE";
   old_details: GenericObject = {};
   new_details: GenericObject = {};

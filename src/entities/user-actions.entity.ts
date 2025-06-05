@@ -3,6 +3,8 @@ import { ActionValue, GenericObject, ServiceNameValue } from "../shared/types/co
 export default interface UserActions {
   id?: string;
   service_name: ServiceNameValue;
+  table_name: string;
+  table_id: string;
   action: ActionValue;
   action_details: GenericObject;
   ip_address: string;

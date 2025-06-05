@@ -5,6 +5,8 @@ import { ActionValue, GenericObject, ServiceNameValue } from "../shared/types/co
 class UserActionsModel implements UserActions {
   id?: string = uuidv4();
   service_name: ServiceNameValue = "USER_SERVICE";
+  table_name: string = "";
+  table_id: string = "";
   action: ActionValue = "LOGIN";
   action_details: GenericObject = {};
   ip_address: string = "";

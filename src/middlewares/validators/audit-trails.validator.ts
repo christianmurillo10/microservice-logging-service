@@ -17,13 +17,13 @@ export const list = async (
       filters: joi.object({
         created_at: joi.date().label("Date Created").empty(),
         service_name: joi.string().label("Service Name").valid(ServiceName.AuthService, ServiceName.UserService).max(100).empty(),
-        entity_type: joi.string().label("Entity Type").max(100).empty(),
+        table_name: joi.string().label("Entity Type").max(100).empty(),
         action: joi.string().label("Action").max(100).empty(),
       }).label("Filters").empty(),
       sorting: joi.object({
         created_at: joi.string().label("Date Created").valid("asc", "desc").empty(),
         service_name: joi.string().label("Service Name").valid("asc", "desc").empty(),
-        entity_type: joi.string().label("Entity Type").valid("asc", "desc").empty(),
+        table_name: joi.string().label("Entity Type").valid("asc", "desc").empty(),
         action: joi.string().label("Action").valid("asc", "desc").empty(),
       }).label("Sorting").empty(),
       offset: joi.number().label("Offset").empty(),
