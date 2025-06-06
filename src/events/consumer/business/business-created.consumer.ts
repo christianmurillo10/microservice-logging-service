@@ -32,7 +32,7 @@ const subscribeUserCreated = async (message: Message): Promise<void> => {
     service_name: "USER_SERVICE",
     action: "CREATE",
     event_type: message.key!.toString(),
-    table_name: "users",
+    table_name: "businesses",
     table_id: value.new_details.id,
     payload: value,
     header: {

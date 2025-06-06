@@ -50,7 +50,7 @@ const subscribeUserDeleted = async (message: Message): Promise<void> => {
     service_name: "USER_SERVICE",
     action: "UPDATE",
     event_type: message.key!.toString(),
-    table_name: "users",
+    table_name: "businesses",
     table_id: value.new_details.id,
     payload: value,
     header: {
