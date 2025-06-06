@@ -1,7 +1,7 @@
 import KafkaService from "../services/kafka.service";
 import UserKafkaConsumer from "./consumer/user";
 import kafkaConfig from "../config/kafka.config";
-import { EVENT_USER } from "../shared/constants/events.constant";
+import { EVENT_BUSINESS, EVENT_ROLE, EVENT_USER } from "../shared/constants/events.constant";
 import BusinessKafkaConsumer from "./consumer/business";
 import RoleKafkaConsumer from "./consumer/roles.consumer";
 
@@ -25,5 +25,7 @@ export default class KafkaServer {
     });
     await kafkaService.disconnectProducer();
     await kafkaService.disconnectConsumer(EVENT_USER);
+    await kafkaService.disconnectConsumer(EVENT_BUSINESS);
+    await kafkaService.disconnectConsumer(EVENT_ROLE);
   };
 };

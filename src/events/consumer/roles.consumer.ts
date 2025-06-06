@@ -46,7 +46,7 @@ export default class RoleKafkaConsumer {
       const loggingService = new LoggingService({
         service_name: "USER_SERVICE",
         action: action,
-        event_type: message.key!.toString(),
+        event_type: message.key.toString(),
         table_name: "roles",
         table_id: value.new_details.id,
         payload: value,
@@ -58,6 +58,8 @@ export default class RoleKafkaConsumer {
         business_id: value.new_details.business_id ?? undefined
       });
       await loggingService.execute();
+
+      console.info(`Event Notification: Successfully logged role updates.`);
     }
 
     await heartbeat();
