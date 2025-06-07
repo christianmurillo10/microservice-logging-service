@@ -22,14 +22,15 @@ export default class RoleKafkaConsumer {
 
   private eachMessageHandler = async (payload: EachMessagePayload) => {
     const { message, heartbeat } = payload;
+    const value = JSON.parse(message.value?.toString() ?? '{}');
 
-    if (!message.key) {
+    if (!value) {
       return;
     };
 
     let action: ActionValue | null = null;
 
-    switch (message.key.toString()) {
+    switch (value.eventType) {
       case EVENT_ROLE_CREATED:
         action = "CREATE";
         break;
@@ -42,20 +43,20 @@ export default class RoleKafkaConsumer {
     };
 
     if (action) {
-      const value = JSON.parse(message.value?.toString() ?? '{}');
+      const data = value.data;
       const loggingService = new LoggingService({
         service_name: "USER_SERVICE",
         action: action,
-        event_type: message.key.toString(),
+        event_type: value.eventType,
         table_name: "roles",
-        table_id: value.new_details.id,
-        payload: value,
+        table_id: data.new_details.id,
+        payload: data,
         header: {
           ip_address: message.headers!.ip_address!.toString(),
           user_agent: message.headers!.user_agent!.toString()
         },
         user_id: undefined,
-        business_id: value.new_details.business_id ?? undefined
+        business_id: data.new_details.business_id ?? undefined
       });
       await loggingService.execute();
 

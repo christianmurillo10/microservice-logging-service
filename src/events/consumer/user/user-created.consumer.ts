@@ -1,12 +1,12 @@
-import { Message } from "kafkajs";
 import UsersModel from "../../../models/users.model";
 import UsersService from "../../../services/users.service";
-import LoggingService from "../../../services/logging.service";
+import LoggingService, { Header } from "../../../services/logging.service";
+import { EventMessageData } from "../../../shared/types/common.type";
+import { EVENT_USER_CREATED } from "../../../shared/constants/events.constant";
 
 const usersService = new UsersService();
 
-const subscribeUserCreated = async (message: Message): Promise<void> => {
-  const value = JSON.parse(message.value?.toString() ?? '{}');
+const subscribeUserCreated = async (value: EventMessageData<UsersModel>, header: Header): Promise<void> => {
   const data = {
     id: value.new_details.id,
     name: value.new_details.name,
@@ -31,13 +31,13 @@ const subscribeUserCreated = async (message: Message): Promise<void> => {
   const loggingService = new LoggingService({
     service_name: "USER_SERVICE",
     action: "CREATE",
-    event_type: message.key!.toString(),
+    event_type: EVENT_USER_CREATED,
     table_name: "users",
-    table_id: value.new_details.id,
+    table_id: record.id!,
     payload: value,
     header: {
-      ip_address: message.headers!.ip_address!.toString(),
-      user_agent: message.headers!.user_agent!.toString()
+      ip_address: header.ip_address,
+      user_agent: header.user_agent
     },
     user_id: record.id!,
     business_id: record.business_id ?? undefined

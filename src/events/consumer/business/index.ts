@@ -23,20 +23,26 @@ export default class BusinessKafkaConsumer {
 
   private eachMessageHandler = async (payload: EachMessagePayload) => {
     const { message, heartbeat } = payload;
+    const value = JSON.parse(message.value?.toString() ?? '{}');
 
-    if (!message.key) {
+    if (!value) {
       return;
     };
 
-    switch (message.key.toString()) {
+    const header = {
+      ip_address: message.headers!.ip_address!.toString(),
+      user_agent: message.headers!.user_agent!.toString()
+    };
+
+    switch (value.eventType) {
       case EVENT_BUSINESS_CREATED:
-        await subscribeBusinessCreated(message);
+        await subscribeBusinessCreated(value.data, header);
         break;
       case EVENT_BUSINESS_UPDATED:
-        await subscribeBusinessUpdated(message);
+        await subscribeBusinessUpdated(value.data, header);
         break;
       case EVENT_BUSINESS_DELETED:
-        await subscribeBusinessDeleted(message);
+        await subscribeBusinessDeleted(value.data, header);
         break;
     };
 

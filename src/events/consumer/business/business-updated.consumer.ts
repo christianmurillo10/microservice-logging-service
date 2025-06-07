@@ -1,14 +1,14 @@
-import { Message } from "kafkajs";
 import BusinessesModel from "../../../models/businesses.model";
 import BusinessesService from "../../../services/businesses.service";
-import LoggingService from "../../../services/logging.service";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
+import LoggingService, { Header } from "../../../services/logging.service";
+import { EventMessageData } from "../../../shared/types/common.type";
+import { EVENT_BUSINESS_UPDATED } from "../../../shared/constants/events.constant";
 
 const businessesService = new BusinessesService();
 
-const subscribeUserUpdated = async (message: Message): Promise<void> => {
-  const value = JSON.parse(message.value?.toString() ?? '{}');
-  const businessId = value.new_details.id;
+const subscribeUserUpdated = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
+  const businessId = value.new_details.id!;
   const record = await businessesService.getById(businessId)
     .catch(err => {
       if (err instanceof NotFoundException) {
@@ -48,13 +48,13 @@ const subscribeUserUpdated = async (message: Message): Promise<void> => {
   const loggingService = new LoggingService({
     service_name: "USER_SERVICE",
     action: "UPDATE",
-    event_type: message.key!.toString(),
+    event_type: EVENT_BUSINESS_UPDATED,
     table_name: "businesses",
-    table_id: value.new_details.id,
+    table_id: record.id!,
     payload: value,
     header: {
-      ip_address: message.headers!.ip_address!.toString(),
-      user_agent: message.headers!.user_agent!.toString()
+      ip_address: header.ip_address,
+      user_agent: header.user_agent
     },
     user_id: undefined,
     business_id: undefined

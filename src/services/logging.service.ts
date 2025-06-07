@@ -6,7 +6,7 @@ import AuditTrailsService from "./audit-trails.service";
 import EventLogsService from "./event-logs.service";
 import UserActionsService from "./user-actions.service";
 
-type Header = {
+export type Header = {
   ip_address: string,
   user_agent: string
 };
