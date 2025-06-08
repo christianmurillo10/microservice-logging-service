@@ -3,7 +3,6 @@ export const businessesSubsets = {
   name: true,
   api_key: true,
   domain: true,
-  logo_path: true,
   preferred_timezone: true,
   currency: true,
   created_at: true,

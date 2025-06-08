@@ -37,27 +37,27 @@ export default class UsersService {
     return record;
   };
 
-  save = async (data: UsersModel): Promise<UsersModel> => {
-    let record: UsersModel;
-    let newData = new UsersModel(data);
-    let option = {
-      params: newData,
+  create = async (data: UsersModel): Promise<UsersModel> => {
+    const option = {
+      params: new UsersModel(data),
       // include: ["roles", "businesses"],
       exclude: ["deleted_at"]
     };
 
-    if (data.id) {
-      // Update
-      record = await this.repository.update({
-        id: data.id,
-        ...option
-      });
-    } else {
-      // Create
-      record = await this.repository.create(option);
-    }
+    return await this.repository.create(option);
+  };
 
-    return record;
+  update = async (data: UsersModel): Promise<UsersModel> => {
+    const option = {
+      params: new UsersModel(data),
+      // include: ["roles", "businesses"],
+      exclude: ["deleted_at"]
+    };
+
+    return await this.repository.update({
+      id: data.id!,
+      ...option
+    });;
   };
 
   delete = async (id: string): Promise<UsersModel> => {

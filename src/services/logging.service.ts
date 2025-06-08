@@ -42,7 +42,7 @@ export default class LoggingService {
       service_name: service_name,
       event_type: event_type,
       payload: payload,
-      business_id: business_id,
+      business_id: business_id ?? null,
       created_at: new Date()
     } as EventLogsModel;
 
@@ -61,8 +61,8 @@ export default class LoggingService {
       action: action,
       old_details: payload.old_details,
       new_details: payload.new_details,
-      business_id: business_id,
-      created_user_id: user_id,
+      business_id: business_id ?? null,
+      created_user_id: user_id ?? null,
       created_at: new Date()
     } as AuditTrailsModel;
 
@@ -82,8 +82,8 @@ export default class LoggingService {
       action_details: payload.new_details,
       ip_address: header.ip_address,
       user_agent: header.user_agent,
-      business_id: business_id,
-      user_id: user_id,
+      business_id: business_id ?? null,
+      user_id: user_id ?? null,
       created_at: new Date()
     } as UserActionsModel;
 

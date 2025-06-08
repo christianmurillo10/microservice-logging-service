@@ -18,7 +18,7 @@ const subscribeUserCreated = async (value: EventMessageData<BusinessesModel>, he
     updated_at: value.new_details.updated_at,
   } as BusinessesModel;
 
-  const record = await businessesService.save(data)
+  const record = await businessesService.create(data)
     .catch(err => {
       console.log("Error on creating businesses", err);
       return null;

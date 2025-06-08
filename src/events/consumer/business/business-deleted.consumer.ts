@@ -36,7 +36,7 @@ const subscribeUserDeleted = async (value: EventMessageData<BusinessesModel>, he
     deleted_at: value.new_details.deleted_at,
   } as BusinessesModel;
 
-  const newRecord = await businessService.save(data)
+  const newRecord = await businessService.update(data)
     .catch(err => {
       console.log("Error on deleting business", err);
       return null;

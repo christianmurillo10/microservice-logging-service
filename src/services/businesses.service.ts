@@ -60,26 +60,25 @@ export default class BusinessesService {
     return record;
   };
 
-  save = async (data: BusinessesModel): Promise<BusinessesModel> => {
-    let record: BusinessesModel;
-    let newData = new BusinessesModel(data);
-    let option = {
-      params: newData,
+  create = async (data: BusinessesModel): Promise<BusinessesModel> => {
+    const option = {
+      params: new BusinessesModel(data),
       exclude: ["deleted_at"]
     };
 
-    if (data.id) {
-      // Update
-      record = await this.repository.update({
-        id: data.id,
-        ...option
-      });
-    } else {
-      // Create
-      record = await this.repository.create(option);
-    }
+    return await this.repository.create(option);
+  };
 
-    return record;
+  update = async (data: BusinessesModel): Promise<BusinessesModel> => {
+    const option = {
+      params: new BusinessesModel(data),
+      exclude: ["deleted_at"]
+    };
+
+    return await this.repository.update({
+      id: data.id!,
+      ...option
+    });;
   };
 
   delete = async (id: number): Promise<BusinessesModel> => {

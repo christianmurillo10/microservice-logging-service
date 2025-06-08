@@ -35,7 +35,7 @@ const subscribeUserUpdated = async (value: EventMessageData<BusinessesModel>, he
     updated_at: value.new_details.updated_at,
   } as BusinessesModel;
 
-  const newRecord = await businessesService.save(data)
+  const newRecord = await businessesService.update(data)
     .catch(err => {
       console.log("Error on updating businesses", err);
       return null;
