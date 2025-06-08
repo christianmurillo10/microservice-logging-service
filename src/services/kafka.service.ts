@@ -16,7 +16,7 @@ export default class KafkaService {
       await this.producer.connect();
       console.info("Producer connected successfully connected successfully")
     } catch (error) {
-      console.error("Failed to connect Kafka producer:", error);
+      console.error("Failed to connect kafka producer:", error);
     }
   };
 
@@ -48,7 +48,7 @@ export default class KafkaService {
       await this.producer.disconnect();
       console.info("Producer disconnected successfully")
     } catch (error) {
-      console.error("Failed to disconnect Kafka producer:", error);
+      console.error("Failed to disconnect kafka producer:", error);
     }
   };
 
