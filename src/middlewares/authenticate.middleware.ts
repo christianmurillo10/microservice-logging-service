@@ -83,6 +83,8 @@ const authenticate = async (
       req.body.business_id = businessesRecord.id;
     }
 
+    req.auth = usersRecord;
+
     next();
   })
   .catch(err => next(err));
