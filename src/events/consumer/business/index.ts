@@ -1,8 +1,5 @@
-import { EachMessagePayload } from "kafkajs";
-import KafkaService from "../../../services/kafka.service";
-import kafkaConfig from "../../../config/kafka.config";
+import { KafkaMessage } from "kafkajs";
 import {
-  EVENT_BUSINESS,
   EVENT_BUSINESS_CREATED,
   EVENT_BUSINESS_DELETED,
   EVENT_BUSINESS_UPDATED
@@ -11,49 +8,29 @@ import subscribeBusinessCreated from "./business-created.consumer";
 import subscribeBusinessUpdated from "./business-updated.consumer";
 import subscribeBusinessDeleted from "./business-deleted.consumer";
 
-export default class BusinessKafkaConsumer {
-  private kafkaService: KafkaService;
+const businessConsumer = async (message: KafkaMessage) => {
+  const value = JSON.parse(message.value?.toString() ?? '{}');
 
-  constructor() {
-    this.kafkaService = new KafkaService({
-      clientId: kafkaConfig.kafka_client_id,
-      brokers: [kafkaConfig.kafka_broker]
-    });
+  if (!value) {
+    return;
   };
 
-  private eachMessageHandler = async (payload: EachMessagePayload) => {
-    const { message, heartbeat } = payload;
-    const value = JSON.parse(message.value?.toString() ?? '{}');
-
-    if (!value) {
-      return;
-    };
-
-    const header = {
-      ip_address: message.headers!.ip_address!.toString(),
-      user_agent: message.headers!.user_agent!.toString()
-    };
-
-    switch (value.eventType) {
-      case EVENT_BUSINESS_CREATED:
-        await subscribeBusinessCreated(value.data, header);
-        break;
-      case EVENT_BUSINESS_UPDATED:
-        await subscribeBusinessUpdated(value.data, header);
-        break;
-      case EVENT_BUSINESS_DELETED:
-        await subscribeBusinessDeleted(value.data, header);
-        break;
-    };
-
-    await heartbeat();
+  const header = {
+    ip_address: message.headers!.ip_address!.toString(),
+    user_agent: message.headers!.user_agent!.toString()
   };
 
-  execute = async (): Promise<void> => {
-    await this.kafkaService.initializeConsumer(
-      EVENT_BUSINESS,
-      kafkaConfig.kafka_group_id,
-      this.eachMessageHandler
-    );
+  switch (value.eventType) {
+    case EVENT_BUSINESS_CREATED:
+      await subscribeBusinessCreated(value.data, header);
+      break;
+    case EVENT_BUSINESS_UPDATED:
+      await subscribeBusinessUpdated(value.data, header);
+      break;
+    case EVENT_BUSINESS_DELETED:
+      await subscribeBusinessDeleted(value.data, header);
+      break;
   };
 };
+
+export default businessConsumer;
