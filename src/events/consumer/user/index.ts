@@ -4,6 +4,7 @@ import {
   EVENT_USER_DELETED,
   EVENT_USER_LOGGED_IN,
   EVENT_USER_LOGGED_OUT,
+  EVENT_USER_PASSWORD_CHANGED,
   EVENT_USER_UPDATED
 } from "../../../shared/constants/events.constant";
 import subscribeUserLoggedIn from "./user-logged-in.consumer";
@@ -11,6 +12,7 @@ import subscribeUserLoggedOut from "./user-logged-out.consumer";
 import subscribeUserCreated from "./user-created.consumer";
 import subscribeUserUpdated from "./user-updated.consumer";
 import subscribeUserDeleted from "./user-deleted.consumer";
+import subscribeUserPasswordChanged from "./user-password-changed.consumer";
 
 const userConsumer = async (message: KafkaMessage) => {
   const value = JSON.parse(message.value?.toString() ?? '{}');
@@ -39,6 +41,9 @@ const userConsumer = async (message: KafkaMessage) => {
       break;
     case EVENT_USER_DELETED:
       await subscribeUserDeleted(value.data, header);
+      break;
+    case EVENT_USER_PASSWORD_CHANGED:
+      await subscribeUserPasswordChanged(value.data, header);
       break;
   };
 };
