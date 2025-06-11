@@ -6,7 +6,7 @@ import { EVENT_BUSINESS_CREATED } from "../../../shared/constants/events.constan
 
 const businessesService = new BusinessesService();
 
-const subscribeUserCreated = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
+const subscribeBusinessCreated = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
   const data = {
     id: value.new_details.id,
     name: value.new_details.name,
@@ -47,4 +47,4 @@ const subscribeUserCreated = async (value: EventMessageData<BusinessesModel>, he
   console.info(`Event Notification: Successfully created business ${record.id}.`);
 };
 
-export default subscribeUserCreated;
+export default subscribeBusinessCreated;

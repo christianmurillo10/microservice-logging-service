@@ -7,7 +7,7 @@ import { EVENT_BUSINESS_DELETED } from "../../../shared/constants/events.constan
 
 const businessService = new BusinessesService();
 
-const subscribeUserDeleted = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
+const subscribeBusinessDeleted = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
   const businessId = value.new_details.id!;
   const record = await businessService.getById(businessId)
     .catch(err => {
@@ -48,7 +48,7 @@ const subscribeUserDeleted = async (value: EventMessageData<BusinessesModel>, he
 
   const loggingService = new LoggingService({
     service_name: "USER_SERVICE",
-    action: "UPDATE",
+    action: "DELETE",
     event_type: EVENT_BUSINESS_DELETED,
     table_name: "businesses",
     table_id: record.id!,
@@ -65,4 +65,4 @@ const subscribeUserDeleted = async (value: EventMessageData<BusinessesModel>, he
   console.info(`Event Notification: Successfully deleted business ${data.id}.`);
 };
 
-export default subscribeUserDeleted;
+export default subscribeBusinessDeleted;

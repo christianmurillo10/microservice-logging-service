@@ -1,5 +1,6 @@
 import { KafkaMessage } from "kafkajs";
 import {
+  EVENT_BUSINESS_BULK_DELETED,
   EVENT_BUSINESS_CREATED,
   EVENT_BUSINESS_DELETED,
   EVENT_BUSINESS_UPDATED
@@ -7,6 +8,7 @@ import {
 import subscribeBusinessCreated from "./business-created.consumer";
 import subscribeBusinessUpdated from "./business-updated.consumer";
 import subscribeBusinessDeleted from "./business-deleted.consumer";
+import subscribeBusinessBulkDeleted from "./business-bulk-deleted.consumer";
 
 const businessConsumer = async (message: KafkaMessage) => {
   const value = JSON.parse(message.value?.toString() ?? '{}');
@@ -29,6 +31,9 @@ const businessConsumer = async (message: KafkaMessage) => {
       break;
     case EVENT_BUSINESS_DELETED:
       await subscribeBusinessDeleted(value.data, header);
+      break;
+    case EVENT_BUSINESS_BULK_DELETED:
+      await subscribeBusinessBulkDeleted(value.data, header);
       break;
   };
 };

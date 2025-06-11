@@ -7,7 +7,7 @@ import { EVENT_BUSINESS_UPDATED } from "../../../shared/constants/events.constan
 
 const businessesService = new BusinessesService();
 
-const subscribeUserUpdated = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
+const subscribeBusinessUpdated = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
   const businessId = value.new_details.id!;
   const record = await businessesService.getById(businessId)
     .catch(err => {
@@ -64,4 +64,4 @@ const subscribeUserUpdated = async (value: EventMessageData<BusinessesModel>, he
   console.info(`Event Notification: Successfully updated business ${data.id}.`);
 };
 
-export default subscribeUserUpdated;
+export default subscribeBusinessUpdated;
