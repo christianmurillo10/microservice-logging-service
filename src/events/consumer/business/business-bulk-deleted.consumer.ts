@@ -46,7 +46,16 @@ const subscribeBusinessBulkDeleted = async (value: EventMessageData<Record<strin
       event_type: EVENT_USER_BULK_DELETED,
       table_name: "businesses",
       table_id: record.id!,
-      payload: value,
+      payload: {
+        old_details: {
+          id: record.id,
+          deleted_at: record.deleted_at
+        },
+        new_details: {
+          id: newRecord.id,
+          deleted_at: newRecord.deleted_at
+        }
+      },
       header: {
         ip_address: header.ip_address,
         user_agent: header.user_agent

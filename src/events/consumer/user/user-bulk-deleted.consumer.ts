@@ -46,8 +46,14 @@ const subscribeUserBulkDeleted = async (value: EventMessageData<Record<string, s
       table_name: "users",
       table_id: record.id!,
       payload: {
-        old_details: record,
-        new_details: newRecord
+        old_details: {
+          id: record.id,
+          deleted_at: record.deleted_at
+        },
+        new_details: {
+          id: newRecord.id,
+          deleted_at: newRecord.deleted_at
+        }
       },
       header: {
         ip_address: header.ip_address,

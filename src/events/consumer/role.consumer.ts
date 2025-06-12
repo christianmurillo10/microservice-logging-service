@@ -59,7 +59,10 @@ const roleConsumer = async (message: KafkaMessage) => {
 
       for (const roleId of roleIds) {
         const data = {
-          old_details: {},
+          old_details: {
+            id: roleId,
+            deleted_at: null,
+          },
           new_details: {
             id: roleId,
             deleted_at: new Date(),
