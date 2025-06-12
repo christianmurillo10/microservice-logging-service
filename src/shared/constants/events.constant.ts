@@ -15,3 +15,4 @@ export const EVENT_ROLE = "role-events";
 export const EVENT_ROLE_CREATED = "role-created";
 export const EVENT_ROLE_UPDATED = "role-updated";
 export const EVENT_ROLE_DELETED = "role-deleted";
+export const EVENT_ROLE_BULK_DELETED = "role-bulk-deleted";
