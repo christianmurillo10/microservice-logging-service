@@ -7,14 +7,14 @@ import EventLogsService from "../../../services/event-logs.service";
 import BadRequestException from "../../../shared/exceptions/bad-request.exception";
 
 const router = Router();
-const service = new EventLogsService();
+const eventLogsService = new EventLogsService();
 
 const controller = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => Promise.resolve(req)
-  .then(async (req) => {
+): Promise<void> => {
+  try {
     const { params, businesses } = req;
     const id = params.id;
 
@@ -23,19 +23,18 @@ const controller = async (
     }
 
     const condition = businesses ? { business_id: businesses.id } : undefined;
-    return await service.getById({ id, condition });
-  })
-  .then(result => {
+    const eventLog = await eventLogsService.getById({ id, condition });
+
     apiResponse(res, {
       status_code: 200,
       message: MESSAGE_DATA_FIND,
-      result
-    })
-  })
-  .catch(err => {
-    console.error(`${ERROR_ON_READ}: `, err);
-    next(err)
-  });
+      result: eventLog
+    });
+  } catch (error) {
+    console.error(`${ERROR_ON_READ}: `, error);
+    next(error);
+  };
+};
 
 export default router.get(
   "/:id",

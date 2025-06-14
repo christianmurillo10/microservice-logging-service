@@ -7,44 +7,38 @@ import { ERROR_ON_LIST } from "../../../shared/constants/error.constant";
 import AuditTrailsService from "../../../services/audit-trails.service";
 
 const router = Router();
-const service = new AuditTrailsService();
+const auditTrailsService = new AuditTrailsService();
 
 const controller = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => Promise.resolve(req)
-  .then(async (req) => {
+): Promise<void> => {
+  try {
     const { query } = req;
-    const record = await service.getAll();
-    const record_count = record.length;
-    const all_record_count = await service.count({ query });
+    const auditTrails = await auditTrailsService.getAll();
+    const auditTrailsCount = auditTrails.length;
+    const allAuditTrailsCount = await auditTrailsService.count({ query });
     let message = MESSAGE_DATA_FIND_ALL;
 
-    if (record.length < 1) {
+    if (auditTrails.length < 1) {
       message = MESSAGE_DATA_NOT_FOUND;
     };
 
-    return {
-      message,
-      result: {
-        all_data_count: all_record_count,
-        data_count: record_count,
-        data: record
-      }
-    };
-  })
-  .then(({ message, result }) => {
     apiResponse(res, {
       status_code: 200,
       message,
-      result
-    })
-  })
-  .catch(err => {
-    console.error(`${ERROR_ON_LIST}: `, err);
-    next(err)
-  });
+      result: {
+        all_data_count: allAuditTrailsCount,
+        data_count: auditTrailsCount,
+        data: auditTrails
+      }
+    });
+  } catch (error) {
+    console.error(`${ERROR_ON_LIST}: `, error);
+    next(error);
+  };
+};
 
 export default router.get(
   "/",
