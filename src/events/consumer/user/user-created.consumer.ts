@@ -7,17 +7,7 @@ import { EVENT_USER_CREATED } from "../../../shared/constants/events.constant";
 const usersService = new UsersService();
 
 const subscribeUserCreated = async (value: EventMessageData<UsersModel>, header: Header): Promise<void> => {
-  const data = {
-    id: value.new_details.id,
-    name: value.new_details.name,
-    username: value.new_details.username,
-    email: value.new_details.email,
-    access_type: value.new_details.access_type,
-    business_id: value.new_details.business_id,
-    created_at: value.new_details.created_at,
-    updated_at: value.new_details.updated_at,
-  } as UsersModel;
-
+  const data = new UsersModel(value.new_details);
   const record = await usersService.create(data)
     .catch(err => {
       console.log("Error on creating users", err);

@@ -23,18 +23,7 @@ const subscribeUserUpdated = async (value: EventMessageData<UsersModel>, header:
     return;
   }
 
-  const data = {
-    ...record,
-    id: value.new_details.id,
-    name: value.new_details.name,
-    username: value.new_details.username,
-    email: value.new_details.email,
-    access_type: value.new_details.access_type,
-    business_id: value.new_details.business_id,
-    created_at: value.new_details.created_at,
-    updated_at: value.new_details.updated_at,
-  } as UsersModel;
-
+  const data = new UsersModel({ ...record, ...value });
   const newRecord = await usersService.update(data)
     .catch(err => {
       console.log("Error on updating users", err);
