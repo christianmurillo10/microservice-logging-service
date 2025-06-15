@@ -1,3 +1,4 @@
+import UsersModel from "../../../models/users.model";
 import UsersService from "../../../services/users.service";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService, { Header } from "../../../services/logging.service";
@@ -19,6 +20,17 @@ const subscribeUserLoggedOut = async (value: EventMessageData<Record<string, any
     });
 
   if (!record) {
+    return;
+  }
+
+  const data = new UsersModel({ ...record, ...value });
+  const newRecord = await usersService.update(data)
+    .catch(err => {
+      console.log("Error on updating users", err);
+      return null;
+    });
+
+  if (!newRecord) {
     return;
   }
 

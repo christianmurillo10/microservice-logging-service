@@ -1,3 +1,4 @@
+import UsersModel from "../../../models/users.model";
 import UsersService from "../../../services/users.service";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService, { Header } from "../../../services/logging.service";
@@ -22,6 +23,17 @@ const subscribeUserLoggedIn = async (value: EventMessageData<Record<string, any>
     return;
   }
 
+  const data = new UsersModel({ ...record, ...value });
+  const newRecord = await usersService.update(data)
+    .catch(err => {
+      console.log("Error on updating users", err);
+      return null;
+    });
+
+  if (!newRecord) {
+    return;
+  }
+
   const loggingService = new LoggingService({
     service_name: "AUTH_SERVICE",
     action: "LOGIN",
@@ -34,11 +46,11 @@ const subscribeUserLoggedIn = async (value: EventMessageData<Record<string, any>
       user_agent: header.user_agent
     },
     user_id: userId,
-    business_id: record.business_id ?? undefined
+    business_id: newRecord.business_id ?? undefined
   });
   await loggingService.execute();
 
-  console.info(`Event Notification: Successfully logged in user ${record.id}.`);
+  console.info(`Event Notification: Successfully logged in user ${data.id}.`);
 };
 
 export default subscribeUserLoggedIn;
