@@ -13,6 +13,9 @@ export default interface Users {
   email: string;
   access_type: UsersAccessTypeValue;
   business_id?: number | null;
+  is_active: boolean;
+  is_logged: boolean;
+  last_logged_at?: Date | null;
   created_at: Date;
   updated_at?: Date | null;
   deleted_at?: Date | null;
