@@ -7,14 +7,14 @@ import { EVENT_BUSINESS_CREATED } from "../../../shared/constants/events.constan
 const businessesService = new BusinessesService();
 
 const subscribeBusinessCreated = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
-  const data = new BusinessesModel(value.new_details);
-  const record = await businessesService.create(data)
+  const business = new BusinessesModel(value.new_details);
+  const newBusiness = await businessesService.create(business)
     .catch(err => {
       console.log("Error on creating businesses", err);
       return null;
     });
 
-  if (!record) {
+  if (!newBusiness) {
     return;
   }
 
@@ -23,7 +23,7 @@ const subscribeBusinessCreated = async (value: EventMessageData<BusinessesModel>
     action: "CREATE",
     event_type: EVENT_BUSINESS_CREATED,
     table_name: "businesses",
-    table_id: record.id!,
+    table_id: newBusiness.id!,
     payload: value,
     header: {
       ip_address: header.ip_address,
@@ -34,7 +34,7 @@ const subscribeBusinessCreated = async (value: EventMessageData<BusinessesModel>
   });
   await loggingService.execute();
 
-  console.info(`Event Notification: Successfully created business ${record.id}.`);
+  console.info(`Event Notification: Successfully created business ${newBusiness.id}.`);
 };
 
 export default subscribeBusinessCreated;

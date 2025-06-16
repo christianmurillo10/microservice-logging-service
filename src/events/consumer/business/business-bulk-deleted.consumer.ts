@@ -11,7 +11,7 @@ const subscribeBusinessBulkDeleted = async (value: EventMessageData<Record<strin
   const businessIds = value.new_details.ids!;
 
   for (const businessId of businessIds) {
-    const record = await businessService.getById(businessId)
+    const existingBusiness = await businessService.getById(businessId)
       .catch(err => {
         if (err instanceof NotFoundException) {
           console.log(`Business ${businessId} not exist!`);
@@ -21,21 +21,21 @@ const subscribeBusinessBulkDeleted = async (value: EventMessageData<Record<strin
         throw err;
       });
 
-    if (!record) {
+    if (!existingBusiness) {
       return;
     }
 
-    const data = new BusinessesModel({
-      ...record,
+    const business = new BusinessesModel({
+      ...existingBusiness,
       deleted_at: new Date()
     });
-    const newRecord = await businessService.update(data)
+    const newBusiness = await businessService.update(business)
       .catch(err => {
         console.log("Error on deleting business", err);
         return null;
       });
 
-    if (!newRecord) {
+    if (!newBusiness) {
       return;
     }
 
@@ -44,15 +44,15 @@ const subscribeBusinessBulkDeleted = async (value: EventMessageData<Record<strin
       action: "DELETE_MANY",
       event_type: EVENT_USER_BULK_DELETED,
       table_name: "businesses",
-      table_id: record.id!,
+      table_id: newBusiness.id!,
       payload: {
         old_details: {
-          id: record.id,
-          deleted_at: record.deleted_at
+          id: existingBusiness.id,
+          deleted_at: existingBusiness.deleted_at
         },
         new_details: {
-          id: newRecord.id,
-          deleted_at: newRecord.deleted_at
+          id: newBusiness.id,
+          deleted_at: newBusiness.deleted_at
         }
       },
       header: {

@@ -9,7 +9,7 @@ const businessService = new BusinessesService();
 
 const subscribeBusinessDeleted = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
   const businessId = value.new_details.id!;
-  const record = await businessService.getById(businessId)
+  const existingBusiness = await businessService.getById(businessId)
     .catch(err => {
       if (err instanceof NotFoundException) {
         console.log(`Business ${businessId} not exist!`);
@@ -19,21 +19,21 @@ const subscribeBusinessDeleted = async (value: EventMessageData<BusinessesModel>
       throw err;
     });
 
-  if (!record) {
+  if (!existingBusiness) {
     return;
   }
 
-  const data = new BusinessesModel({
-    ...record,
+  const business = new BusinessesModel({
+    ...existingBusiness,
     deleted_at: value.new_details.deleted_at
   });
-  const newRecord = await businessService.update(data)
+  const newBusiness = await businessService.update(business)
     .catch(err => {
       console.log("Error on deleting business", err);
       return null;
     });
 
-  if (!newRecord) {
+  if (!newBusiness) {
     return;
   }
 
@@ -42,7 +42,7 @@ const subscribeBusinessDeleted = async (value: EventMessageData<BusinessesModel>
     action: "DELETE",
     event_type: EVENT_BUSINESS_DELETED,
     table_name: "businesses",
-    table_id: record.id!,
+    table_id: newBusiness.id!,
     payload: value,
     header: {
       ip_address: header.ip_address,
@@ -53,7 +53,7 @@ const subscribeBusinessDeleted = async (value: EventMessageData<BusinessesModel>
   });
   await loggingService.execute();
 
-  console.info(`Event Notification: Successfully deleted business ${data.id}.`);
+  console.info(`Event Notification: Successfully deleted business ${newBusiness.id}.`);
 };
 
 export default subscribeBusinessDeleted;

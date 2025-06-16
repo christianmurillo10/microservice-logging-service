@@ -9,7 +9,7 @@ const businessesService = new BusinessesService();
 
 const subscribeBusinessUpdated = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
   const businessId = value.new_details.id!;
-  const record = await businessesService.getById(businessId)
+  const existingBusiness = await businessesService.getById(businessId)
     .catch(err => {
       if (err instanceof NotFoundException) {
         console.log(`Business ${businessId} not exist!`);
@@ -19,21 +19,21 @@ const subscribeBusinessUpdated = async (value: EventMessageData<BusinessesModel>
       throw err;
     });
 
-  if (!record) {
+  if (!existingBusiness) {
     return;
   }
 
-  const data = new BusinessesModel({
-    ...record,
+  const business = new BusinessesModel({
+    ...existingBusiness,
     ...value.new_details
   });
-  const newRecord = await businessesService.update(data)
+  const newBusiness = await businessesService.update(business)
     .catch(err => {
       console.log("Error on updating businesses", err);
       return null;
     });
 
-  if (!newRecord) {
+  if (!newBusiness) {
     return;
   }
 
@@ -42,7 +42,7 @@ const subscribeBusinessUpdated = async (value: EventMessageData<BusinessesModel>
     action: "UPDATE",
     event_type: EVENT_BUSINESS_UPDATED,
     table_name: "businesses",
-    table_id: record.id!,
+    table_id: newBusiness.id!,
     payload: value,
     header: {
       ip_address: header.ip_address,
@@ -53,7 +53,7 @@ const subscribeBusinessUpdated = async (value: EventMessageData<BusinessesModel>
   });
   await loggingService.execute();
 
-  console.info(`Event Notification: Successfully updated business ${data.id}.`);
+  console.info(`Event Notification: Successfully updated business ${newBusiness.id}.`);
 };
 
 export default subscribeBusinessUpdated;
