@@ -9,7 +9,7 @@ const usersService = new UsersService();
 
 const subscribeUserPasswordChanged = async (value: EventMessageData<UsersModel>, header: Header): Promise<void> => {
   const userId = value.new_details.id!;
-  const record = await usersService.getById({ id: userId })
+  const existingUser = await usersService.getById({ id: userId })
     .catch(err => {
       if (err instanceof NotFoundException) {
         console.log(`User ${userId} not exist!`);
@@ -19,22 +19,21 @@ const subscribeUserPasswordChanged = async (value: EventMessageData<UsersModel>,
       throw err;
     });
 
-  if (!record) {
+  if (!existingUser) {
     return;
   }
 
-  const data = {
-    ...record,
+  const user = new UsersModel({
+    ...existingUser,
     updated_at: value.new_details.updated_at,
-  } as UsersModel;
-
-  const newRecord = await usersService.update(data)
+  });
+  const newUser = await usersService.update(user)
     .catch(err => {
       console.log("Error on changing users password", err);
       return null;
     });
 
-  if (!newRecord) {
+  if (!newUser) {
     return;
   }
 
@@ -43,18 +42,18 @@ const subscribeUserPasswordChanged = async (value: EventMessageData<UsersModel>,
     action: "UPDATE",
     event_type: EVENT_USER_PASSWORD_CHANGED,
     table_name: "users",
-    table_id: record.id!,
+    table_id: newUser.id!,
     payload: value,
     header: {
       ip_address: header.ip_address,
       user_agent: header.user_agent
     },
-    user_id: newRecord.id!,
-    business_id: newRecord.business_id ?? undefined
+    user_id: newUser.id!,
+    business_id: newUser.business_id ?? undefined
   });
   await loggingService.execute();
 
-  console.info(`Event Notification: Successfully changed user password ${data.id}.`);
+  console.info(`Event Notification: Successfully changed user password ${newUser.id}.`);
 };
 
 export default subscribeUserPasswordChanged;

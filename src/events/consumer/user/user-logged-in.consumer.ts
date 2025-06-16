@@ -9,7 +9,7 @@ const usersService = new UsersService();
 
 const subscribeUserLoggedIn = async (value: EventMessageData<Record<string, any>>, header: Header): Promise<void> => {
   const userId = value.new_details.id;
-  const record = await usersService.getById({ id: userId })
+  const existingUser = await usersService.getById({ id: userId })
     .catch(err => {
       if (err instanceof NotFoundException) {
         console.log(`User ${userId} not exist!`);
@@ -19,18 +19,21 @@ const subscribeUserLoggedIn = async (value: EventMessageData<Record<string, any>
       throw err;
     });
 
-  if (!record) {
+  if (!existingUser) {
     return;
   }
 
-  const data = new UsersModel({ ...record, ...value });
-  const newRecord = await usersService.update(data)
+  const user = new UsersModel({
+    ...existingUser,
+    ...value
+  });
+  const newUser = await usersService.update(user)
     .catch(err => {
       console.log("Error on updating users", err);
       return null;
     });
 
-  if (!newRecord) {
+  if (!newUser) {
     return;
   }
 
@@ -39,18 +42,18 @@ const subscribeUserLoggedIn = async (value: EventMessageData<Record<string, any>
     action: "LOGIN",
     event_type: EVENT_USER_LOGGED_IN,
     table_name: "users",
-    table_id: record.id!,
+    table_id: newUser.id!,
     payload: value,
     header: {
       ip_address: header.ip_address,
       user_agent: header.user_agent
     },
     user_id: userId,
-    business_id: newRecord.business_id ?? undefined
+    business_id: newUser.business_id ?? undefined
   });
   await loggingService.execute();
 
-  console.info(`Event Notification: Successfully logged in user ${data.id}.`);
+  console.info(`Event Notification: Successfully logged in user ${newUser.id}.`);
 };
 
 export default subscribeUserLoggedIn;
