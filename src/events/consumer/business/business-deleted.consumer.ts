@@ -25,14 +25,6 @@ const subscribeBusinessDeleted = async (value: EventMessageData<BusinessesModel>
 
   const data = {
     ...record,
-    id: value.new_details.id,
-    name: value.new_details.name,
-    api_key: value.new_details.api_key,
-    domain: value.new_details.domain,
-    preferred_timezone: value.new_details.preferred_timezone,
-    currency: value.new_details.currency,
-    created_at: value.new_details.created_at,
-    updated_at: value.new_details.updated_at,
     deleted_at: value.new_details.deleted_at,
   } as BusinessesModel;
 
