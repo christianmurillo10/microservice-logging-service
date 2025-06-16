@@ -23,18 +23,10 @@ const subscribeBusinessUpdated = async (value: EventMessageData<BusinessesModel>
     return;
   }
 
-  const data = {
+  const data = new BusinessesModel({
     ...record,
-    id: value.new_details.id,
-    name: value.new_details.name,
-    api_key: value.new_details.api_key,
-    domain: value.new_details.domain,
-    preferred_timezone: value.new_details.preferred_timezone,
-    currency: value.new_details.currency,
-    created_at: value.new_details.created_at,
-    updated_at: value.new_details.updated_at,
-  } as BusinessesModel;
-
+    ...value.new_details
+  });
   const newRecord = await businessesService.update(data)
     .catch(err => {
       console.log("Error on updating businesses", err);

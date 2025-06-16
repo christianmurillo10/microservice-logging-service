@@ -7,17 +7,7 @@ import { EVENT_BUSINESS_CREATED } from "../../../shared/constants/events.constan
 const businessesService = new BusinessesService();
 
 const subscribeBusinessCreated = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
-  const data = {
-    id: value.new_details.id,
-    name: value.new_details.name,
-    api_key: value.new_details.api_key,
-    domain: value.new_details.domain,
-    preferred_timezone: value.new_details.preferred_timezone,
-    currency: value.new_details.currency,
-    created_at: value.new_details.created_at,
-    updated_at: value.new_details.updated_at,
-  } as BusinessesModel;
-
+  const data = new BusinessesModel(value.new_details);
   const record = await businessesService.create(data)
     .catch(err => {
       console.log("Error on creating businesses", err);
