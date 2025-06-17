@@ -25,7 +25,7 @@ const subscribeUserUpdated = async (value: EventMessageData<UsersModel>, header:
 
   const user = new UsersModel({
     ...existingUser,
-    ...value
+    ...value.new_details
   });
   const newUser = await usersService.update(user)
     .catch(err => {

@@ -25,7 +25,7 @@ const subscribeUserLoggedOut = async (value: EventMessageData<Record<string, any
 
   const user = new UsersModel({
     ...existingUser,
-    ...value
+    ...value.new_details
   });
   const newUser = await usersService.update(user)
     .catch(err => {
