@@ -11,12 +11,22 @@ class UserActionsModel implements UserActions {
   action_details: GenericObject = {};
   ip_address: string = "";
   user_agent: string = "";
-  business_id: number | null = null;
+  business_id?: number | null = null;
   user_id!: string;
   created_at: Date = new Date();
 
   constructor(props: UserActions) {
-    Object.assign(this, props);
+    this.id = props.id;
+    this.service_name = props.service_name;
+    this.table_name = props.table_name;
+    this.table_id = props.table_id;
+    this.action = props.action;
+    this.action_details = props.action_details;
+    this.ip_address = props.ip_address;
+    this.user_agent = props.user_agent;
+    this.business_id = props.business_id;
+    this.user_id = props.user_id;
+    this.created_at = props.created_at;
   };
 };
 
