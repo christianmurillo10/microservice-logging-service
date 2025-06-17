@@ -1,7 +1,7 @@
 import { UsersAccessType } from "../entities/users.entity";
 import BusinessesModel from "../models/businesses.model";
 import UsersModel from "../models/users.model";
-import { MESSAGE_DATA_INVALID_TOKEN, MESSAGE_INVALID_API_KEY, MESSAGE_REQUIRED_API_KEY } from "../shared/constants/message.constant";
+import { MESSAGE_DATA_INVALID_TOKEN, MESSAGE_DATA_NOT_LOGGED, MESSAGE_INVALID_API_KEY, MESSAGE_REQUIRED_API_KEY } from "../shared/constants/message.constant";
 import ForbiddenException from "../shared/exceptions/forbidden.exception";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 import UnauthorizedException from "../shared/exceptions/unauthorized.exception";
@@ -64,6 +64,10 @@ export default class AuthenticateService {
 
     if (!usersRecord) {
       throw new NotFoundException([MESSAGE_INVALID_API_KEY]);
+    }
+
+    if (Boolean(usersRecord.is_logged) === false) {
+      throw new UnauthorizedException([MESSAGE_DATA_NOT_LOGGED]);
     }
 
     // Validate via api_key if token client is BUSINESS
