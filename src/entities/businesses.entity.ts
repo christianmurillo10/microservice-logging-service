@@ -3,7 +3,6 @@ export default interface Businesses {
   name: string;
   api_key: string;
   domain?: string | null;
-  logo_path?: string | null;
   preferred_timezone?: string | null;
   currency?: string | null;
   created_at: Date;

@@ -7,7 +7,11 @@ import { EVENT_USER_DELETED } from "../../../shared/constants/events.constant";
 
 const usersService = new UsersService();
 
-const subscribeUserDeleted = async (value: EventMessageData<UsersModel>, header: Header): Promise<void> => {
+const subscribeUserDeleted = async (
+  user_id: string,
+  value: EventMessageData<UsersModel>,
+  header: Header
+): Promise<void> => {
   const userId = value.new_details.id!;
   const existingUser = await usersService.getById({ id: userId })
     .catch(err => {
@@ -48,7 +52,7 @@ const subscribeUserDeleted = async (value: EventMessageData<UsersModel>, header:
       ip_address: header.ip_address,
       user_agent: header.user_agent
     },
-    user_id: newUser.id!,
+    user_id,
     business_id: newUser.business_id ?? undefined
   });
   await loggingService.execute();

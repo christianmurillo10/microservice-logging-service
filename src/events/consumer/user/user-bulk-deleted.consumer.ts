@@ -7,7 +7,11 @@ import { EVENT_USER_BULK_DELETED } from "../../../shared/constants/events.consta
 
 const usersService = new UsersService();
 
-const subscribeUserBulkDeleted = async (value: EventMessageData<Record<string, string[]>>, header: Header): Promise<void> => {
+const subscribeUserBulkDeleted = async (
+  user_id: string,
+  value: EventMessageData<Record<string, string[]>>,
+  header: Header
+): Promise<void> => {
   const userIds = value.new_details.ids!;
 
   for (const userId of userIds) {
@@ -58,7 +62,7 @@ const subscribeUserBulkDeleted = async (value: EventMessageData<Record<string, s
         ip_address: header.ip_address,
         user_agent: header.user_agent
       },
-      user_id: newUser.id!,
+      user_id,
       business_id: newUser.business_id ?? undefined
     });
     await loggingService.execute();

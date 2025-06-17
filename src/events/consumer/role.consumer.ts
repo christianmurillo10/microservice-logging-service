@@ -11,6 +11,7 @@ import LoggingService, { Header } from "../../services/logging.service";
 const executeLoggingService = async (
   action: ActionValue,
   event_type: string,
+  user_id: string,
   data: EventMessageData<any>,
   header: Header
 ) => {
@@ -25,16 +26,17 @@ const executeLoggingService = async (
       ip_address: header.ip_address,
       user_agent: header.user_agent
     },
-    user_id: undefined,
+    user_id,
     business_id: data.new_details.business_id ?? undefined
   });
   await loggingService.execute();
 };
 
 const roleConsumer = async (message: KafkaMessage) => {
+  const userId = message.key?.toString() ?? "";
   const value = JSON.parse(message.value?.toString() ?? '{}');
 
-  if (!value) {
+  if (!value && !userId) {
     return;
   };
 
@@ -46,13 +48,13 @@ const roleConsumer = async (message: KafkaMessage) => {
 
   switch (eventType) {
     case EVENT_ROLE_CREATED:
-      await executeLoggingService("CREATE", eventType, value.data, header);
+      await executeLoggingService("CREATE", eventType, userId, value.data, header);
       break;
     case EVENT_ROLE_UPDATED:
-      await executeLoggingService("UPDATE", eventType, value.data, header);
+      await executeLoggingService("UPDATE", eventType, userId, value.data, header);
       break;
     case EVENT_ROLE_DELETED:
-      await executeLoggingService("DELETE", eventType, value.data, header);
+      await executeLoggingService("DELETE", eventType, userId, value.data, header);
       break;
     case EVENT_ROLE_BULK_DELETED:
       const roleIds = value.data.new_details.ids;
@@ -68,7 +70,7 @@ const roleConsumer = async (message: KafkaMessage) => {
             deleted_at: new Date(),
           }
         }
-        await executeLoggingService("DELETE_MANY", eventType, data, header);
+        await executeLoggingService("DELETE_MANY", eventType, userId, data, header);
       }
       break;
   };

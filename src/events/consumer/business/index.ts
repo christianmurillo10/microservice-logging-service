@@ -11,9 +11,10 @@ import subscribeBusinessDeleted from "./business-deleted.consumer";
 import subscribeBusinessBulkDeleted from "./business-bulk-deleted.consumer";
 
 const businessConsumer = async (message: KafkaMessage) => {
+  const userId = message.key?.toString() ?? "";
   const value = JSON.parse(message.value?.toString() ?? '{}');
 
-  if (!value) {
+  if (!value && !userId) {
     return;
   };
 
@@ -24,16 +25,16 @@ const businessConsumer = async (message: KafkaMessage) => {
 
   switch (value.eventType) {
     case EVENT_BUSINESS_CREATED:
-      await subscribeBusinessCreated(value.data, header);
+      await subscribeBusinessCreated(userId, value.data, header);
       break;
     case EVENT_BUSINESS_UPDATED:
-      await subscribeBusinessUpdated(value.data, header);
+      await subscribeBusinessUpdated(userId, value.data, header);
       break;
     case EVENT_BUSINESS_DELETED:
-      await subscribeBusinessDeleted(value.data, header);
+      await subscribeBusinessDeleted(userId, value.data, header);
       break;
     case EVENT_BUSINESS_BULK_DELETED:
-      await subscribeBusinessBulkDeleted(value.data, header);
+      await subscribeBusinessBulkDeleted(userId, value.data, header);
       break;
   };
 };

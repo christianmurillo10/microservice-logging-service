@@ -7,7 +7,11 @@ import { EVENT_USER_UPDATED } from "../../../shared/constants/events.constant";
 
 const usersService = new UsersService();
 
-const subscribeUserUpdated = async (value: EventMessageData<UsersModel>, header: Header): Promise<void> => {
+const subscribeUserUpdated = async (
+  user_id: string,
+  value: EventMessageData<UsersModel>,
+  header: Header
+): Promise<void> => {
   const userId = value.new_details.id!;
   const existingUser = await usersService.getById({ id: userId })
     .catch(err => {
@@ -48,7 +52,7 @@ const subscribeUserUpdated = async (value: EventMessageData<UsersModel>, header:
       ip_address: header.ip_address,
       user_agent: header.user_agent
     },
-    user_id: newUser.id!,
+    user_id,
     business_id: newUser.business_id ?? undefined
   });
   await loggingService.execute();

@@ -13,7 +13,15 @@ class BusinessesModel implements Businesses {
   deleted_at?: Date | null = null;
 
   constructor(props: Businesses) {
-    Object.assign(this, props);
+    this.id = props.id;
+    this.name = props.name;
+    this.api_key = props.api_key;
+    this.domain = props.domain;
+    this.preferred_timezone = props.preferred_timezone;
+    this.currency = props.currency;
+    this.created_at = props.created_at;
+    this.updated_at = props.updated_at;
+    this.deleted_at = props.deleted_at;
   };
 };
 

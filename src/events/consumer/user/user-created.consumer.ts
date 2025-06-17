@@ -6,7 +6,11 @@ import { EVENT_USER_CREATED } from "../../../shared/constants/events.constant";
 
 const usersService = new UsersService();
 
-const subscribeUserCreated = async (value: EventMessageData<UsersModel>, header: Header): Promise<void> => {
+const subscribeUserCreated = async (
+  user_id: string,
+  value: EventMessageData<UsersModel>,
+  header: Header
+): Promise<void> => {
   const user = new UsersModel(value.new_details);
   const newUser = await usersService.create(user)
     .catch(err => {
@@ -29,7 +33,7 @@ const subscribeUserCreated = async (value: EventMessageData<UsersModel>, header:
       ip_address: header.ip_address,
       user_agent: header.user_agent
     },
-    user_id: newUser.id!,
+    user_id,
     business_id: newUser.business_id ?? undefined
   });
   await loggingService.execute();

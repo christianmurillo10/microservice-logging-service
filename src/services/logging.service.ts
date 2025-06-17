@@ -57,7 +57,7 @@ export default class LoggingService {
     const auditTrails = {
       service_name: service_name,
       table_name: table_name,
-      table_id: table_id,
+      table_id: table_id.toString(),
       action: action,
       old_details: payload.old_details,
       new_details: payload.new_details,
@@ -77,7 +77,7 @@ export default class LoggingService {
     const userActions = {
       service_name: service_name,
       table_name: table_name,
-      table_id: table_id,
+      table_id: table_id.toString(),
       action: action,
       action_details: payload.new_details,
       ip_address: header.ip_address,

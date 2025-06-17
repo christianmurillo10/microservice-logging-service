@@ -6,7 +6,11 @@ import { EVENT_BUSINESS_CREATED } from "../../../shared/constants/events.constan
 
 const businessesService = new BusinessesService();
 
-const subscribeBusinessCreated = async (value: EventMessageData<BusinessesModel>, header: Header): Promise<void> => {
+const subscribeBusinessCreated = async (
+  user_id: string,
+  value: EventMessageData<BusinessesModel>,
+  header: Header
+): Promise<void> => {
   const business = new BusinessesModel(value.new_details);
   const newBusiness = await businessesService.create(business)
     .catch(err => {
@@ -29,7 +33,7 @@ const subscribeBusinessCreated = async (value: EventMessageData<BusinessesModel>
       ip_address: header.ip_address,
       user_agent: header.user_agent
     },
-    user_id: undefined,
+    user_id,
     business_id: undefined
   });
   await loggingService.execute();

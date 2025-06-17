@@ -17,9 +17,10 @@ import subscribeUserBulkDeleted from "./user-bulk-deleted.consumer";
 import subscribeUserPasswordChanged from "./user-password-changed.consumer";
 
 const userConsumer = async (message: KafkaMessage) => {
+  const userId = message.key?.toString() ?? "";
   const value = JSON.parse(message.value?.toString() ?? '{}');
 
-  if (!value) {
+  if (!value && !userId) {
     return;
   };
 
@@ -30,25 +31,25 @@ const userConsumer = async (message: KafkaMessage) => {
 
   switch (value.eventType) {
     case EVENT_USER_LOGGED_IN:
-      await subscribeUserLoggedIn(value.data, header);
+      await subscribeUserLoggedIn(userId, value.data, header);
       break;
     case EVENT_USER_LOGGED_OUT:
-      await subscribeUserLoggedOut(value.data, header);
+      await subscribeUserLoggedOut(userId, value.data, header);
       break;
     case EVENT_USER_CREATED:
-      await subscribeUserCreated(value.data, header);
+      await subscribeUserCreated(userId, value.data, header);
       break;
     case EVENT_USER_UPDATED:
-      await subscribeUserUpdated(value.data, header);
+      await subscribeUserUpdated(userId, value.data, header);
       break;
     case EVENT_USER_DELETED:
-      await subscribeUserDeleted(value.data, header);
+      await subscribeUserDeleted(userId, value.data, header);
       break;
     case EVENT_USER_BULK_DELETED:
-      await subscribeUserBulkDeleted(value.data, header);
+      await subscribeUserBulkDeleted(userId, value.data, header);
       break;
     case EVENT_USER_PASSWORD_CHANGED:
-      await subscribeUserPasswordChanged(value.data, header);
+      await subscribeUserPasswordChanged(userId, value.data, header);
       break;
   };
 };

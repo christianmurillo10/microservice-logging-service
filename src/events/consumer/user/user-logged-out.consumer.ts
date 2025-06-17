@@ -7,7 +7,11 @@ import { EVENT_USER_LOGGED_OUT } from "../../../shared/constants/events.constant
 
 const usersService = new UsersService();
 
-const subscribeUserLoggedOut = async (value: EventMessageData<Record<string, any>>, header: Header): Promise<void> => {
+const subscribeUserLoggedOut = async (
+  user_id: string,
+  value: EventMessageData<Record<string, any>>,
+  header: Header
+): Promise<void> => {
   const userId = value.new_details.id;
   const existingUser = await usersService.getById({ id: userId })
     .catch(err => {
@@ -48,7 +52,7 @@ const subscribeUserLoggedOut = async (value: EventMessageData<Record<string, any
       ip_address: header.ip_address,
       user_agent: header.user_agent
     },
-    user_id: userId,
+    user_id,
     business_id: newUser.business_id ?? undefined
   });
   await loggingService.execute();
