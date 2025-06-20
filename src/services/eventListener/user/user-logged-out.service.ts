@@ -1,5 +1,4 @@
 import UsersModel from "../../../models/users.model";
-import { EventMessageData } from "../../../shared/types/common.type";
 import UserEventListenerServiceAbstract from "../event-listener.abstract";
 import EventListenerService from "../event-listener.interface";
 import UsersService from "../../users.service";
@@ -7,7 +6,7 @@ import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
 import { EVENT_USER_LOGGED_OUT } from "../../../shared/constants/events.constant";
 
-export default class UserLoggedOutEventListenerService extends UserEventListenerServiceAbstract<EventMessageData<UsersModel>> implements EventListenerService<UsersModel> {
+export default class UserLoggedOutEventListenerService extends UserEventListenerServiceAbstract<UsersModel> implements EventListenerService<UsersModel> {
   usersService: UsersService;
 
   constructor() {

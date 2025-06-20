@@ -1,17 +1,17 @@
 import EventListenerAbstract from "../event-listener.abstract";
 import EventListenerService from "../event-listener.interface";
-import UsersService from "../../users.service";
-import UsersModel from "../../../models/users.model";
+import BusinessesService from "../../businesses.service";
+import BusinessesModel from "../../../models/businesses.model";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
 import { EVENT_USER_BULK_DELETED } from "../../../shared/constants/events.constant";
 
-export default class UserBulkDeletedEventListenerService extends EventListenerAbstract<Record<string, string[]>> implements EventListenerService<Record<string, string[]>> {
-  usersService: UsersService;
+export default class BusinessBulkDeletedEventListenerService extends EventListenerAbstract<Record<string, number[]>> implements EventListenerService<Record<string, number[]>> {
+  businessesService: BusinessesService;
 
   constructor() {
     super();
-    this.usersService = new UsersService();
+    this.businessesService = new BusinessesService();
   };
 
   execute = async (): Promise<void> => {
@@ -20,33 +20,34 @@ export default class UserBulkDeletedEventListenerService extends EventListenerAb
       return;
     };
 
-    const userIds = this.state.value.new_details.ids!;
+    const businessIds = this.state.value.new_details.ids!;
 
-    for (const userId of userIds) {
-      const existingUser = await this.usersService.getById({ id: userId })
+    for (const businessId of businessIds) {
+      const existingBusiness = await this.businessesService.getById(businessId)
         .catch(err => {
           if (err instanceof NotFoundException) {
-            console.log(`User ${userId} not exist!`);
+            console.log(`Business ${businessId} not exist!`);
             return;
           }
 
           throw err;
         });
 
-      if (!existingUser) {
+      if (!existingBusiness) {
         return;
       }
 
-      const user = new UsersModel({
-        ...existingUser,
+      const business = new BusinessesModel({
+        ...existingBusiness,
         deleted_at: new Date()
       });
-      const newUser = await this.usersService.update(user)
+      const newBusiness = await this.businessesService.update(business)
         .catch(err => {
-          console.log("Error on deleting users", err);
+          console.log("Error on deleting business", err);
+          return null;
         });
 
-      if (!newUser) {
+      if (!newBusiness) {
         return;
       }
 
@@ -54,16 +55,16 @@ export default class UserBulkDeletedEventListenerService extends EventListenerAb
         service_name: "USER_SERVICE",
         action: "DELETE_MANY",
         event_type: EVENT_USER_BULK_DELETED,
-        table_name: "users",
-        table_id: existingUser.id!,
+        table_name: "businesses",
+        table_id: newBusiness.id!,
         payload: {
           old_details: {
-            id: existingUser.id,
-            deleted_at: existingUser.deleted_at
+            id: existingBusiness.id,
+            deleted_at: existingBusiness.deleted_at
           },
           new_details: {
-            id: newUser.id,
-            deleted_at: newUser.deleted_at
+            id: newBusiness.id,
+            deleted_at: newBusiness.deleted_at
           }
         },
         header: {
@@ -71,11 +72,11 @@ export default class UserBulkDeletedEventListenerService extends EventListenerAb
           user_agent: this.state.header.user_agent
         },
         user_id: this.state.userId,
-        business_id: newUser.business_id ?? undefined
+        business_id: undefined
       });
       await loggingService.execute();
     }
 
-    console.info("Event Notification: Successfully bulk deleted users.");
+    console.info("Event Notification: Successfully bulk deleted business.");
   };
 };

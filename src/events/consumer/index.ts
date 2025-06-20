@@ -7,7 +7,7 @@ import {
   EVENT_USER
 } from "../../shared/constants/events.constant";
 import userConsumer from "./user.consumer";
-import businessConsumer from "./business";
+import businessConsumer from "./business.consumer";
 import roleConsumer from "./role.consumer";
 
 export default class KafkaConsumer {
