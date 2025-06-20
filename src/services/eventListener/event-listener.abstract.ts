@@ -1,5 +1,7 @@
-export default abstract class EventListenerAbstract<State> {
-  state: State | undefined;
+import { State } from "../../shared/types/service.type";
 
-  setState = (state: State) => this.state = state;
+export default abstract class EventListenerAbstract<V> {
+  state: State<V> | undefined;
+
+  setState = (state: State<V>) => this.state = state;
 };

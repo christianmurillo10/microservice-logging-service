@@ -6,7 +6,7 @@ import {
   EVENT_ROLE,
   EVENT_USER
 } from "../../shared/constants/events.constant";
-import userConsumer from "./user";
+import userConsumer from "./user.consumer";
 import businessConsumer from "./business";
 import roleConsumer from "./role.consumer";
 

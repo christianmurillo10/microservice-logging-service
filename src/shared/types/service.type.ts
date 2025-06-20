@@ -1,3 +1,4 @@
+import { Header } from "../../services/logging.service";
 import { GenericObject, Query } from "./common.type";
 
 export type GetAllArgs = {
@@ -19,4 +20,10 @@ export type GetByIdArgs<I> = {
 export type CountAllArgs = {
   condition?: GenericObject,
   query?: Query
+};
+
+export type State<V> = {
+  userId: string
+  value: V,
+  header: Header
 };
