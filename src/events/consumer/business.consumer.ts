@@ -11,6 +11,7 @@ const businessConsumer = async (message: KafkaMessage) => {
 
   const instance = BusinessEventListenerServiceFactory.createInstance(value.eventType);
   instance.setState({
+    eventType: value.eventType,
     userId,
     value: value.data,
     header: {

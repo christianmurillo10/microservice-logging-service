@@ -4,7 +4,6 @@ import UsersService from "../../users.service";
 import UsersModel from "../../../models/users.model";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
-import { EVENT_USER_BULK_DELETED } from "../../../shared/constants/events.constant";
 
 export default class UserBulkDeletedEventListenerService extends EventListenerAbstract<Record<string, string[]>> implements EventListenerService<Record<string, string[]>> {
   usersService: UsersService;
@@ -53,7 +52,7 @@ export default class UserBulkDeletedEventListenerService extends EventListenerAb
       const loggingService = new LoggingService({
         service_name: "USER_SERVICE",
         action: "DELETE_MANY",
-        event_type: EVENT_USER_BULK_DELETED,
+        event_type: this.state.eventType,
         table_name: "users",
         table_id: existingUser.id!,
         payload: {

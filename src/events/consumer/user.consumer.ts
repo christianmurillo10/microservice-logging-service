@@ -11,6 +11,7 @@ const userConsumer = async (message: KafkaMessage) => {
 
   const intance = UserEventListenerServiceFactory.createInstance(value.eventType);
   intance.setState({
+    eventType: value.eventType,
     userId,
     value: value.data,
     header: {

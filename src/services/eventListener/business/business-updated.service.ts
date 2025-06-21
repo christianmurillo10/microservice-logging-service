@@ -4,7 +4,6 @@ import BusinessesService from "../../businesses.service";
 import BusinessesModel from "../../../models/businesses.model";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
-import { EVENT_BUSINESS_UPDATED } from "../../../shared/constants/events.constant";
 
 export default class BusinessUpdatedEventListenerService extends EventListenerAbstract<BusinessesModel> implements EventListenerService<BusinessesModel> {
   businessesService: BusinessesService;
@@ -52,7 +51,7 @@ export default class BusinessUpdatedEventListenerService extends EventListenerAb
     const loggingService = new LoggingService({
       service_name: "USER_SERVICE",
       action: "UPDATE",
-      event_type: EVENT_BUSINESS_UPDATED,
+      event_type: this.state.eventType,
       table_name: "businesses",
       table_id: newBusiness.id!,
       payload: this.state.value,

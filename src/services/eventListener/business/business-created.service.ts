@@ -3,7 +3,6 @@ import EventListenerService from "../event-listener.interface";
 import BusinessesService from "../../businesses.service";
 import BusinessesModel from "../../../models/businesses.model";
 import LoggingService from "../../logging.service";
-import { EVENT_BUSINESS_CREATED } from "../../../shared/constants/events.constant";
 
 export default class BusinessCreatedEventListenerService extends EventListenerAbstract<BusinessesModel> implements EventListenerService<BusinessesModel> {
   businessesService: BusinessesService;
@@ -33,7 +32,7 @@ export default class BusinessCreatedEventListenerService extends EventListenerAb
     const loggingService = new LoggingService({
       service_name: "USER_SERVICE",
       action: "CREATE",
-      event_type: EVENT_BUSINESS_CREATED,
+      event_type: this.state.eventType,
       table_name: "businesses",
       table_id: newBusiness.id!,
       payload: this.state.value,

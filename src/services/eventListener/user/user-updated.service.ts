@@ -4,7 +4,6 @@ import EventListenerService from "../event-listener.interface";
 import UsersService from "../../users.service";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
-import { EVENT_USER_UPDATED } from "../../../shared/constants/events.constant";
 
 export default class UserUpdatedEventListenerService extends UserEventListenerServiceAbstract<UsersModel> implements EventListenerService<UsersModel> {
   usersService: UsersService;
@@ -52,7 +51,7 @@ export default class UserUpdatedEventListenerService extends UserEventListenerSe
     const loggingService = new LoggingService({
       service_name: "USER_SERVICE",
       action: "UPDATE",
-      event_type: EVENT_USER_UPDATED,
+      event_type: this.state.eventType,
       table_name: "users",
       table_id: newUser.id!,
       payload: this.state.value,

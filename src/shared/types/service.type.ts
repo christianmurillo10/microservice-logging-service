@@ -23,6 +23,7 @@ export type CountAllArgs = {
 };
 
 export type State<V> = {
+  eventType: string,
   userId: string
   value: V,
   header: Header
