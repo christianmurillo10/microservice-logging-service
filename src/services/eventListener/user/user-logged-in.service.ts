@@ -6,7 +6,7 @@ import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
 
 export default class UserLoggedInEventListenerService extends UserEventListenerServiceAbstract<UsersModel> implements EventListenerService<UsersModel> {
-  usersService: UsersService;
+  private usersService: UsersService;
 
   constructor() {
     super();

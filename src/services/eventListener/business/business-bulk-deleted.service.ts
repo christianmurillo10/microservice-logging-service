@@ -6,7 +6,7 @@ import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
 
 export default class BusinessBulkDeletedEventListenerService extends EventListenerAbstract<Record<string, number[]>> implements EventListenerService<Record<string, number[]>> {
-  businessesService: BusinessesService;
+  private businessesService: BusinessesService;
 
   constructor() {
     super();

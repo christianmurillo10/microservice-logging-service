@@ -5,7 +5,7 @@ import BusinessesModel from "../../../models/businesses.model";
 import LoggingService from "../../logging.service";
 
 export default class BusinessCreatedEventListenerService extends EventListenerAbstract<BusinessesModel> implements EventListenerService<BusinessesModel> {
-  businessesService: BusinessesService;
+  private businessesService: BusinessesService;
 
   constructor() {
     super();
