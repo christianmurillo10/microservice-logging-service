@@ -4,6 +4,7 @@ import authenticate from "../../../middlewares/authenticate.middleware";
 import { list as validator } from "../../../middlewares/validators/event-logs.validator";
 import { MESSAGE_DATA_FIND_ALL, MESSAGE_DATA_NOT_FOUND } from "../../../shared/constants/message.constant";
 import { ERROR_ON_LIST } from "../../../shared/constants/error.constant";
+import { getPagination } from "../../../shared/helpers/common.helper";
 import EventLogsService from "../../../services/event-logs.service";
 
 const router = Router();
@@ -16,7 +17,7 @@ const controller = async (
 ): Promise<void> => {
   try {
     const { query } = req;
-    const eventLogs = await eventLogsService.getAll();
+    const eventLogs = await eventLogsService.getAll({ query });
     const eventLogsCount = eventLogs.length;
     const allEventLogsCount = await eventLogsService.count({ query });
     let message = MESSAGE_DATA_FIND_ALL;
@@ -28,11 +29,13 @@ const controller = async (
     apiResponse(res, {
       status_code: 200,
       message,
-      result: {
-        all_data_count: allEventLogsCount,
-        data_count: eventLogsCount,
-        data: eventLogs
-      }
+      data: eventLogs,
+      pagination: getPagination(
+        allEventLogsCount,
+        eventLogsCount,
+        Number(query.page ?? 1),
+        Number(query.limit ?? 10)
+      )
     });
   } catch (error) {
     console.error(`${ERROR_ON_LIST}: `, error);

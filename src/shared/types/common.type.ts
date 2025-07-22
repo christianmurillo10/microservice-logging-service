@@ -8,8 +8,18 @@ export type UniqueId = number | string | null;
 export type Query = {
   filters?: GenericObject,
   sorting?: GenericObject,
-  offset?: number,
+  page?: number,
   limit?: number
+};
+
+export type Pagination = {
+  total_items: number,
+  total_page_items: number,
+  total_pages: number,
+  page: number,
+  page_size: number,
+  has_next_page: boolean,
+  has_previous_page: boolean,
 };
 
 export type ApiResponseInput = {
@@ -19,7 +29,8 @@ export type ApiResponseInput = {
   status?: string,
   message?: string,
   errors?: string[],
-  result?: unknown,
+  data?: unknown,
+  pagination?: Pagination,
 };
 
 export type EventMessageData<T> = {
