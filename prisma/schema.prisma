@@ -8,87 +8,98 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model businesses {
-  id                 Int            @id @default(autoincrement())
-  name               String         @db.VarChar(100)
-  api_key            String         @db.VarChar(255)
-  domain             String?        @db.VarChar(255)
-  preferred_timezone String?        @db.VarChar(100)
-  currency           String?        @db.VarChar(100)
-  created_at         DateTime       @db.DateTime(0)
-  updated_at         DateTime?      @db.DateTime(0)
-  deleted_at         DateTime?      @db.DateTime(0)
-  users              users[]
-  audit_trails       audit_trails[]
-  user_actions       user_actions[]
-  event_logs         event_logs[]
+model Business {
+  id                Int       @id @default(autoincrement())
+  name              String    @db.VarChar(100)
+  apiKey            String    @map("api_key") @db.VarChar(255)
+  domain            String?   @db.VarChar(255)
+  preferredTimezone String?   @map("preferred_timezone") @db.VarChar(100)
+  currency          String?   @db.VarChar(100)
+  createdAt         DateTime  @map("created_at") @db.DateTime(0)
+  updatedAt         DateTime? @map("updated_at") @db.DateTime(0)
+  deletedAt         DateTime? @map("deleted_at") @db.DateTime(0)
+
+  users       User[]       @relation("UserToBusiness")
+  auditTrails AuditTrail[] @relation("AuditTrailToBusiness")
+  userActions UserAction[] @relation("UserActionToBusiness")
+  eventLogs   EventLog[]   @relation("EventLogToBusiness")
+
+  @@map("businesses")
 }
 
-model users {
-  id                         String         @id @default(uuid()) @db.Char(36)
-  name                       String         @db.VarChar(100)
-  username                   String         @db.VarChar(100)
-  email                      String         @db.VarChar(100)
-  access_type                String         @db.VarChar(100)
-  business_id                Int?
-  is_active                  Boolean        @default(true)
-  is_logged                  Boolean        @default(false)
-  last_logged_at             DateTime?      @db.DateTime(0)
-  created_at                 DateTime       @db.DateTime(0)
-  updated_at                 DateTime?      @db.DateTime(0)
-  deleted_at                 DateTime?      @db.DateTime(0)
-  businesses                 businesses?    @relation(fields: [business_id], references: [id], map: "users_ibfk_1")
-  audit_trails_created_users audit_trails[] @relation("audit_trails_created_user_idTousers")
-  user_actions_users         user_actions[] @relation("user_actions_user_idTousers")
+model User {
+  id           String    @id @default(uuid()) @db.Char(36)
+  name         String    @db.VarChar(100)
+  username     String    @db.VarChar(100)
+  email        String    @db.VarChar(100)
+  accessType   String    @map("access_type") @db.VarChar(100)
+  businessId   Int?      @map("business_id")
+  isActive     Boolean   @default(true) @map("is_active")
+  isLogged     Boolean   @default(false) @map("is_logged")
+  lastLoggedAt DateTime? @map("last_logged_at") @db.DateTime(0)
+  createdAt    DateTime  @map("created_at") @db.DateTime(0)
+  updatedAt    DateTime? @map("updated_at") @db.DateTime(0)
+  deletedAt    DateTime? @map("deleted_at") @db.DateTime(0)
 
-  @@index([business_id], map: "business_id")
+  business           Business?    @relation("UserToBusiness", fields: [businessId], references: [id])
+  auditTrailsCreated AuditTrail[] @relation("AuditTrailToUser")
+  userActions        UserAction[] @relation("UserActionToUser")
+
+  @@index([businessId], map: "business_id")
+  @@map("users")
 }
 
-model audit_trails {
-  id              String      @id @default(uuid()) @db.Char(36)
-  service_name    String      @db.VarChar(100)
-  table_name      String      @db.VarChar(100)
-  table_id        String      @db.VarChar(255)
-  action          String      @db.VarChar(100)
-  old_details     Json        @default("{}") @db.Json
-  new_details     Json        @default("{}") @db.Json
-  business_id     Int?
-  created_user_id String      @db.Char(36)
-  created_at      DateTime    @db.DateTime(0)
-  businesses      businesses? @relation(fields: [business_id], references: [id], map: "audit_trails_ibfk_1")
-  created_users   users       @relation("audit_trails_created_user_idTousers", fields: [created_user_id], references: [id], onDelete: NoAction, map: "audit_trails_ibfk_2")
+model AuditTrail {
+  id            String   @id @default(uuid()) @db.Char(36)
+  serviceName   String   @map("service_name") @db.VarChar(100)
+  tableName     String   @map("table_name") @db.VarChar(100)
+  tableId       String   @map("table_id") @db.VarChar(255)
+  action        String   @db.VarChar(100)
+  oldDetails    Json     @default("{}") @map("old_details") @db.Json
+  newDetails    Json     @default("{}") @map("new_details") @db.Json
+  businessId    Int?     @map("business_id")
+  createdUserId String   @map("created_user_id") @db.Char(36)
+  createdAt     DateTime @map("created_at") @db.DateTime(0)
 
-  @@index([business_id], map: "business_id")
-  @@index([created_user_id], map: "created_user_id")
+  business    Business? @relation("AuditTrailToBusiness", fields: [businessId], references: [id])
+  createdUser User      @relation("AuditTrailToUser", fields: [createdUserId], references: [id], onDelete: Cascade)
+
+  @@index([businessId], map: "business_id")
+  @@index([createdUserId], map: "created_user_id")
+  @@map("audit_trails")
 }
 
-model user_actions {
-  id             String      @id @default(uuid()) @db.Char(36)
-  service_name   String      @db.VarChar(100)
-  table_name     String      @db.VarChar(100)
-  table_id       String      @db.VarChar(255)
-  action         String      @db.VarChar(100)
-  action_details Json        @default("{}") @db.Json
-  ip_address     String      @db.VarChar(100)
-  user_agent     String      @db.VarChar(100)
-  business_id    Int?
-  user_id        String      @db.Char(36)
-  created_at     DateTime    @db.DateTime(0)
-  businesses     businesses? @relation(fields: [business_id], references: [id], map: "user_actions_ibfk_1")
-  users          users       @relation("user_actions_user_idTousers", fields: [user_id], references: [id], onDelete: NoAction, map: "user_actions_ibfk_2")
+model UserAction {
+  id            String   @id @default(uuid()) @db.Char(36)
+  serviceName   String   @map("service_name") @db.VarChar(100)
+  tableName     String   @map("table_name") @db.VarChar(100)
+  tableId       String   @map("table_id") @db.VarChar(255)
+  action        String   @db.VarChar(100)
+  actionDetails Json     @default("{}") @map("action_details") @db.Json
+  ipAddress     String   @map("ip_address") @db.VarChar(100)
+  userAgent     String   @map("user_agent") @db.VarChar(100)
+  businessId    Int?     @map("business_id")
+  userId        String   @map("user_id") @db.Char(36)
+  createdAt     DateTime @map("created_at") @db.DateTime(0)
 
-  @@index([business_id], map: "business_id")
-  @@index([user_id], map: "user_id")
+  business Business? @relation("UserActionToBusiness", fields: [businessId], references: [id])
+  user     User      @relation("UserActionToUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([businessId], map: "business_id")
+  @@index([userId], map: "user_id")
+  @@map("user_actions")
 }
 
-model event_logs {
-  id           String      @id @default(uuid()) @db.Char(36)
-  service_name String      @db.VarChar(100)
-  event_type   String      @db.VarChar(100)
-  payload      Json        @default("{}") @db.Json
-  business_id  Int?
-  created_at   DateTime    @db.DateTime(0)
-  businesses   businesses? @relation(fields: [business_id], references: [id], map: "event_logs_ibfk_1")
+model EventLog {
+  id          String   @id @default(uuid()) @db.Char(36)
+  serviceName String   @map("service_name") @db.VarChar(100)
+  eventType   String   @map("event_type") @db.VarChar(100)
+  payload     Json     @default("{}") @db.Json
+  businessId  Int?     @map("business_id")
+  createdAt   DateTime @map("created_at") @db.DateTime(0)
 
-  @@index([business_id], map: "business_id")
+  business Business? @relation("EventLogToBusiness", fields: [businessId], references: [id])
+
+  @@index([businessId], map: "business_id")
+  @@map("event_logs")
 }
