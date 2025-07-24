@@ -1,101 +1,101 @@
-import AuditTrailsModel from "../models/audit-trails.model";
-import EventLogsModel from "../models/event-logs.model";
-import UserActionsModel from "../models/user-actions.model";
+import AuditTrailModel from "../models/audit-trail.model";
+import EventLogModel from "../models/event-log.model";
+import UserActionModel from "../models/user-action.model";
 import { ActionValue, EventMessageData, ServiceNameValue } from "../shared/types/common.type";
-import AuditTrailsService from "./audit-trails.service";
-import EventLogsService from "./event-logs.service";
-import UserActionsService from "./user-actions.service";
+import AuditTrailService from "./audit-trail.service";
+import EventLogService from "./event-log.service";
+import UserActionService from "./user-action.service";
 
 export type Header = {
-  ip_address: string,
-  user_agent: string
+  ipAddress: string,
+  userAgent: string
 };
 
 export type Input = {
-  service_name: ServiceNameValue
+  serviceName: ServiceNameValue
   action: ActionValue,
-  event_type: string,
-  table_name: string,
-  table_id: string | number,
+  eventType: string,
+  tableName: string,
+  tableId: string | number,
   payload: EventMessageData<unknown>,
   header: Header,
-  user_id?: string,
-  business_id?: number
+  userId?: string,
+  businessId?: number
 };
 
 export default class LoggingService {
   private input: Input;
-  private eventLogsService: EventLogsService;
-  private auditTrailsService: AuditTrailsService;
-  private userActionsService: UserActionsService;
+  private eventLogService: EventLogService;
+  private auditTrailService: AuditTrailService;
+  private userActionService: UserActionService;
 
   constructor(input: Input) {
     this.input = input;
-    this.eventLogsService = new EventLogsService();
-    this.auditTrailsService = new AuditTrailsService();
-    this.userActionsService = new UserActionsService();
+    this.eventLogService = new EventLogService();
+    this.auditTrailService = new AuditTrailService();
+    this.userActionService = new UserActionService();
   };
 
-  private saveEventLogs = async () => {
-    const { service_name, event_type, payload, business_id } = this.input;
-    const eventLogs = {
-      service_name: service_name,
-      event_type: event_type,
+  private saveEventLog = async () => {
+    const { serviceName, eventType, payload, businessId } = this.input;
+    const eventLog = {
+      serviceName: serviceName,
+      eventType: eventType,
       payload: payload,
-      business_id: business_id ?? null,
-      created_at: new Date()
-    } as EventLogsModel;
+      businessId: businessId ?? null,
+      createdAt: new Date()
+    } as EventLogModel;
 
-    await this.eventLogsService.save(eventLogs)
+    await this.eventLogService.save(eventLog)
       .catch(err => {
         console.log("Error on saving event logs", err);
       });
   };
 
-  private saveAuditTrails = async () => {
-    const { service_name, action, table_name, table_id, payload, user_id, business_id } = this.input;
-    const auditTrails = {
-      service_name: service_name,
-      table_name: table_name,
-      table_id: table_id.toString(),
+  private saveAuditTrail = async () => {
+    const { serviceName, action, tableName, tableId, payload, userId, businessId } = this.input;
+    const auditTrail = {
+      serviceName: serviceName,
+      tableName: tableName,
+      tableId: tableId.toString(),
       action: action,
-      old_details: payload.old_details,
-      new_details: payload.new_details,
-      business_id: business_id ?? null,
-      created_user_id: user_id ?? null,
-      created_at: new Date()
-    } as AuditTrailsModel;
+      oldDetails: payload.oldDetails,
+      newDetails: payload.newDetails,
+      businessId: businessId ?? null,
+      createdUserId: userId ?? null,
+      createdAt: new Date()
+    } as AuditTrailModel;
 
-    await this.auditTrailsService.save(auditTrails)
+    await this.auditTrailService.save(auditTrail)
       .catch(err => {
         console.log("Error on saving audit trails", err);
       });
   };
 
-  private saveUserActions = async () => {
-    const { service_name, action, table_name, table_id, payload, header, user_id, business_id } = this.input;
-    const userActions = {
-      service_name: service_name,
-      table_name: table_name,
-      table_id: table_id.toString(),
+  private saveUserAction = async () => {
+    const { serviceName, action, tableName, tableId, payload, header, userId, businessId } = this.input;
+    const userAction = {
+      serviceName: serviceName,
+      tableName: tableName,
+      tableId: tableId.toString(),
       action: action,
-      action_details: payload.new_details,
-      ip_address: header.ip_address,
-      user_agent: header.user_agent,
-      business_id: business_id ?? null,
-      user_id: user_id ?? null,
-      created_at: new Date()
-    } as UserActionsModel;
+      actionDetails: payload.newDetails,
+      ipAddress: header.ipAddress,
+      userAgent: header.userAgent,
+      businessId: businessId ?? null,
+      userId: userId ?? null,
+      createdAt: new Date()
+    } as UserActionModel;
 
-    await this.userActionsService.save(userActions)
+    await this.userActionService.save(userAction)
       .catch(err => {
         console.log("Error on saving user actions", err);
       });
   };
 
   execute = async (): Promise<void> => {
-    await this.saveEventLogs();
-    await this.saveAuditTrails();
-    await this.saveUserActions();
+    await this.saveEventLog();
+    await this.saveAuditTrail();
+    await this.saveUserAction();
   };
 };

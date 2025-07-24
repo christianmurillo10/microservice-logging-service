@@ -15,8 +15,8 @@ const userConsumer = async (message: KafkaMessage) => {
     userId,
     value: value.data,
     header: {
-      ip_address: message.headers!.ip_address!.toString(),
-      user_agent: message.headers!.user_agent!.toString()
+      ipAddress: message.headers!.ipAddress!.toString(),
+      userAgent: message.headers!.userAgent!.toString()
     }
   });
   await intance.execute();

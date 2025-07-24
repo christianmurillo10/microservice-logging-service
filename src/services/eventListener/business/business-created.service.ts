@@ -1,15 +1,15 @@
 import EventListenerAbstract from "../event-listener.abstract";
 import EventListenerService from "../event-listener.interface";
-import BusinessesService from "../../businesses.service";
-import BusinessesModel from "../../../models/businesses.model";
+import BusinessService from "../../business.service";
+import BusinessModel from "../../../models/business.model";
 import LoggingService from "../../logging.service";
 
-export default class BusinessCreatedEventListenerService extends EventListenerAbstract<BusinessesModel> implements EventListenerService<BusinessesModel> {
-  private businessesService: BusinessesService;
+export default class BusinessCreatedEventListenerService extends EventListenerAbstract<BusinessModel> implements EventListenerService<BusinessModel> {
+  private businessService: BusinessService;
 
   constructor() {
     super();
-    this.businessesService = new BusinessesService();
+    this.businessService = new BusinessService();
   };
 
   execute = async (): Promise<void> => {
@@ -18,10 +18,10 @@ export default class BusinessCreatedEventListenerService extends EventListenerAb
       return;
     };
 
-    const business = new BusinessesModel(this.state.value.new_details);
-    const newBusiness = await this.businessesService.create(business)
+    const business = new BusinessModel(this.state.value.newDetails);
+    const newBusiness = await this.businessService.create(business)
       .catch(err => {
-        console.log("Error on creating businesses", err);
+        console.log("Error on creating business", err);
         return null;
       });
 
@@ -30,18 +30,18 @@ export default class BusinessCreatedEventListenerService extends EventListenerAb
     }
 
     const loggingService = new LoggingService({
-      service_name: "USER_SERVICE",
+      serviceName: "USER_SERVICE",
       action: "CREATE",
-      event_type: this.state.eventType,
-      table_name: "businesses",
-      table_id: newBusiness.id!,
+      eventType: this.state.eventType,
+      tableName: "business",
+      tableId: newBusiness.id!,
       payload: this.state.value,
       header: {
-        ip_address: this.state.header.ip_address,
-        user_agent: this.state.header.user_agent
+        ipAddress: this.state.header.ipAddress,
+        userAgent: this.state.header.userAgent
       },
-      user_id: this.state.userId,
-      business_id: undefined
+      userId: this.state.userId,
+      businessId: undefined
     });
     await loggingService.execute();
 

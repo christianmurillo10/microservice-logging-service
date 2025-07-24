@@ -11,24 +11,24 @@ export default class RoleEventListenerService extends EventListenerAbstract<any>
 
   private executeLoggingService = async (
     action: ActionValue,
-    event_type: string,
-    user_id: string,
+    eventType: string,
+    userId: string,
     data: EventMessageData<any>,
     header: Header
   ) => {
     const loggingService = new LoggingService({
-      service_name: "USER_SERVICE",
+      serviceName: "USER_SERVICE",
       action: action,
-      event_type: event_type,
-      table_name: "roles",
-      table_id: data.new_details.id,
+      eventType: eventType,
+      tableName: "roles",
+      tableId: data.newDetails.id,
       payload: data,
       header: {
-        ip_address: header.ip_address,
-        user_agent: header.user_agent
+        ipAddress: header.ipAddress,
+        userAgent: header.userAgent
       },
-      user_id,
-      business_id: data.new_details.business_id ?? undefined
+      userId,
+      businessId: data.newDetails.businessId ?? undefined
     });
     await loggingService.execute();
   };
@@ -52,17 +52,17 @@ export default class RoleEventListenerService extends EventListenerAbstract<any>
         await this.executeLoggingService("DELETE", eventType, userId, value, header);
         break;
       case EVENT_ROLE_BULK_DELETED:
-        const roleIds = value.new_details.ids;
+        const roleIds = value.newDetails.ids;
 
         for (const roleId of roleIds) {
           const data = {
-            old_details: {
+            oldDetails: {
               id: roleId,
-              deleted_at: null,
+              deletedAt: null,
             },
-            new_details: {
+            newDetails: {
               id: roleId,
-              deleted_at: new Date(),
+              deletedAt: new Date(),
             }
           }
           await this.executeLoggingService("DELETE_MANY", eventType, userId, data, header);

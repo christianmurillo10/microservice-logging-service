@@ -1,62 +1,62 @@
-export const businessesSubsets = {
+export const businessSubsets = {
   id: true,
   name: true,
-  api_key: true,
+  apiKey: true,
   domain: true,
-  preferred_timezone: true,
+  preferredTimezone: true,
   currency: true,
-  created_at: true,
-  updated_at: true,
-  deleted_at: true
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true
 };
 
-export const usersSubsets = {
+export const userSubsets = {
   id: true,
   name: true,
   username: true,
   email: true,
-  access_type: true,
-  business_id: true,
-  is_active: true,
-  is_logged: true,
-  last_logged_at: true,
-  created_at: true,
-  updated_at: true,
-  deleted_at: true
+  accessType: true,
+  businessId: true,
+  isActive: true,
+  isLogged: true,
+  lastLoggedAt: true,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true
 };
 
-export const userActionsSubsets = {
+export const userActionSubsets = {
   id: true,
-  service_name: true,
-  table_name: true,
-  table_id: true,
+  serviceName: true,
+  tableName: true,
+  tableId: true,
   action: true,
-  action_details: true,
-  ip_address: true,
-  user_agent: true,
-  business_id: true,
-  user_id: true,
-  created_at: true
+  actionDetails: true,
+  ipAddress: true,
+  userAgent: true,
+  businessId: true,
+  userId: true,
+  createdAt: true
 };
 
-export const auditTrailsSubsets = {
+export const auditTrailSubsets = {
   id: true,
-  service_name: true,
-  table_name: true,
-  table_id: true,
+  serviceName: true,
+  tableName: true,
+  tableId: true,
   action: true,
-  old_details: true,
-  new_details: true,
-  business_id: true,
-  created_user_id: true,
-  created_at: true
+  oldDetails: true,
+  newDetails: true,
+  businessId: true,
+  createdUserId: true,
+  createdAt: true
 };
 
-export const eventLogsSubsets = {
+export const eventLogSubsets = {
   id: true,
-  service_name: true,
-  event_type: true,
+  serviceName: true,
+  eventType: true,
   payload: true,
-  business_id: true,
-  created_at: true
+  businessId: true,
+  createdAt: true
 };

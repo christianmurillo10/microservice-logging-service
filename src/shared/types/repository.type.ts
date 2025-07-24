@@ -8,8 +8,8 @@ export type FindAllArgs = {
 };
 
 export type FindAllBetweenCreatedAtArgs = {
-  date_from?: string | undefined,
-  date_to?: string | undefined,
+  dateFrom?: string | undefined,
+  dateTo?: string | undefined,
   condition?: GenericObject | undefined,
   include?: string[] | undefined,
   exclude?: string[] | undefined
@@ -36,7 +36,7 @@ export type FindByNameArgs = {
 };
 
 export type FindByApiKeyArgs = {
-  api_key: string,
+  apiKey: string,
   condition?: GenericObject | undefined,
   include?: string[] | undefined,
   exclude?: string[] | undefined

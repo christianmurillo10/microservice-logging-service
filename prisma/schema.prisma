@@ -16,7 +16,7 @@ model Business {
   preferredTimezone String?   @map("preferred_timezone") @db.VarChar(100)
   currency          String?   @db.VarChar(100)
   createdAt         DateTime  @map("created_at") @db.DateTime(0)
-  updatedAt         DateTime? @map("updated_at") @db.DateTime(0)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.DateTime(0)
   deletedAt         DateTime? @map("deleted_at") @db.DateTime(0)
 
   users       User[]       @relation("UserToBusiness")
@@ -38,10 +38,10 @@ model User {
   isLogged     Boolean   @default(false) @map("is_logged")
   lastLoggedAt DateTime? @map("last_logged_at") @db.DateTime(0)
   createdAt    DateTime  @map("created_at") @db.DateTime(0)
-  updatedAt    DateTime? @map("updated_at") @db.DateTime(0)
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.DateTime(0)
   deletedAt    DateTime? @map("deleted_at") @db.DateTime(0)
 
-  business           Business?    @relation("UserToBusiness", fields: [businessId], references: [id])
+  business           Business?    @relation("UserToBusiness", fields: [businessId], references: [id], onDelete: Cascade)
   auditTrailsCreated AuditTrail[] @relation("AuditTrailToUser")
   userActions        UserAction[] @relation("UserActionToUser")
 
@@ -61,7 +61,7 @@ model AuditTrail {
   createdUserId String   @map("created_user_id") @db.Char(36)
   createdAt     DateTime @map("created_at") @db.DateTime(0)
 
-  business    Business? @relation("AuditTrailToBusiness", fields: [businessId], references: [id])
+  business    Business? @relation("AuditTrailToBusiness", fields: [businessId], references: [id], onDelete: Cascade)
   createdUser User      @relation("AuditTrailToUser", fields: [createdUserId], references: [id], onDelete: Cascade)
 
   @@index([businessId], map: "business_id")
@@ -82,7 +82,7 @@ model UserAction {
   userId        String   @map("user_id") @db.Char(36)
   createdAt     DateTime @map("created_at") @db.DateTime(0)
 
-  business Business? @relation("UserActionToBusiness", fields: [businessId], references: [id])
+  business Business? @relation("UserActionToBusiness", fields: [businessId], references: [id], onDelete: Cascade)
   user     User      @relation("UserActionToUser", fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([businessId], map: "business_id")
@@ -98,7 +98,7 @@ model EventLog {
   businessId  Int?     @map("business_id")
   createdAt   DateTime @map("created_at") @db.DateTime(0)
 
-  business Business? @relation("EventLogToBusiness", fields: [businessId], references: [id])
+  business Business? @relation("EventLogToBusiness", fields: [businessId], references: [id], onDelete: Cascade)
 
   @@index([businessId], map: "business_id")
   @@map("event_logs")

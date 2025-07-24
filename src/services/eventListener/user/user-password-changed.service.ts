@@ -1,16 +1,16 @@
-import UsersModel from "../../../models/users.model";
+import UserModel from "../../../models/user.model";
 import EventListenerAbstract from "../event-listener.abstract";
 import EventListenerService from "../event-listener.interface";
-import UsersService from "../../users.service";
+import UserService from "../../user.service";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
 
-export default class UserPasswordChangedEventListenerService extends EventListenerAbstract<UsersModel> implements EventListenerService<UsersModel> {
-  private usersService: UsersService;
+export default class UserPasswordChangedEventListenerService extends EventListenerAbstract<UserModel> implements EventListenerService<UserModel> {
+  private userService: UserService;
 
   constructor() {
     super();
-    this.usersService = new UsersService();
+    this.userService = new UserService();
   };
 
   execute = async (): Promise<void> => {
@@ -19,8 +19,8 @@ export default class UserPasswordChangedEventListenerService extends EventListen
       return;
     };
 
-    const userId = this.state.value.new_details.id!;
-    const existingUser = await this.usersService.getById({ id: userId })
+    const userId = this.state.value.newDetails.id!;
+    const existingUser = await this.userService.getById({ id: userId })
       .catch(err => {
         if (err instanceof NotFoundException) {
           console.log(`User ${userId} not exist!`);
@@ -34,13 +34,13 @@ export default class UserPasswordChangedEventListenerService extends EventListen
       return;
     }
 
-    const user = new UsersModel({
+    const user = new UserModel({
       ...existingUser,
-      updated_at: this.state.value.new_details.updated_at,
+      updatedAt: this.state.value.newDetails.updatedAt,
     });
-    const newUser = await this.usersService.update(user)
+    const newUser = await this.userService.update(user)
       .catch(err => {
-        console.log("Error on changing users password", err);
+        console.log("Error on changing user password", err);
         return null;
       });
 
@@ -49,18 +49,18 @@ export default class UserPasswordChangedEventListenerService extends EventListen
     }
 
     const loggingService = new LoggingService({
-      service_name: "USER_SERVICE",
+      serviceName: "USER_SERVICE",
       action: "UPDATE",
-      event_type: this.state.eventType,
-      table_name: "users",
-      table_id: newUser.id!,
+      eventType: this.state.eventType,
+      tableName: "user",
+      tableId: newUser.id!,
       payload: this.state.value,
       header: {
-        ip_address: this.state.header.ip_address,
-        user_agent: this.state.header.user_agent
+        ipAddress: this.state.header.ipAddress,
+        userAgent: this.state.header.userAgent
       },
-      user_id: this.state.userId,
-      business_id: newUser.business_id ?? undefined
+      userId: this.state.userId,
+      businessId: newUser.businessId ?? undefined
     });
     await loggingService.execute();
 

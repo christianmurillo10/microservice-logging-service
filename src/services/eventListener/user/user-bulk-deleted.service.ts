@@ -1,16 +1,16 @@
 import EventListenerAbstract from "../event-listener.abstract";
 import EventListenerService from "../event-listener.interface";
-import UsersService from "../../users.service";
-import UsersModel from "../../../models/users.model";
+import UserService from "../../user.service";
+import UserModel from "../../../models/user.model";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
 
 export default class UserBulkDeletedEventListenerService extends EventListenerAbstract<Record<string, string[]>> implements EventListenerService<Record<string, string[]>> {
-  private usersService: UsersService;
+  private userService: UserService;
 
   constructor() {
     super();
-    this.usersService = new UsersService();
+    this.userService = new UserService();
   };
 
   execute = async (): Promise<void> => {
@@ -19,10 +19,10 @@ export default class UserBulkDeletedEventListenerService extends EventListenerAb
       return;
     };
 
-    const userIds = this.state.value.new_details.ids!;
+    const userIds = this.state.value.newDetails.ids!;
 
     for (const userId of userIds) {
-      const existingUser = await this.usersService.getById({ id: userId })
+      const existingUser = await this.userService.getById({ id: userId })
         .catch(err => {
           if (err instanceof NotFoundException) {
             console.log(`User ${userId} not exist!`);
@@ -36,13 +36,13 @@ export default class UserBulkDeletedEventListenerService extends EventListenerAb
         return;
       }
 
-      const user = new UsersModel({
+      const user = new UserModel({
         ...existingUser,
-        deleted_at: new Date()
+        deletedAt: new Date()
       });
-      const newUser = await this.usersService.update(user)
+      const newUser = await this.userService.update(user)
         .catch(err => {
-          console.log("Error on deleting users", err);
+          console.log("Error on deleting user", err);
         });
 
       if (!newUser) {
@@ -50,31 +50,31 @@ export default class UserBulkDeletedEventListenerService extends EventListenerAb
       }
 
       const loggingService = new LoggingService({
-        service_name: "USER_SERVICE",
+        serviceName: "USER_SERVICE",
         action: "DELETE_MANY",
-        event_type: this.state.eventType,
-        table_name: "users",
-        table_id: existingUser.id!,
+        eventType: this.state.eventType,
+        tableName: "user",
+        tableId: existingUser.id!,
         payload: {
-          old_details: {
+          oldDetails: {
             id: existingUser.id,
-            deleted_at: existingUser.deleted_at
+            deletedAt: existingUser.deletedAt
           },
-          new_details: {
+          newDetails: {
             id: newUser.id,
-            deleted_at: newUser.deleted_at
+            deletedAt: newUser.deletedAt
           }
         },
         header: {
-          ip_address: this.state.header.ip_address,
-          user_agent: this.state.header.user_agent
+          ipAddress: this.state.header.ipAddress,
+          userAgent: this.state.header.userAgent
         },
-        user_id: this.state.userId,
-        business_id: newUser.business_id ?? undefined
+        userId: this.state.userId,
+        businessId: newUser.businessId ?? undefined
       });
       await loggingService.execute();
     }
 
-    console.info("Event Notification: Successfully bulk deleted users.");
+    console.info("Event Notification: Successfully bulk deleted user.");
   };
 };

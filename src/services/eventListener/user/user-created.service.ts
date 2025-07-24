@@ -1,15 +1,15 @@
-import UsersModel from "../../../models/users.model";
+import UserModel from "../../../models/user.model";
 import EventListenerAbstract from "../event-listener.abstract";
 import EventListenerService from "../event-listener.interface";
-import UsersService from "../../users.service";
+import UserService from "../../user.service";
 import LoggingService from "../../logging.service";
 
-export default class UserCreatedEventListenerService extends EventListenerAbstract<UsersModel> implements EventListenerService<UsersModel> {
-  private usersService: UsersService;
+export default class UserCreatedEventListenerService extends EventListenerAbstract<UserModel> implements EventListenerService<UserModel> {
+  private userService: UserService;
 
   constructor() {
     super();
-    this.usersService = new UsersService();
+    this.userService = new UserService();
   };
 
   execute = async (): Promise<void> => {
@@ -18,10 +18,10 @@ export default class UserCreatedEventListenerService extends EventListenerAbstra
       return;
     };
 
-    const user = new UsersModel(this.state.value.new_details);
-    const newUser = await this.usersService.create(user)
+    const user = new UserModel(this.state.value.newDetails);
+    const newUser = await this.userService.create(user)
       .catch(err => {
-        console.log("Error on creating users", err);
+        console.log("Error on creating user", err);
         return null;
       });
 
@@ -30,18 +30,18 @@ export default class UserCreatedEventListenerService extends EventListenerAbstra
     }
 
     const loggingService = new LoggingService({
-      service_name: "USER_SERVICE",
+      serviceName: "USER_SERVICE",
       action: "CREATE",
-      event_type: this.state.eventType,
-      table_name: "users",
-      table_id: newUser.id!,
+      eventType: this.state.eventType,
+      tableName: "user",
+      tableId: newUser.id!,
       payload: this.state.value,
       header: {
-        ip_address: this.state.header.ip_address,
-        user_agent: this.state.header.user_agent
+        ipAddress: this.state.header.ipAddress,
+        userAgent: this.state.header.userAgent
       },
-      user_id: this.state.userId,
-      business_id: newUser.business_id ?? undefined
+      userId: this.state.userId,
+      businessId: newUser.businessId ?? undefined
     });
     await loggingService.execute();
 

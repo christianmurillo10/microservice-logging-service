@@ -1,16 +1,16 @@
 import EventListenerAbstract from "../event-listener.abstract";
 import EventListenerService from "../event-listener.interface";
-import BusinessesService from "../../businesses.service";
-import BusinessesModel from "../../../models/businesses.model";
+import BusinessService from "../../business.service";
+import BusinessModel from "../../../models/business.model";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
 
-export default class BusinessDeletedEventListenerService extends EventListenerAbstract<BusinessesModel> implements EventListenerService<BusinessesModel> {
-  private businessesService: BusinessesService;
+export default class BusinessDeletedEventListenerService extends EventListenerAbstract<BusinessModel> implements EventListenerService<BusinessModel> {
+  private businessService: BusinessService;
 
   constructor() {
     super();
-    this.businessesService = new BusinessesService();
+    this.businessService = new BusinessService();
   };
 
   execute = async (): Promise<void> => {
@@ -19,8 +19,8 @@ export default class BusinessDeletedEventListenerService extends EventListenerAb
       return;
     };
 
-    const businessId = this.state.value.new_details.id!;
-    const existingBusiness = await this.businessesService.getById(businessId)
+    const businessId = this.state.value.newDetails.id!;
+    const existingBusiness = await this.businessService.getById(businessId)
       .catch(err => {
         if (err instanceof NotFoundException) {
           console.log(`Business ${businessId} not exist!`);
@@ -34,11 +34,11 @@ export default class BusinessDeletedEventListenerService extends EventListenerAb
       return;
     }
 
-    const business = new BusinessesModel({
+    const business = new BusinessModel({
       ...existingBusiness,
-      deleted_at: this.state.value.new_details.deleted_at
+      deletedAt: this.state.value.newDetails.deletedAt
     });
-    const newBusiness = await this.businessesService.update(business)
+    const newBusiness = await this.businessService.update(business)
       .catch(err => {
         console.log("Error on deleting business", err);
         return null;
@@ -49,18 +49,18 @@ export default class BusinessDeletedEventListenerService extends EventListenerAb
     }
 
     const loggingService = new LoggingService({
-      service_name: "USER_SERVICE",
+      serviceName: "USER_SERVICE",
       action: "DELETE",
-      event_type: this.state.eventType,
-      table_name: "businesses",
-      table_id: newBusiness.id!,
+      eventType: this.state.eventType,
+      tableName: "business",
+      tableId: newBusiness.id!,
       payload: this.state.value,
       header: {
-        ip_address: this.state.header.ip_address,
-        user_agent: this.state.header.user_agent
+        ipAddress: this.state.header.ipAddress,
+        userAgent: this.state.header.userAgent
       },
-      user_id: this.state.userId,
-      business_id: undefined
+      userId: this.state.userId,
+      businessId: undefined
     });
     await loggingService.execute();
 
