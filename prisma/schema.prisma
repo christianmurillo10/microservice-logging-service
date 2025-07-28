@@ -9,13 +9,13 @@ datasource db {
 }
 
 model Business {
-  id                Int       @id @default(autoincrement())
+  id                String    @id @default(uuid()) @db.Char(36)
   name              String    @db.VarChar(100)
   apiKey            String    @map("api_key") @db.VarChar(255)
   domain            String?   @db.VarChar(255)
   preferredTimezone String?   @map("preferred_timezone") @db.VarChar(100)
   currency          String?   @db.VarChar(100)
-  createdAt         DateTime  @map("created_at") @db.DateTime(0)
+  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt         DateTime  @updatedAt @map("updated_at") @db.DateTime(0)
   deletedAt         DateTime? @map("deleted_at") @db.DateTime(0)
 
@@ -33,11 +33,11 @@ model User {
   username     String    @db.VarChar(100)
   email        String    @db.VarChar(100)
   accessType   String    @map("access_type") @db.VarChar(100)
-  businessId   Int?      @map("business_id")
+  businessId   String?   @map("business_id")
   isActive     Boolean   @default(true) @map("is_active")
   isLogged     Boolean   @default(false) @map("is_logged")
   lastLoggedAt DateTime? @map("last_logged_at") @db.DateTime(0)
-  createdAt    DateTime  @map("created_at") @db.DateTime(0)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.DateTime(0)
   updatedAt    DateTime  @updatedAt @map("updated_at") @db.DateTime(0)
   deletedAt    DateTime? @map("deleted_at") @db.DateTime(0)
 
@@ -57,9 +57,9 @@ model AuditTrail {
   action        String   @db.VarChar(100)
   oldDetails    Json     @default("{}") @map("old_details") @db.Json
   newDetails    Json     @default("{}") @map("new_details") @db.Json
-  businessId    Int?     @map("business_id")
+  businessId    String?  @map("business_id")
   createdUserId String   @map("created_user_id") @db.Char(36)
-  createdAt     DateTime @map("created_at") @db.DateTime(0)
+  createdAt     DateTime @default(now()) @map("created_at") @db.DateTime(0)
 
   business    Business? @relation("AuditTrailToBusiness", fields: [businessId], references: [id], onDelete: Cascade)
   createdUser User      @relation("AuditTrailToUser", fields: [createdUserId], references: [id], onDelete: Cascade)
@@ -78,9 +78,9 @@ model UserAction {
   actionDetails Json     @default("{}") @map("action_details") @db.Json
   ipAddress     String   @map("ip_address") @db.VarChar(100)
   userAgent     String   @map("user_agent") @db.VarChar(100)
-  businessId    Int?     @map("business_id")
+  businessId    String?  @map("business_id")
   userId        String   @map("user_id") @db.Char(36)
-  createdAt     DateTime @map("created_at") @db.DateTime(0)
+  createdAt     DateTime @default(now()) @map("created_at") @db.DateTime(0)
 
   business Business? @relation("UserActionToBusiness", fields: [businessId], references: [id], onDelete: Cascade)
   user     User      @relation("UserActionToUser", fields: [userId], references: [id], onDelete: Cascade)
@@ -95,8 +95,8 @@ model EventLog {
   serviceName String   @map("service_name") @db.VarChar(100)
   eventType   String   @map("event_type") @db.VarChar(100)
   payload     Json     @default("{}") @db.Json
-  businessId  Int?     @map("business_id")
-  createdAt   DateTime @map("created_at") @db.DateTime(0)
+  businessId  String?  @map("business_id")
+  createdAt   DateTime @default(now()) @map("created_at") @db.DateTime(0)
 
   business Business? @relation("EventLogToBusiness", fields: [businessId], references: [id], onDelete: Cascade)
 
