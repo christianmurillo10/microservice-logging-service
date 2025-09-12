@@ -1,6 +1,7 @@
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native"]
+  output        = "../src/prisma/client"
 }
 
 datasource db {
@@ -8,98 +9,96 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Business {
-  id                String    @id @default(uuid()) @db.Char(36)
-  name              String    @db.VarChar(100)
-  apiKey            String    @map("api_key") @db.VarChar(255)
-  domain            String?   @db.VarChar(255)
-  preferredTimezone String?   @map("preferred_timezone") @db.VarChar(100)
-  currency          String?   @db.VarChar(100)
-  createdAt         DateTime  @default(now()) @map("created_at") @db.DateTime(0)
-  updatedAt         DateTime  @updatedAt @map("updated_at") @db.DateTime(0)
-  deletedAt         DateTime? @map("deleted_at") @db.DateTime(0)
+model Organization {
+  id        String    @id @default(uuid()) @db.Char(36)
+  name      String    @db.VarChar(100)
+  logoPath  String?   @map("logo_path") @db.VarChar(255)
+  isActive  Boolean   @default(true) @map("is_active")
+  createdAt DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt DateTime? @map("deleted_at") @db.DateTime(0)
 
-  users       User[]       @relation("UserToBusiness")
-  auditTrails AuditTrail[] @relation("AuditTrailToBusiness")
-  userActions UserAction[] @relation("UserActionToBusiness")
-  eventLogs   EventLog[]   @relation("EventLogToBusiness")
+  users       User[]       @relation("UserToOrganization")
+  auditTrails AuditTrail[] @relation("AuditTrailToOrganization")
+  userActions UserAction[] @relation("UserActionToOrganization")
+  eventLogs   EventLog[]   @relation("EventLogToOrganization")
 
-  @@map("businesses")
+  @@map("organizations")
 }
 
 model User {
-  id           String    @id @default(uuid()) @db.Char(36)
-  name         String    @db.VarChar(100)
-  username     String    @db.VarChar(100)
-  email        String    @db.VarChar(100)
-  accessType   String    @map("access_type") @db.VarChar(100)
-  businessId   String?   @map("business_id")
-  isActive     Boolean   @default(true) @map("is_active")
-  isLogged     Boolean   @default(false) @map("is_logged")
-  lastLoggedAt DateTime? @map("last_logged_at") @db.DateTime(0)
-  createdAt    DateTime  @default(now()) @map("created_at") @db.DateTime(0)
-  updatedAt    DateTime  @updatedAt @map("updated_at") @db.DateTime(0)
-  deletedAt    DateTime? @map("deleted_at") @db.DateTime(0)
+  id             String    @id @default(uuid()) @db.Char(36)
+  name           String    @db.VarChar(100)
+  username       String    @db.VarChar(100)
+  email          String    @db.VarChar(100)
+  accessType     String    @map("access_type") @db.VarChar(100)
+  organizationId String?   @map("organization_id")
+  isActive       Boolean   @default(true) @map("is_active")
+  isLogged       Boolean   @default(false) @map("is_logged")
+  lastLoggedAt   DateTime? @map("last_logged_at") @db.DateTime(0)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.DateTime(0)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.DateTime(0)
+  deletedAt      DateTime? @map("deleted_at") @db.DateTime(0)
 
-  business           Business?    @relation("UserToBusiness", fields: [businessId], references: [id], onDelete: Cascade)
-  auditTrailsCreated AuditTrail[] @relation("AuditTrailToUser")
-  userActions        UserAction[] @relation("UserActionToUser")
+  organization       Organization? @relation("UserToOrganization", fields: [organizationId], references: [id], onDelete: Cascade)
+  auditTrailsCreated AuditTrail[]  @relation("AuditTrailToUser")
+  userActions        UserAction[]  @relation("UserActionToUser")
 
-  @@index([businessId], map: "business_id")
+  @@index([organizationId], map: "organization_id")
   @@map("users")
 }
 
 model AuditTrail {
-  id            String   @id @default(uuid()) @db.Char(36)
-  serviceName   String   @map("service_name") @db.VarChar(100)
-  tableName     String   @map("table_name") @db.VarChar(100)
-  tableId       String   @map("table_id") @db.VarChar(255)
-  action        String   @db.VarChar(100)
-  oldDetails    Json     @default("{}") @map("old_details") @db.Json
-  newDetails    Json     @default("{}") @map("new_details") @db.Json
-  businessId    String?  @map("business_id")
-  createdUserId String   @map("created_user_id") @db.Char(36)
-  createdAt     DateTime @default(now()) @map("created_at") @db.DateTime(0)
+  id             String   @id @default(uuid()) @db.Char(36)
+  serviceName    String   @map("service_name") @db.VarChar(100)
+  tableName      String   @map("table_name") @db.VarChar(100)
+  tableId        String   @map("table_id") @db.VarChar(255)
+  action         String   @db.VarChar(100)
+  oldDetails     Json     @default("{}") @map("old_details") @db.Json
+  newDetails     Json     @default("{}") @map("new_details") @db.Json
+  organizationId String?  @map("organization_id")
+  createdUserId  String   @map("created_user_id") @db.Char(36)
+  createdAt      DateTime @default(now()) @map("created_at") @db.DateTime(0)
 
-  business    Business? @relation("AuditTrailToBusiness", fields: [businessId], references: [id], onDelete: Cascade)
-  createdUser User      @relation("AuditTrailToUser", fields: [createdUserId], references: [id], onDelete: Cascade)
+  organization Organization? @relation("AuditTrailToOrganization", fields: [organizationId], references: [id], onDelete: Cascade)
+  createdUser  User          @relation("AuditTrailToUser", fields: [createdUserId], references: [id], onDelete: Cascade)
 
-  @@index([businessId], map: "business_id")
+  @@index([organizationId], map: "organization_id")
   @@index([createdUserId], map: "created_user_id")
   @@map("audit_trails")
 }
 
 model UserAction {
-  id            String   @id @default(uuid()) @db.Char(36)
-  serviceName   String   @map("service_name") @db.VarChar(100)
-  tableName     String   @map("table_name") @db.VarChar(100)
-  tableId       String   @map("table_id") @db.VarChar(255)
-  action        String   @db.VarChar(100)
-  actionDetails Json     @default("{}") @map("action_details") @db.Json
-  ipAddress     String   @map("ip_address") @db.VarChar(100)
-  userAgent     String   @map("user_agent") @db.VarChar(100)
-  businessId    String?  @map("business_id")
-  userId        String   @map("user_id") @db.Char(36)
-  createdAt     DateTime @default(now()) @map("created_at") @db.DateTime(0)
+  id             String   @id @default(uuid()) @db.Char(36)
+  serviceName    String   @map("service_name") @db.VarChar(100)
+  tableName      String   @map("table_name") @db.VarChar(100)
+  tableId        String   @map("table_id") @db.VarChar(255)
+  action         String   @db.VarChar(100)
+  actionDetails  Json     @default("{}") @map("action_details") @db.Json
+  ipAddress      String   @map("ip_address") @db.VarChar(100)
+  userAgent      String   @map("user_agent") @db.VarChar(100)
+  organizationId String?  @map("organization_id")
+  userId         String   @map("user_id") @db.Char(36)
+  createdAt      DateTime @default(now()) @map("created_at") @db.DateTime(0)
 
-  business Business? @relation("UserActionToBusiness", fields: [businessId], references: [id], onDelete: Cascade)
-  user     User      @relation("UserActionToUser", fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization? @relation("UserActionToOrganization", fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User          @relation("UserActionToUser", fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([businessId], map: "business_id")
+  @@index([organizationId], map: "organization_id")
   @@index([userId], map: "user_id")
   @@map("user_actions")
 }
 
 model EventLog {
-  id          String   @id @default(uuid()) @db.Char(36)
-  serviceName String   @map("service_name") @db.VarChar(100)
-  eventType   String   @map("event_type") @db.VarChar(100)
-  payload     Json     @default("{}") @db.Json
-  businessId  String?  @map("business_id")
-  createdAt   DateTime @default(now()) @map("created_at") @db.DateTime(0)
+  id             String   @id @default(uuid()) @db.Char(36)
+  serviceName    String   @map("service_name") @db.VarChar(100)
+  eventType      String   @map("event_type") @db.VarChar(100)
+  payload        Json     @default("{}") @db.Json
+  organizationId String?  @map("organization_id")
+  createdAt      DateTime @default(now()) @map("created_at") @db.DateTime(0)
 
-  business Business? @relation("EventLogToBusiness", fields: [businessId], references: [id], onDelete: Cascade)
+  organization Organization? @relation("EventLogToOrganization", fields: [organizationId], references: [id], onDelete: Cascade)
 
-  @@index([businessId], map: "business_id")
+  @@index([organizationId], map: "organization_id")
   @@map("event_logs")
 }
