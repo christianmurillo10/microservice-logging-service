@@ -20,7 +20,7 @@ export type Input = {
   payload: EventMessageData<unknown>,
   header: Header,
   userId?: string,
-  businessId?: number
+  organizationId?: number
 };
 
 export default class LoggingService {
@@ -37,12 +37,12 @@ export default class LoggingService {
   };
 
   private saveEventLog = async () => {
-    const { serviceName, eventType, payload, businessId } = this.input;
+    const { serviceName, eventType, payload, organizationId } = this.input;
     const eventLog = {
       serviceName: serviceName,
       eventType: eventType,
       payload: payload,
-      businessId: businessId ?? null,
+      organizationId: organizationId ?? null,
       createdAt: new Date()
     } as EventLogModel;
 
@@ -53,7 +53,7 @@ export default class LoggingService {
   };
 
   private saveAuditTrail = async () => {
-    const { serviceName, action, tableName, tableId, payload, userId, businessId } = this.input;
+    const { serviceName, action, tableName, tableId, payload, userId, organizationId } = this.input;
     const auditTrail = {
       serviceName: serviceName,
       tableName: tableName,
@@ -61,7 +61,7 @@ export default class LoggingService {
       action: action,
       oldDetails: payload.oldDetails,
       newDetails: payload.newDetails,
-      businessId: businessId ?? null,
+      organizationId: organizationId ?? null,
       createdUserId: userId ?? null,
       createdAt: new Date()
     } as AuditTrailModel;
@@ -73,7 +73,7 @@ export default class LoggingService {
   };
 
   private saveUserAction = async () => {
-    const { serviceName, action, tableName, tableId, payload, header, userId, businessId } = this.input;
+    const { serviceName, action, tableName, tableId, payload, header, userId, organizationId } = this.input;
     const userAction = {
       serviceName: serviceName,
       tableName: tableName,
@@ -82,7 +82,7 @@ export default class LoggingService {
       actionDetails: payload.newDetails,
       ipAddress: header.ipAddress,
       userAgent: header.userAgent,
-      businessId: businessId ?? null,
+      organizationId: organizationId ?? null,
       userId: userId ?? null,
       createdAt: new Date()
     } as UserActionModel;

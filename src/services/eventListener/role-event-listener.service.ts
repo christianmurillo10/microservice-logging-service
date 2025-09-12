@@ -28,7 +28,7 @@ export default class RoleEventListenerService extends EventListenerAbstract<any>
         userAgent: header.userAgent
       },
       userId,
-      businessId: data.newDetails.businessId ?? undefined
+      organizationId: data.newDetails.organizationId ?? undefined
     });
     await loggingService.execute();
   };

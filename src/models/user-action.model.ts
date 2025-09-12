@@ -11,7 +11,7 @@ class UserActionModel implements UserAction {
   actionDetails: GenericObject = {};
   ipAddress: string = "";
   userAgent: string = "";
-  businessId?: number | null = null;
+  organizationId?: number | null = null;
   userId!: string;
   createdAt: Date = new Date();
 
@@ -24,7 +24,7 @@ class UserActionModel implements UserAction {
     this.actionDetails = props.actionDetails;
     this.ipAddress = props.ipAddress;
     this.userAgent = props.userAgent;
-    this.businessId = props.businessId;
+    this.organizationId = props.organizationId;
     this.userId = props.userId;
     this.createdAt = props.createdAt;
   };

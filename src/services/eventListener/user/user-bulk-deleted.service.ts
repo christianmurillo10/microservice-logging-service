@@ -70,7 +70,7 @@ export default class UserBulkDeletedEventListenerService extends EventListenerAb
           userAgent: this.state.header.userAgent
         },
         userId: this.state.userId,
-        businessId: newUser.businessId ?? undefined
+        organizationId: newUser.organizationId ?? undefined
       });
       await loggingService.execute();
     }

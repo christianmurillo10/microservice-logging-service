@@ -15,7 +15,7 @@ export default class UserActionService {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
-      // include: ["business"],
+      // include: ["organization"],
     });
 
     return record;
@@ -24,7 +24,7 @@ export default class UserActionService {
   getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<UserActionModel[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
-      // include: ["business"],
+      // include: ["organization"],
     });
 
     return record;
@@ -34,7 +34,7 @@ export default class UserActionService {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
-      // include: ["business"],
+      // include: ["organization"],
     });
 
     if (!record) {
@@ -47,7 +47,7 @@ export default class UserActionService {
   save = async (data: UserActionModel): Promise<UserActionModel> => {
     return await this.repository.create({
       params: new UserActionModel(data),
-      // include: ["business"],
+      // include: ["organization"],
     });
   };
 

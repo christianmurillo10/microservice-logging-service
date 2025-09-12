@@ -5,6 +5,6 @@ export default interface EventLog {
   serviceName: ServiceNameValue;
   eventType: string;
   payload: GenericObject;
-  businessId?: number | null;
+  organizationId?: number | null;
   createdAt: Date;
 };

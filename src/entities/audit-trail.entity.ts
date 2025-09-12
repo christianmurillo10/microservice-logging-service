@@ -8,7 +8,7 @@ export default interface AuditTrail {
   action: ActionValue;
   oldDetails: GenericObject;
   newDetails: GenericObject;
-  businessId?: number | null;
+  organizationId?: number | null;
   createdUserId: string;
   createdAt: Date;
 };

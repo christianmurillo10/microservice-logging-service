@@ -10,7 +10,7 @@ class AuditTrailModel implements AuditTrail {
   action: ActionValue = "CREATE";
   oldDetails: GenericObject = {};
   newDetails: GenericObject = {};
-  businessId?: number | null = null;
+  organizationId?: number | null = null;
   createdUserId!: string;
   createdAt: Date = new Date();
 
@@ -22,7 +22,7 @@ class AuditTrailModel implements AuditTrail {
     this.action = props.action;
     this.oldDetails = props.oldDetails;
     this.newDetails = props.newDetails;
-    this.businessId = props.businessId;
+    this.organizationId = props.organizationId;
     this.createdUserId = props.createdUserId;
     this.createdAt = props.createdAt;
   };

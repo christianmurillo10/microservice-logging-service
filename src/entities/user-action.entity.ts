@@ -9,7 +9,7 @@ export default interface UserAction {
   actionDetails: GenericObject;
   ipAddress: string;
   userAgent: string;
-  businessId?: number | null;
+  organizationId?: number | null;
   userId: string;
   createdAt: Date;
 };

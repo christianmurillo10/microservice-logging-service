@@ -1,17 +1,17 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
-import PrismaBusinessRepository from "../repositories/prisma/business.repository";
-import BusinessModel from "../models/business.model";
+import PrismaOrganizationRepository from "../repositories/prisma/organization.repository";
+import OrganizationModel from "../models/organization.model";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 import { GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
 
-export default class BusinessService {
-  private repository: PrismaBusinessRepository;
+export default class OrganizationService {
+  private repository: PrismaOrganizationRepository;
 
   constructor() {
-    this.repository = new PrismaBusinessRepository();
+    this.repository = new PrismaOrganizationRepository();
   };
 
-  getAll = async (args?: GetAllArgs): Promise<BusinessModel[]> => {
+  getAll = async (args?: GetAllArgs): Promise<OrganizationModel[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -21,7 +21,7 @@ export default class BusinessService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<BusinessModel[]> => {
+  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<OrganizationModel[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       exclude: ["deletedAt"]
@@ -30,7 +30,7 @@ export default class BusinessService {
     return record;
   };
 
-  getById = async (id: number): Promise<BusinessModel> => {
+  getById = async (id: number): Promise<OrganizationModel> => {
     const record = await this.repository.findById({ id: id });
 
     if (!record) {
@@ -40,7 +40,7 @@ export default class BusinessService {
     return record;
   };
 
-  getByName = async (name: string): Promise<BusinessModel> => {
+  getByName = async (name: string): Promise<OrganizationModel> => {
     const record = await this.repository.findByName({ name: name });
 
     if (!record) {
@@ -50,7 +50,7 @@ export default class BusinessService {
     return record;
   };
 
-  getByApiKey = async (apiKey: string): Promise<BusinessModel> => {
+  getByApiKey = async (apiKey: string): Promise<OrganizationModel> => {
     const record = await this.repository.findByApiKey({ apiKey: apiKey });
 
     if (!record) {
@@ -60,18 +60,18 @@ export default class BusinessService {
     return record;
   };
 
-  create = async (data: BusinessModel): Promise<BusinessModel> => {
+  create = async (data: OrganizationModel): Promise<OrganizationModel> => {
     const option = {
-      params: new BusinessModel(data),
+      params: new OrganizationModel(data),
       exclude: ["deletedAt"]
     };
 
     return await this.repository.create(option);
   };
 
-  update = async (data: BusinessModel): Promise<BusinessModel> => {
+  update = async (data: OrganizationModel): Promise<OrganizationModel> => {
     const option = {
-      params: new BusinessModel(data),
+      params: new OrganizationModel(data),
       exclude: ["deletedAt"]
     };
 
@@ -81,7 +81,7 @@ export default class BusinessService {
     });;
   };
 
-  delete = async (id: number): Promise<BusinessModel> => {
+  delete = async (id: number): Promise<OrganizationModel> => {
     return await this.repository.softDelete({ id: id });
   };
 

@@ -9,7 +9,7 @@ import {
   CountArgs,
 } from "../../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
-import { businessSubsets, userActionSubsets } from "../../shared/helpers/select-subset.helper";
+import { organizationSubsets, userActionSubsets } from "../../shared/helpers/select-subset.helper";
 import { ActionValue, GenericObject, ServiceNameValue } from "../../shared/types/common.type";
 
 export default class PrismaUserActionRepository implements UserActionRepository {
@@ -24,14 +24,14 @@ export default class PrismaUserActionRepository implements UserActionRepository 
     args: FindAllArgs
   ): Promise<UserActionModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const res = await this.client.findMany({
       select: {
         ...userActionSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       where: {
         ...args.condition,
@@ -58,8 +58,8 @@ export default class PrismaUserActionRepository implements UserActionRepository 
     args: FindAllBetweenCreatedAtArgs
   ): Promise<UserActionModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const betweenCreatedAt = args.dateFrom && args.dateTo
       ? { createdAt: { gte: new Date(args.dateFrom), lte: new Date(args.dateTo) } }
@@ -68,7 +68,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
       select: {
         ...userActionSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       where: {
         ...args.condition,
@@ -88,14 +88,14 @@ export default class PrismaUserActionRepository implements UserActionRepository 
     args: FindByIdArgs<string>
   ): Promise<UserActionModel | null> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const res = await this.client.findFirst({
       select: {
         ...userActionSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       where: {
         id: args.id,
@@ -117,14 +117,14 @@ export default class PrismaUserActionRepository implements UserActionRepository 
     args: CreateArgs<UserActionModel>
   ): Promise<UserActionModel> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const data = await this.client.create({
       select: {
         ...userActionSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       data: args.params
     });

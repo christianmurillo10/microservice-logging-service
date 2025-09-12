@@ -1,7 +1,7 @@
 import { KafkaMessage } from "kafkajs";
-import BusinessEventListenerServiceFactory from "../../services/eventListener/business/business-factory.service";
+import OrganizationEventListenerServiceFactory from "../../services/eventListener/organization/organization-factory.service";
 
-const businessConsumer = async (message: KafkaMessage) => {
+const organizationConsumer = async (message: KafkaMessage) => {
   const userId = message.key?.toString() ?? "";
   const value = JSON.parse(message.value?.toString() ?? '{}');
 
@@ -9,7 +9,7 @@ const businessConsumer = async (message: KafkaMessage) => {
     return;
   };
 
-  const instance = BusinessEventListenerServiceFactory.createInstance(value.eventType);
+  const instance = OrganizationEventListenerServiceFactory.createInstance(value.eventType);
   instance.setState({
     eventType: value.eventType,
     userId,
@@ -22,4 +22,4 @@ const businessConsumer = async (message: KafkaMessage) => {
   await instance.execute();
 };
 
-export default businessConsumer;
+export default organizationConsumer;

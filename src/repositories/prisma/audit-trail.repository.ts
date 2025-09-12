@@ -9,7 +9,7 @@ import {
   CountArgs,
 } from "../../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
-import { auditTrailSubsets, businessSubsets } from "../../shared/helpers/select-subset.helper";
+import { auditTrailSubsets, organizationSubsets } from "../../shared/helpers/select-subset.helper";
 import { ActionValue, GenericObject, ServiceNameValue } from "../../shared/types/common.type";
 
 export default class PrismaAuditTrailRepository implements AuditTrailRepository {
@@ -24,14 +24,14 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
     args: FindAllArgs
   ): Promise<AuditTrailModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const res = await this.client.findMany({
       select: {
         ...auditTrailSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       where: {
         ...args.condition,
@@ -59,8 +59,8 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
     args: FindAllBetweenCreatedAtArgs
   ): Promise<AuditTrailModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const betweenCreatedAt = args.dateFrom && args.dateTo
       ? { createdAt: { gte: new Date(args.dateFrom), lte: new Date(args.dateTo) } }
@@ -69,7 +69,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
       select: {
         ...auditTrailSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       where: {
         ...args.condition,
@@ -90,14 +90,14 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
     args: FindByIdArgs<string>
   ): Promise<AuditTrailModel | null> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const res = await this.client.findFirst({
       select: {
         ...auditTrailSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       where: {
         id: args.id,
@@ -120,14 +120,14 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
     args: CreateArgs<AuditTrailModel>
   ): Promise<AuditTrailModel> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const data = await this.client.create({
       select: {
         ...auditTrailSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       data: args.params
     });

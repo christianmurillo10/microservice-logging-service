@@ -1,4 +1,4 @@
-export default interface Business {
+export default interface Organization {
   id?: number;
   name: string;
   apiKey: string;

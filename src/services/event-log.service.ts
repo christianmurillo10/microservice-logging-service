@@ -15,7 +15,7 @@ export default class EventLogService {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
-      // include: ["business"],
+      // include: ["organization"],
     });
 
     return record;
@@ -24,7 +24,7 @@ export default class EventLogService {
   getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<EventLogModel[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
-      // include: ["business"],
+      // include: ["organization"],
     });
 
     return record;
@@ -34,7 +34,7 @@ export default class EventLogService {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
-      // include: ["business"],
+      // include: ["organization"],
     });
 
     if (!record) {
@@ -47,7 +47,7 @@ export default class EventLogService {
   save = async (data: EventLogModel): Promise<EventLogModel> => {
     return await this.repository.create({
       params: new EventLogModel(data),
-      // include: ["business"],
+      // include: ["organization"],
     });
   };
 

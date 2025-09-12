@@ -60,7 +60,7 @@ export default class UserUpdatedEventListenerService extends UserEventListenerSe
         userAgent: this.state.header.userAgent
       },
       userId: this.state.userId,
-      businessId: newUser.businessId ?? undefined
+      organizationId: newUser.organizationId ?? undefined
     });
     await loggingService.execute();
 

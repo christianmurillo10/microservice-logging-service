@@ -7,7 +7,7 @@ class EventLogModel implements EventLog {
   serviceName: ServiceNameValue = "USER_SERVICE";
   eventType: string = "";
   payload: GenericObject = {};
-  businessId?: number | null = null;
+  organizationId?: number | null = null;
   createdAt: Date = new Date();
 
   constructor(props: EventLog) {
@@ -15,7 +15,7 @@ class EventLogModel implements EventLog {
     this.serviceName = props.serviceName;
     this.eventType = props.eventType;
     this.payload = props.payload;
-    this.businessId = props.businessId;
+    this.organizationId = props.organizationId;
     this.createdAt = props.createdAt;
   };
 };

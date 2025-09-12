@@ -1,4 +1,4 @@
-export const businessSubsets = {
+export const organizationSubsets = {
   id: true,
   name: true,
   apiKey: true,
@@ -16,7 +16,7 @@ export const userSubsets = {
   username: true,
   email: true,
   accessType: true,
-  businessId: true,
+  organizationId: true,
   isActive: true,
   isLogged: true,
   lastLoggedAt: true,
@@ -34,7 +34,7 @@ export const userActionSubsets = {
   actionDetails: true,
   ipAddress: true,
   userAgent: true,
-  businessId: true,
+  organizationId: true,
   userId: true,
   createdAt: true
 };
@@ -47,7 +47,7 @@ export const auditTrailSubsets = {
   action: true,
   oldDetails: true,
   newDetails: true,
-  businessId: true,
+  organizationId: true,
   createdUserId: true,
   createdAt: true
 };
@@ -57,6 +57,6 @@ export const eventLogSubsets = {
   serviceName: true,
   eventType: true,
   payload: true,
-  businessId: true,
+  organizationId: true,
   createdAt: true
 };

@@ -9,7 +9,7 @@ import {
   CountArgs,
 } from "../../shared/types/repository.type";
 import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
-import { businessSubsets, eventLogSubsets } from "../../shared/helpers/select-subset.helper";
+import { organizationSubsets, eventLogSubsets } from "../../shared/helpers/select-subset.helper";
 import { GenericObject, ServiceNameValue } from "../../shared/types/common.type";
 
 export default class PrismaEventLogRepository implements EventLogRepository {
@@ -24,14 +24,14 @@ export default class PrismaEventLogRepository implements EventLogRepository {
     args: FindAllArgs
   ): Promise<EventLogModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const res = await this.client.findMany({
       select: {
         ...eventLogSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       where: {
         ...args.condition,
@@ -57,8 +57,8 @@ export default class PrismaEventLogRepository implements EventLogRepository {
     args: FindAllBetweenCreatedAtArgs
   ): Promise<EventLogModel[]> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const betweenCreatedAt = args.dateFrom && args.dateTo
       ? { createdAt: { gte: new Date(args.dateFrom), lte: new Date(args.dateTo) } }
@@ -67,7 +67,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
       select: {
         ...eventLogSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       where: {
         ...args.condition,
@@ -86,14 +86,14 @@ export default class PrismaEventLogRepository implements EventLogRepository {
     args: FindByIdArgs<string>
   ): Promise<EventLogModel | null> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const res = await this.client.findFirst({
       select: {
         ...eventLogSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       where: {
         id: args.id,
@@ -114,14 +114,14 @@ export default class PrismaEventLogRepository implements EventLogRepository {
     args: CreateArgs<EventLogModel>
   ): Promise<EventLogModel> => {
     const exclude = setSelectExclude(args.exclude!);
-    const businessSelect = args.include?.includes("business")
-      ? { business: { select: { ...businessSubsets, deletedAt: false } } }
+    const organizationSelect = args.include?.includes("organization")
+      ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
       : undefined;
     const data = await this.client.create({
       select: {
         ...eventLogSubsets,
         ...exclude,
-        ...businessSelect
+        ...organizationSelect
       },
       data: args.params
     });

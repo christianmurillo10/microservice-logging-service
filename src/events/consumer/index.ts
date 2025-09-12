@@ -2,12 +2,12 @@ import { EachMessagePayload } from "kafkajs";
 import KafkaService from "../../services/kafka.service";
 import kafkaConfig from "../../config/kafka.config";
 import {
-  EVENT_BUSINESS,
+  EVENT_ORGANIZATION,
   EVENT_ROLE,
   EVENT_USER
 } from "../../shared/constants/events.constant";
 import userConsumer from "./user.consumer";
-import businessConsumer from "./business.consumer";
+import organizationConsumer from "./organization.consumer";
 import roleConsumer from "./role.consumer";
 
 export default class KafkaConsumer {
@@ -29,8 +29,8 @@ export default class KafkaConsumer {
       case EVENT_USER:
         await userConsumer(message);
         break;
-      case EVENT_BUSINESS:
-        await businessConsumer(message);
+      case EVENT_ORGANIZATION:
+        await organizationConsumer(message);
         break;
       case EVENT_ROLE:
         await roleConsumer(message);

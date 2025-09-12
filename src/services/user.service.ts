@@ -15,7 +15,7 @@ export default class UserService {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
-      // include: ["roles", "business"],
+      // include: ["roles", "organization"],
       exclude: ["deletedAt"]
     });
 
@@ -26,7 +26,7 @@ export default class UserService {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
-      // include: ["roles", "business"],
+      // include: ["roles", "organization"],
       exclude: ["deletedAt"]
     });
 
@@ -40,7 +40,7 @@ export default class UserService {
   create = async (data: UserModel): Promise<UserModel> => {
     const option = {
       params: new UserModel(data),
-      // include: ["roles", "business"],
+      // include: ["roles", "organization"],
       exclude: ["deletedAt"]
     };
 
@@ -50,7 +50,7 @@ export default class UserService {
   update = async (data: UserModel): Promise<UserModel> => {
     const option = {
       params: new UserModel(data),
-      // include: ["roles", "business"],
+      // include: ["roles", "organization"],
       exclude: ["deletedAt"]
     };
 
@@ -71,7 +71,7 @@ export default class UserService {
     await this.repository.softDeleteMany({ ids: ids });
   };
 
-  deleteManyByBusinessIds = async (ids: number[]): Promise<void> => {
-    await this.repository.softDeleteManyByBusinessIds({ ids: ids });
+  deleteManyByOrganizationIds = async (ids: number[]): Promise<void> => {
+    await this.repository.softDeleteManyByOrganizationIds({ ids: ids });
   };
 };
