@@ -14,8 +14,8 @@ router.get("/", (_req: Request, res: Response) => {
   }).end();
 });
 
-router.use("/audit-trail", auditTrailRoute);
-router.use("/event-log", eventLogRoute);
-router.use("/user-action", userActionRoute);
+router.use("/audit-trails", auditTrailRoute);
+router.use("/event-logs", eventLogRoute);
+router.use("/user-actions", userActionRoute);
 
 export default router;

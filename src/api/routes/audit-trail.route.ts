@@ -1,9 +1,25 @@
 import { Router } from "express";
-import read from "../controllers/auditTrail/read.controller";
-import list from "../controllers/auditTrail/list.controller";
+import authenticate from "../../middlewares/authenticate.middleware";
+import {
+  list as listValidation
+} from "../../middlewares/validators/audit-trail.validator";
+import * as AuditTrailController from "../controllers/auditTrail";
 
-const router = Router();
-router.use(read);
-router.use(list);
+const router = Router({ mergeParams: true });
+
+router.get(
+  "/",
+  authenticate,
+  // authorize("list", "audit-trail"),
+  listValidation,
+  AuditTrailController.list
+);
+
+router.get(
+  "/:id",
+  // authorize("read", "audit-trail"),
+  authenticate,
+  AuditTrailController.read
+);
 
 export default router;

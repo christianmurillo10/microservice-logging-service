@@ -1,9 +1,25 @@
 import { Router } from "express";
-import read from "../controllers/userAction/read.controller";
-import list from "../controllers/userAction/list.controller";
+import authenticate from "../../middlewares/authenticate.middleware";
+import {
+  list as listValidation
+} from "../../middlewares/validators/user-action.validator";
+import * as UserActionController from "../controllers/userAction";
 
-const router = Router();
-router.use(read);
-router.use(list);
+const router = Router({ mergeParams: true });
+
+router.get(
+  "/",
+  authenticate,
+  // authorize("list", "user-action"),
+  listValidation,
+  UserActionController.list
+);
+
+router.get(
+  "/:id",
+  // authorize("read", "user-action"),
+  authenticate,
+  UserActionController.read
+);
 
 export default router;
