@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../prisma/client";
 import UserActionModel from "../../models/user-action.model";
 import UserActionRepository from "../user-action.interface";
 import {

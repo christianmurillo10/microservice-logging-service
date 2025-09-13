@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../prisma/client";
 import EventLogModel from "../../models/event-log.model";
 import EventLogRepository from "../event-log.interface";
 import {

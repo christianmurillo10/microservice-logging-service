@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../prisma/client";
 import OrganizationModel from "../../models/organization.model";
 import OrganizationRepository from "../organization.interface";
 import {
@@ -6,7 +6,6 @@ import {
   FindAllBetweenCreatedAtArgs,
   FindByIdArgs,
   FindByNameArgs,
-  FindByApiKeyArgs,
   CreateArgs,
   UpdateArgs,
   SoftDeleteArgs,
@@ -72,7 +71,7 @@ export default class PrismaOrganizationRepository implements OrganizationReposit
   };
 
   findById = async (
-    args: FindByIdArgs<number>
+    args: FindByIdArgs<string>
   ): Promise<OrganizationModel | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const res = await this.client.findFirst({
@@ -113,27 +112,6 @@ export default class PrismaOrganizationRepository implements OrganizationReposit
     return new OrganizationModel(res);
   };
 
-  findByApiKey = async (
-    args: FindByApiKeyArgs
-  ): Promise<OrganizationModel | null> => {
-    const exclude = setSelectExclude(args.exclude!);
-    const res = await this.client.findFirst({
-      select: {
-        ...organizationSubsets,
-        ...exclude
-      },
-      where: {
-        apiKey: args.apiKey,
-        deletedAt: null,
-        ...args.condition
-      }
-    });
-
-    if (!res) return null;
-
-    return new OrganizationModel(res);
-  };
-
   create = async (
     args: CreateArgs<OrganizationModel>
   ): Promise<OrganizationModel> => {
@@ -150,7 +128,7 @@ export default class PrismaOrganizationRepository implements OrganizationReposit
   };
 
   update = async (
-    args: UpdateArgs<number, OrganizationModel>
+    args: UpdateArgs<string, OrganizationModel>
   ): Promise<OrganizationModel> => {
     const exclude = setSelectExclude(args.exclude!);
     const data = await this.client.update({
@@ -169,7 +147,7 @@ export default class PrismaOrganizationRepository implements OrganizationReposit
   };
 
   softDelete = async (
-    args: SoftDeleteArgs<number>
+    args: SoftDeleteArgs<string>
   ): Promise<OrganizationModel> => {
     const exclude = setSelectExclude(args.exclude!);
     const data = await this.client.update({
@@ -187,7 +165,7 @@ export default class PrismaOrganizationRepository implements OrganizationReposit
   };
 
   softDeleteMany = async (
-    args: SoftDeleteManyArgs<number>
+    args: SoftDeleteManyArgs<string>
   ): Promise<GenericObject> => {
     const data = await this.client.updateMany({
       where: {

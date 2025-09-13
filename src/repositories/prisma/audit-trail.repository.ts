@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../../prisma/client";
 import AuditTrailModel from "../../models/audit-trail.model";
 import AuditTrailRepository from "../audit-trail.interface";
 import {

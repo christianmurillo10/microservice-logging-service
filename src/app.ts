@@ -6,7 +6,6 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import routes from "./api/routes";
 import UserModel from "./models/user.model";
-import OrganizationModel from "./models/organization.model";
 import UserRequestHeaderModel from "./models/user-request-header.model";
 import userRequestHeader from "./middlewares/user-request-header.middleware";
 import routeNotFoundHandler from "./middlewares/route-not-found.middleware";
@@ -16,7 +15,6 @@ import KafkaServer from "./events";
 declare module "express-serve-static-core" {
   export interface Request {
     auth: UserModel,
-    organization: OrganizationModel,
     userRequestHeader: UserRequestHeaderModel
   }
 };

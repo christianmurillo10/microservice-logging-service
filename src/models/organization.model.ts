@@ -1,24 +1,19 @@
-import { v4 as uuidv4 } from "uuid";
 import Organization from "../entities/organization.entity";
 
 class OrganizationModel implements Organization {
-  id?: number;
-  name: string = "";
-  apiKey: string = `key-${uuidv4()}`;
-  domain?: string | null = null;
-  preferredTimezone?: string | null = null;
-  currency?: string | null = null;
-  createdAt: Date = new Date();
-  updatedAt: Date = new Date();
-  deletedAt?: Date | null = null;
+  id?: string;
+  name: string;
+  logoPath?: string | null;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date | null;
 
   constructor(props: Organization) {
     this.id = props.id;
     this.name = props.name;
-    this.apiKey = props.apiKey;
-    this.domain = props.domain;
-    this.preferredTimezone = props.preferredTimezone;
-    this.currency = props.currency;
+    this.logoPath = props.logoPath;
+    this.isActive = props.isActive;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
     this.deletedAt = props.deletedAt;

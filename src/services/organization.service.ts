@@ -30,7 +30,7 @@ export default class OrganizationService {
     return record;
   };
 
-  getById = async (id: number): Promise<OrganizationModel> => {
+  getById = async (id: string): Promise<OrganizationModel> => {
     const record = await this.repository.findById({ id: id });
 
     if (!record) {
@@ -42,16 +42,6 @@ export default class OrganizationService {
 
   getByName = async (name: string): Promise<OrganizationModel> => {
     const record = await this.repository.findByName({ name: name });
-
-    if (!record) {
-      throw new NotFoundException([MESSAGE_DATA_NOT_EXIST]);
-    };
-
-    return record;
-  };
-
-  getByApiKey = async (apiKey: string): Promise<OrganizationModel> => {
-    const record = await this.repository.findByApiKey({ apiKey: apiKey });
 
     if (!record) {
       throw new NotFoundException([MESSAGE_DATA_NOT_EXIST]);
@@ -81,11 +71,11 @@ export default class OrganizationService {
     });;
   };
 
-  delete = async (id: number): Promise<OrganizationModel> => {
+  delete = async (id: string): Promise<OrganizationModel> => {
     return await this.repository.softDelete({ id: id });
   };
 
-  deleteMany = async (ids: number[]): Promise<void> => {
+  deleteMany = async (ids: string[]): Promise<void> => {
     this.repository.softDeleteMany({ ids: ids });
   };
 };

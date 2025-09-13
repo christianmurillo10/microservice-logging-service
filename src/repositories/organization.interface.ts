@@ -3,7 +3,6 @@ import {
   CreateArgs,
   FindAllArgs,
   FindAllBetweenCreatedAtArgs,
-  FindByApiKeyArgs,
   FindByIdArgs,
   FindByNameArgs,
   SoftDeleteArgs,
@@ -17,17 +16,15 @@ export default interface OrganizationRepository {
 
   findAllBetweenCreatedAt: (args: FindAllBetweenCreatedAtArgs) => Promise<OrganizationModel[]>;
 
-  findById: (args: FindByIdArgs<number>) => Promise<OrganizationModel | null>;
+  findById: (args: FindByIdArgs<string>) => Promise<OrganizationModel | null>;
 
   findByName: (args: FindByNameArgs) => Promise<OrganizationModel | null>;
 
-  findByApiKey: (args: FindByApiKeyArgs) => Promise<OrganizationModel | null>;
-
   create: (args: CreateArgs<OrganizationModel>) => Promise<OrganizationModel>;
 
-  update: (args: UpdateArgs<number, OrganizationModel>) => Promise<OrganizationModel>;
+  update: (args: UpdateArgs<string, OrganizationModel>) => Promise<OrganizationModel>;
 
-  softDelete: (args: SoftDeleteArgs<number>) => Promise<OrganizationModel>;
+  softDelete: (args: SoftDeleteArgs<string>) => Promise<OrganizationModel>;
 
-  softDeleteMany: (args: SoftDeleteManyArgs<number>) => Promise<GenericObject>;
+  softDeleteMany: (args: SoftDeleteManyArgs<string>) => Promise<GenericObject>;
 };
