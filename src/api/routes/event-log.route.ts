@@ -3,7 +3,7 @@ import authenticate from "../../middlewares/authenticate.middleware";
 import {
   list as listValidation
 } from "../../middlewares/validators/event-log.validator";
-import * as EventLogController from "../controllers/";
+import * as EventLogController from "../controllers/eventLog";
 
 const router = Router({ mergeParams: true });
 
