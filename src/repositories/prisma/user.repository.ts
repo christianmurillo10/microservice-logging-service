@@ -1,5 +1,5 @@
 import { PrismaClient } from "../../prisma/client";
-import UserEntity from "../../entities/user.entity";
+import UserEntity, { UserAccessTypeValue } from "../../entities/user.entity";
 import UserRepository from "../user.interface";
 import {
   FindAllArgs,
@@ -12,7 +12,6 @@ import {
 import { GenericObject } from "../../shared/types/common.type";
 import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
 import { userSubsets, organizationSubsets } from "../../shared/helpers/select-subset.helper";
-import { UserAccessTypeValue } from "../../models/user.model";
 
 export default class PrismaUserRepository implements UserRepository {
   private client;

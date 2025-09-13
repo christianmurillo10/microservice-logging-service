@@ -1,5 +1,17 @@
-import AuditTrail from "../models/audit-trail.model";
 import { ActionValue, GenericObject, ServiceNameValue } from "../shared/types/common.type";
+
+export interface AuditTrail {
+  id?: string;
+  serviceName: ServiceNameValue;
+  tableName: string;
+  tableId: string;
+  action: ActionValue;
+  oldDetails: GenericObject;
+  newDetails: GenericObject;
+  organizationId?: string | null;
+  createdUserId: string;
+  createdAt: Date;
+};
 
 class AuditTrailEntity implements AuditTrail {
   id?: string;

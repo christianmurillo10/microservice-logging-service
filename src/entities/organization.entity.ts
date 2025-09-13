@@ -1,4 +1,12 @@
-import Organization from "../models/organization.model";
+export interface Organization {
+  id?: string;
+  name: string;
+  logoPath?: string | null;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date | null;
+};
 
 class OrganizationEntity implements Organization {
   id?: string;

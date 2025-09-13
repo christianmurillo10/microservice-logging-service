@@ -1,4 +1,25 @@
-import User, { UserAccessTypeValue } from "../models/user.model";
+export enum UserAccessType {
+  Portal = "PORTAL",
+  Organization = "BUSINESS",
+  AppRecognized = "APP_RECOGNIZED"
+};
+
+export type UserAccessTypeValue = UserAccessType.Portal | UserAccessType.Organization | UserAccessType.AppRecognized;
+
+export interface User {
+  id?: string;
+  name: string;
+  username: string;
+  email: string;
+  accessType: UserAccessTypeValue;
+  organizationId?: string | null;
+  isActive: boolean;
+  isLogged: boolean;
+  lastLoggedAt?: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date | null;
+};
 
 class UserEntity implements User {
   id?: string;

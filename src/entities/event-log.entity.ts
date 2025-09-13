@@ -1,5 +1,13 @@
-import EventLog from "../models/event-log.model";
 import { GenericObject, ServiceNameValue } from "../shared/types/common.type";
+
+export interface EventLog {
+  id?: string;
+  serviceName: ServiceNameValue;
+  eventType: string;
+  payload: GenericObject;
+  organizationId?: string | null;
+  createdAt: Date;
+};
 
 class EventLogEntity implements EventLog {
   id?: string;
