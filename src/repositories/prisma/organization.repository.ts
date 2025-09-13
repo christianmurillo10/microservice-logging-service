@@ -1,5 +1,5 @@
 import { PrismaClient } from "../../prisma/client";
-import OrganizationModel from "../../models/organization.model";
+import OrganizationModel from "../../entities/organization.entity";
 import OrganizationRepository from "../organization.interface";
 import {
   FindAllArgs,

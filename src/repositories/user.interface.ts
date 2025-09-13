@@ -1,4 +1,4 @@
-import UserModel from "../models/user.model";
+import UserEntity from "../entities/user.entity";
 import {
   FindAllArgs,
   FindByIdArgs,
@@ -10,17 +10,17 @@ import {
 import { GenericObject } from "../shared/types/common.type";
 
 export default interface UserRepository {
-  findAll: (args: FindAllArgs) => Promise<UserModel[]>;
+  findAll: (args: FindAllArgs) => Promise<UserEntity[]>;
 
-  findById: (args: FindByIdArgs<string>) => Promise<UserModel | null>;
+  findById: (args: FindByIdArgs<string>) => Promise<UserEntity | null>;
 
-  create: (args: CreateArgs<UserModel>) => Promise<UserModel>;
+  create: (args: CreateArgs<UserEntity>) => Promise<UserEntity>;
 
-  update: (args: UpdateArgs<string, UserModel>) => Promise<UserModel>;
+  update: (args: UpdateArgs<string, UserEntity>) => Promise<UserEntity>;
 
-  softDelete: (args: SoftDeleteArgs<string>) => Promise<UserModel>;
+  softDelete: (args: SoftDeleteArgs<string>) => Promise<UserEntity>;
 
   softDeleteMany: (args: SoftDeleteManyArgs<string>) => Promise<GenericObject>;
 
-  softDeleteManyByOrganizationIds: (args: SoftDeleteManyArgs<number>) => Promise<GenericObject>;
+  softDeleteManyByOrganizationIds: (args: SoftDeleteManyArgs<string>) => Promise<GenericObject>;
 };

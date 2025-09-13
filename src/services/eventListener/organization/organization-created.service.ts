@@ -1,7 +1,7 @@
 import EventListenerAbstract from "../event-listener.abstract";
 import EventListenerService from "../event-listener.interface";
 import OrganizationService from "../../organization.service";
-import OrganizationModel from "../../../models/organization.model";
+import OrganizationModel from "../../../entities/organization.entity";
 import LoggingService from "../../logging.service";
 
 export default class OrganizationCreatedEventListenerService extends EventListenerAbstract<OrganizationModel> implements EventListenerService<OrganizationModel> {

@@ -1,5 +1,5 @@
 import { PrismaClient } from "../../prisma/client";
-import EventLogModel from "../../models/event-log.model";
+import EventLogEntity from "../../entities/event-log.entity";
 import EventLogRepository from "../event-log.interface";
 import {
   FindAllArgs,
@@ -22,7 +22,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
 
   findAll = async (
     args: FindAllArgs
-  ): Promise<EventLogModel[]> => {
+  ): Promise<EventLogEntity[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -46,7 +46,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
         undefined
     });
 
-    return res.map(item => new EventLogModel({
+    return res.map(item => new EventLogEntity({
       ...item,
       serviceName: item.serviceName as ServiceNameValue,
       payload: item.payload as GenericObject
@@ -55,7 +55,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
 
   findAllBetweenCreatedAt = async (
     args: FindAllBetweenCreatedAtArgs
-  ): Promise<EventLogModel[]> => {
+  ): Promise<EventLogEntity[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -75,7 +75,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
       }
     });
 
-    return res.map(item => new EventLogModel({
+    return res.map(item => new EventLogEntity({
       ...item,
       serviceName: item.serviceName as ServiceNameValue,
       payload: item.payload as GenericObject
@@ -84,7 +84,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
 
   findById = async (
     args: FindByIdArgs<string>
-  ): Promise<EventLogModel | null> => {
+  ): Promise<EventLogEntity | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -103,7 +103,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
 
     if (!res) return null;
 
-    return new EventLogModel({
+    return new EventLogEntity({
       ...res,
       serviceName: res.serviceName as ServiceNameValue,
       payload: res.payload as GenericObject
@@ -111,8 +111,8 @@ export default class PrismaEventLogRepository implements EventLogRepository {
   };
 
   create = async (
-    args: CreateArgs<EventLogModel>
-  ): Promise<EventLogModel> => {
+    args: CreateArgs<EventLogEntity>
+  ): Promise<EventLogEntity> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -126,7 +126,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
       data: args.params
     });
 
-    return new EventLogModel({
+    return new EventLogEntity({
       ...data,
       serviceName: data.serviceName as ServiceNameValue,
       payload: data.payload as GenericObject

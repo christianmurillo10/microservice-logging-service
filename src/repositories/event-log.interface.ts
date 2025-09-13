@@ -1,4 +1,4 @@
-import EventLogModel from "../models/event-log.model";
+import EventLogEntity from "../entities/event-log.entity";
 import {
   FindAllArgs,
   FindAllBetweenCreatedAtArgs,
@@ -8,13 +8,13 @@ import {
 } from "../shared/types/repository.type";
 
 export default interface EventLogRepository {
-  findAll: (args: FindAllArgs) => Promise<EventLogModel[]>;
+  findAll: (args: FindAllArgs) => Promise<EventLogEntity[]>;
 
-  findAllBetweenCreatedAt: (args: FindAllBetweenCreatedAtArgs) => Promise<EventLogModel[]>;
+  findAllBetweenCreatedAt: (args: FindAllBetweenCreatedAtArgs) => Promise<EventLogEntity[]>;
 
-  findById: (args: FindByIdArgs<string>) => Promise<EventLogModel | null>;
+  findById: (args: FindByIdArgs<string>) => Promise<EventLogEntity | null>;
 
-  create: (args: CreateArgs<EventLogModel>) => Promise<EventLogModel>;
+  create: (args: CreateArgs<EventLogEntity>) => Promise<EventLogEntity>;
 
   count: (args?: CountArgs) => Promise<number>;
 };

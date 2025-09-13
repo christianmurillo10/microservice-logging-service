@@ -1,11 +1,11 @@
 import EventListenerAbstract from "../event-listener.abstract";
 import EventListenerService from "../event-listener.interface";
 import OrganizationService from "../../organization.service";
-import OrganizationModel from "../../../models/organization.model";
+import OrganizationModel from "../../../entities/organization.entity";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
 
-export default class OrganizationBulkDeletedEventListenerService extends EventListenerAbstract<Record<string, number[]>> implements EventListenerService<Record<string, number[]>> {
+export default class OrganizationBulkDeletedEventListenerService extends EventListenerAbstract<Record<string, string[]>> implements EventListenerService<Record<string, string[]>> {
   private organizationService: OrganizationService;
 
   constructor() {

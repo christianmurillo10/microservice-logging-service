@@ -1,6 +1,6 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import PrismaAuditTrailRepository from "../repositories/prisma/audit-trail.repository";
-import AuditTrailModel from "../models/audit-trail.model";
+import AuditTrailEntity from "../entities/audit-trail.entity";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
 
@@ -11,7 +11,7 @@ export default class AuditTrailService {
     this.repository = new PrismaAuditTrailRepository();
   };
 
-  getAll = async (args?: GetAllArgs): Promise<AuditTrailModel[]> => {
+  getAll = async (args?: GetAllArgs): Promise<AuditTrailEntity[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -21,7 +21,7 @@ export default class AuditTrailService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<AuditTrailModel[]> => {
+  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<AuditTrailEntity[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       // include: ["organization"],
@@ -30,7 +30,7 @@ export default class AuditTrailService {
     return record;
   };
 
-  getById = async (args: GetByIdArgs<string>): Promise<AuditTrailModel> => {
+  getById = async (args: GetByIdArgs<string>): Promise<AuditTrailEntity> => {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
@@ -44,9 +44,9 @@ export default class AuditTrailService {
     return record;
   };
 
-  save = async (data: AuditTrailModel): Promise<AuditTrailModel> => {
+  save = async (data: AuditTrailEntity): Promise<AuditTrailEntity> => {
     return await this.repository.create({
-      params: new AuditTrailModel(data),
+      params: new AuditTrailEntity(data),
       // include: ["organization"],
     });
   };

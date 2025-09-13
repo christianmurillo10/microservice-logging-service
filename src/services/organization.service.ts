@@ -1,6 +1,6 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import PrismaOrganizationRepository from "../repositories/prisma/organization.repository";
-import OrganizationModel from "../models/organization.model";
+import OrganizationModel from "../entities/organization.entity";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 import { GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
 

@@ -1,5 +1,5 @@
 import { PrismaClient } from "../../prisma/client";
-import UserModel from "../../models/user.model";
+import UserEntity from "../../entities/user.entity";
 import UserRepository from "../user.interface";
 import {
   FindAllArgs,
@@ -12,7 +12,7 @@ import {
 import { GenericObject } from "../../shared/types/common.type";
 import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
 import { userSubsets, organizationSubsets } from "../../shared/helpers/select-subset.helper";
-import { UserAccessTypeValue } from "../../entities/user.entity";
+import { UserAccessTypeValue } from "../../models/user.model";
 
 export default class PrismaUserRepository implements UserRepository {
   private client;
@@ -24,7 +24,7 @@ export default class PrismaUserRepository implements UserRepository {
 
   findAll = async (
     args: FindAllArgs
-  ): Promise<UserModel[]> => {
+  ): Promise<UserEntity[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -49,7 +49,7 @@ export default class PrismaUserRepository implements UserRepository {
         undefined
     });
 
-    return res.map(item => new UserModel({
+    return res.map(item => new UserEntity({
       ...item,
       accessType: item.accessType as UserAccessTypeValue
     }));
@@ -57,7 +57,7 @@ export default class PrismaUserRepository implements UserRepository {
 
   findById = async (
     args: FindByIdArgs<string>
-  ): Promise<UserModel | null> => {
+  ): Promise<UserEntity | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -77,15 +77,15 @@ export default class PrismaUserRepository implements UserRepository {
 
     if (!res) return null;
 
-    return new UserModel({
+    return new UserEntity({
       ...res,
       accessType: res.accessType as UserAccessTypeValue
     });
   };
 
   create = async (
-    args: CreateArgs<UserModel>
-  ): Promise<UserModel> => {
+    args: CreateArgs<UserEntity>
+  ): Promise<UserEntity> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -99,15 +99,15 @@ export default class PrismaUserRepository implements UserRepository {
       data: args.params
     });
 
-    return new UserModel({
+    return new UserEntity({
       ...data,
       accessType: data.accessType as UserAccessTypeValue
     });
   };
 
   update = async (
-    args: UpdateArgs<string, UserModel>
-  ): Promise<UserModel> => {
+    args: UpdateArgs<string, UserEntity>
+  ): Promise<UserEntity> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -125,7 +125,7 @@ export default class PrismaUserRepository implements UserRepository {
       }
     });
 
-    return new UserModel({
+    return new UserEntity({
       ...data,
       accessType: data.accessType as UserAccessTypeValue
     });
@@ -133,7 +133,7 @@ export default class PrismaUserRepository implements UserRepository {
 
   softDelete = async (
     args: SoftDeleteArgs<string>
-  ): Promise<UserModel> => {
+  ): Promise<UserEntity> => {
     const exclude = setSelectExclude(args.exclude!);
     const data = await this.client.update({
       select: {
@@ -146,7 +146,7 @@ export default class PrismaUserRepository implements UserRepository {
       }
     });
 
-    return new UserModel({
+    return new UserEntity({
       ...data,
       accessType: data.accessType as UserAccessTypeValue
     });
@@ -170,7 +170,7 @@ export default class PrismaUserRepository implements UserRepository {
   };
 
   softDeleteManyByOrganizationIds = async (
-    args: SoftDeleteManyArgs<number>
+    args: SoftDeleteManyArgs<string>
   ): Promise<GenericObject> => {
     const data = await this.client.updateMany({
       where: {

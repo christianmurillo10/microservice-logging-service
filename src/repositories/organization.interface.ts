@@ -1,4 +1,4 @@
-import OrganizationModel from "../models/organization.model";
+import OrganizationModel from "../entities/organization.entity";
 import {
   CreateArgs,
   FindAllArgs,

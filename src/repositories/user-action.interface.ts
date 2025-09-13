@@ -1,4 +1,4 @@
-import UserActionModel from "../models/user-action.model";
+import UserActionEntity from "../entities/user-action.entity";
 import {
   FindAllArgs,
   FindAllBetweenCreatedAtArgs,
@@ -8,13 +8,13 @@ import {
 } from "../shared/types/repository.type";
 
 export default interface UserActionRepository {
-  findAll: (args: FindAllArgs) => Promise<UserActionModel[]>;
+  findAll: (args: FindAllArgs) => Promise<UserActionEntity[]>;
 
-  findAllBetweenCreatedAt: (args: FindAllBetweenCreatedAtArgs) => Promise<UserActionModel[]>;
+  findAllBetweenCreatedAt: (args: FindAllBetweenCreatedAtArgs) => Promise<UserActionEntity[]>;
 
-  findById: (args: FindByIdArgs<string>) => Promise<UserActionModel | null>;
+  findById: (args: FindByIdArgs<string>) => Promise<UserActionEntity | null>;
 
-  create: (args: CreateArgs<UserActionModel>) => Promise<UserActionModel>;
+  create: (args: CreateArgs<UserActionEntity>) => Promise<UserActionEntity>;
 
   count: (args?: CountArgs) => Promise<number>;
 };

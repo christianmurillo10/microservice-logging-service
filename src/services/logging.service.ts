@@ -1,6 +1,6 @@
-import AuditTrailModel from "../models/audit-trail.model";
-import EventLogModel from "../models/event-log.model";
-import UserActionModel from "../models/user-action.model";
+import AuditTrailEntity from "../entities/audit-trail.entity";
+import EventLogEntity from "../entities/event-log.entity";
+import UserActionEntity from "../entities/user-action.entity";
 import { ActionValue, EventMessageData, ServiceNameValue } from "../shared/types/common.type";
 import AuditTrailService from "./audit-trail.service";
 import EventLogService from "./event-log.service";
@@ -20,7 +20,7 @@ export type Input = {
   payload: EventMessageData<unknown>,
   header: Header,
   userId?: string,
-  organizationId?: number
+  organizationId?: string
 };
 
 export default class LoggingService {
@@ -44,7 +44,7 @@ export default class LoggingService {
       payload: payload,
       organizationId: organizationId ?? null,
       createdAt: new Date()
-    } as EventLogModel;
+    } as EventLogEntity;
 
     await this.eventLogService.save(eventLog)
       .catch(err => {
@@ -64,7 +64,7 @@ export default class LoggingService {
       organizationId: organizationId ?? null,
       createdUserId: userId ?? null,
       createdAt: new Date()
-    } as AuditTrailModel;
+    } as AuditTrailEntity;
 
     await this.auditTrailService.save(auditTrail)
       .catch(err => {
@@ -85,7 +85,7 @@ export default class LoggingService {
       organizationId: organizationId ?? null,
       userId: userId ?? null,
       createdAt: new Date()
-    } as UserActionModel;
+    } as UserActionEntity;
 
     await this.userActionService.save(userAction)
       .catch(err => {

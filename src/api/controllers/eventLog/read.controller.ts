@@ -15,15 +15,14 @@ const controller = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { params, organization } = req;
+    const { params } = req;
     const id = params.id;
 
     if (id === ":id") {
       throw new BadRequestException([MESSAGE_INVALID_PARAMETER]);
     }
 
-    const condition = organization ? { organizationId: organization.id } : undefined;
-    const eventLog = await eventLogService.getById({ id, condition });
+    const eventLog = await eventLogService.getById({ id });
 
     apiResponse(res, {
       statusCode: 200,

@@ -1,5 +1,5 @@
 import { PrismaClient } from "../../prisma/client";
-import UserActionModel from "../../models/user-action.model";
+import UserActionEntity from "../../entities/user-action.entity";
 import UserActionRepository from "../user-action.interface";
 import {
   FindAllArgs,
@@ -22,7 +22,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
 
   findAll = async (
     args: FindAllArgs
-  ): Promise<UserActionModel[]> => {
+  ): Promise<UserActionEntity[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -46,7 +46,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
         undefined
     });
 
-    return res.map(item => new UserActionModel({
+    return res.map(item => new UserActionEntity({
       ...item,
       serviceName: item.serviceName as ServiceNameValue,
       action: item.action as ActionValue,
@@ -56,7 +56,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
 
   findAllBetweenCreatedAt = async (
     args: FindAllBetweenCreatedAtArgs
-  ): Promise<UserActionModel[]> => {
+  ): Promise<UserActionEntity[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -76,7 +76,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
       }
     });
 
-    return res.map(item => new UserActionModel({
+    return res.map(item => new UserActionEntity({
       ...item,
       serviceName: item.serviceName as ServiceNameValue,
       action: item.action as ActionValue,
@@ -86,7 +86,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
 
   findById = async (
     args: FindByIdArgs<string>
-  ): Promise<UserActionModel | null> => {
+  ): Promise<UserActionEntity | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -105,7 +105,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
 
     if (!res) return null;
 
-    return new UserActionModel({
+    return new UserActionEntity({
       ...res,
       serviceName: res.serviceName as ServiceNameValue,
       action: res.action as ActionValue,
@@ -114,8 +114,8 @@ export default class PrismaUserActionRepository implements UserActionRepository 
   };
 
   create = async (
-    args: CreateArgs<UserActionModel>
-  ): Promise<UserActionModel> => {
+    args: CreateArgs<UserActionEntity>
+  ): Promise<UserActionEntity> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -129,7 +129,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
       data: args.params
     });
 
-    return new UserActionModel({
+    return new UserActionEntity({
       ...data,
       serviceName: data.serviceName as ServiceNameValue,
       action: data.action as ActionValue,

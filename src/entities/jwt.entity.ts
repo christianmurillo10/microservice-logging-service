@@ -1,6 +1,9 @@
-import { UserAccessTypeValue } from "./user.entity";
+import jwt from "jsonwebtoken";
+import config from "../config/jwt.config";
+import { JWT } from "../models/jwt.model";
+import { UserAccessTypeValue } from "../models/user.model";
 
-export interface JWT {
+class JWTEntity implements JWT {
   id: number;
   email: string;
   client: UserAccessTypeValue;
@@ -9,4 +12,33 @@ export interface JWT {
   exp: number;
   iat: number;
   aud: string;
+
+  constructor(props: JWT) {
+    this.id = props.id;
+    this.email = props.email;
+    this.client = props.client;
+    this.scope = props.scope;
+    this.sub = props.sub;
+    this.exp = props.exp;
+    this.iat = props.iat;
+    this.aud = props.aud;
+  };
+
+  static decodeToken = (token: string): JWT => jwt.verify(token, config.secret) as unknown as JWT;
+
+  encodeToken = () => jwt.sign(
+    {
+      id: this.id,
+      email: this.email,
+      client: this.client,
+      scope: this.scope,
+      sub: this.sub,
+      exp: this.exp,
+      iat: this.iat,
+      aud: this.aud
+    },
+    config.secret
+  );
 };
+
+export default JWTEntity;

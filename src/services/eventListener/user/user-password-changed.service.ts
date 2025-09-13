@@ -1,11 +1,11 @@
-import UserModel from "../../../models/user.model";
+import UserEntity from "../../../entities/user.entity";
 import EventListenerAbstract from "../event-listener.abstract";
 import EventListenerService from "../event-listener.interface";
 import UserService from "../../user.service";
 import NotFoundException from "../../../shared/exceptions/not-found.exception";
 import LoggingService from "../../logging.service";
 
-export default class UserPasswordChangedEventListenerService extends EventListenerAbstract<UserModel> implements EventListenerService<UserModel> {
+export default class UserPasswordChangedEventListenerService extends EventListenerAbstract<UserEntity> implements EventListenerService<UserEntity> {
   private userService: UserService;
 
   constructor() {
@@ -34,7 +34,7 @@ export default class UserPasswordChangedEventListenerService extends EventListen
       return;
     }
 
-    const user = new UserModel({
+    const user = new UserEntity({
       ...existingUser,
       updatedAt: this.state.value.newDetails.updatedAt,
     });

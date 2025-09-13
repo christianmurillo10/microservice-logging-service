@@ -1,5 +1,5 @@
 import { PrismaClient } from "../../prisma/client";
-import AuditTrailModel from "../../models/audit-trail.model";
+import AuditTrailEntity from "../../entities/audit-trail.entity";
 import AuditTrailRepository from "../audit-trail.interface";
 import {
   FindAllArgs,
@@ -22,7 +22,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
 
   findAll = async (
     args: FindAllArgs
-  ): Promise<AuditTrailModel[]> => {
+  ): Promise<AuditTrailEntity[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -46,7 +46,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
         undefined
     });
 
-    return res.map(item => new AuditTrailModel({
+    return res.map(item => new AuditTrailEntity({
       ...item,
       serviceName: item.serviceName as ServiceNameValue,
       action: item.action as ActionValue,
@@ -57,7 +57,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
 
   findAllBetweenCreatedAt = async (
     args: FindAllBetweenCreatedAtArgs
-  ): Promise<AuditTrailModel[]> => {
+  ): Promise<AuditTrailEntity[]> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -77,7 +77,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
       }
     });
 
-    return res.map(item => new AuditTrailModel({
+    return res.map(item => new AuditTrailEntity({
       ...item,
       serviceName: item.serviceName as ServiceNameValue,
       action: item.action as ActionValue,
@@ -88,7 +88,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
 
   findById = async (
     args: FindByIdArgs<string>
-  ): Promise<AuditTrailModel | null> => {
+  ): Promise<AuditTrailEntity | null> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -107,7 +107,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
 
     if (!res) return null;
 
-    return new AuditTrailModel({
+    return new AuditTrailEntity({
       ...res,
       serviceName: res.serviceName as ServiceNameValue,
       action: res.action as ActionValue,
@@ -117,8 +117,8 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
   };
 
   create = async (
-    args: CreateArgs<AuditTrailModel>
-  ): Promise<AuditTrailModel> => {
+    args: CreateArgs<AuditTrailEntity>
+  ): Promise<AuditTrailEntity> => {
     const exclude = setSelectExclude(args.exclude!);
     const organizationSelect = args.include?.includes("organization")
       ? { organization: { select: { ...organizationSubsets, deletedAt: false } } }
@@ -132,7 +132,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
       data: args.params
     });
 
-    return new AuditTrailModel({
+    return new AuditTrailEntity({
       ...data,
       serviceName: data.serviceName as ServiceNameValue,
       action: data.action as ActionValue,

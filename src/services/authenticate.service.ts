@@ -1,5 +1,5 @@
-import OrganizationModel from "../models/organization.model";
-import UserModel from "../models/user.model";
+import OrganizationModel from "../entities/organization.entity";
+import UserEntity from "../entities/user.entity";
 import { MESSAGE_DATA_INVALID_TOKEN, MESSAGE_DATA_NOT_LOGGED, MESSAGE_INVALID_API_KEY } from "../shared/constants/message.constant";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 import UnauthorizedException from "../shared/exceptions/unauthorized.exception";
@@ -8,12 +8,11 @@ import UserService from "./user.service";
 
 type Input = {
   token: string,
-  apiKey?: string,
 };
 
 type Output = {
   organization?: OrganizationModel,
-  user: UserModel
+  user: UserEntity
 };
 
 export default class AuthenticateService {

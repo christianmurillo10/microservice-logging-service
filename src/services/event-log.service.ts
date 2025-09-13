@@ -1,6 +1,6 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import PrismaEventLogRepository from "../repositories/prisma/event-log.repository";
-import EventLogModel from "../models/event-log.model";
+import EventLogEntity from "../entities/event-log.entity";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
 
@@ -11,7 +11,7 @@ export default class EventLogService {
     this.repository = new PrismaEventLogRepository();
   };
 
-  getAll = async (args?: GetAllArgs): Promise<EventLogModel[]> => {
+  getAll = async (args?: GetAllArgs): Promise<EventLogEntity[]> => {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
@@ -21,7 +21,7 @@ export default class EventLogService {
     return record;
   };
 
-  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<EventLogModel[]> => {
+  getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<EventLogEntity[]> => {
     const record = await this.repository.findAllBetweenCreatedAt({
       ...args,
       // include: ["organization"],
@@ -30,7 +30,7 @@ export default class EventLogService {
     return record;
   };
 
-  getById = async (args: GetByIdArgs<string>): Promise<EventLogModel> => {
+  getById = async (args: GetByIdArgs<string>): Promise<EventLogEntity> => {
     const record = await this.repository.findById({
       id: args.id,
       condition: args?.condition,
@@ -44,9 +44,9 @@ export default class EventLogService {
     return record;
   };
 
-  save = async (data: EventLogModel): Promise<EventLogModel> => {
+  save = async (data: EventLogEntity): Promise<EventLogEntity> => {
     return await this.repository.create({
-      params: new EventLogModel(data),
+      params: new EventLogEntity(data),
       // include: ["organization"],
     });
   };
