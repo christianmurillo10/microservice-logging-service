@@ -13,10 +13,11 @@ const listController = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { query } = req;
-    const eventLog = await eventLogService.getAll({ query });
+    const { params, query } = req;
+    const condition = params.organizationId ? { organizationId: params.organizationId } : undefined;
+    const eventLog = await eventLogService.getAll({ condition, query });
     const eventLogCount = eventLog.length;
-    const allEventLogCount = await eventLogService.count({ query });
+    const allEventLogCount = await eventLogService.count({ condition, query });
     let message = MESSAGE_DATA_FIND_ALL;
 
     if (eventLog.length < 1) {

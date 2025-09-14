@@ -13,10 +13,11 @@ const listController = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { query } = req;
-    const auditTrail = await auditTrailService.getAll({ query });
+    const { params, query } = req;
+    const condition = params.organizationId ? { organizationId: params.organizationId } : undefined;
+    const auditTrail = await auditTrailService.getAll({ condition, query });
     const auditTrailCount = auditTrail.length;
-    const allAuditTrailCount = await auditTrailService.count({ query });
+    const allAuditTrailCount = await auditTrailService.count({ query, condition });
     let message = MESSAGE_DATA_FIND_ALL;
 
     if (auditTrail.length < 1) {
