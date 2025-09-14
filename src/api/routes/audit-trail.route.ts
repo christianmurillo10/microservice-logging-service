@@ -1,5 +1,6 @@
 import { Router } from "express";
 import authenticate from "../../middlewares/authenticate.middleware";
+import authorize from "../../middlewares/authoriza.middleware";
 import {
   list as listValidation
 } from "../../middlewares/validators/audit-trail.validator";
@@ -10,14 +11,14 @@ const router = Router({ mergeParams: true });
 router.get(
   "/",
   authenticate,
-  // authorize("list", "audit-trail"),
+  authorize("list", "audit-trail"),
   listValidation,
   AuditTrailController.list
 );
 
 router.get(
   "/:id",
-  // authorize("read", "audit-trail"),
+  authorize("read", "audit-trail"),
   authenticate,
   AuditTrailController.read
 );
