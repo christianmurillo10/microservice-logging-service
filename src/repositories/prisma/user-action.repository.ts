@@ -1,4 +1,5 @@
 import { PrismaClient } from "../../prisma/client";
+import type { UserAction as UserActionRecord } from "../../prisma/client";
 import UserActionEntity from "../../entities/user-action.entity";
 import UserActionRepository from "../user-action.interface";
 import {
@@ -11,6 +12,15 @@ import {
 import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
 import { organizationSubsets, userActionSubsets } from "../../shared/helpers/select-subset.helper";
 import { ActionValue, GenericObject, ServiceNameValue } from "../../shared/types/common.type";
+
+function toEntity(userAction: UserActionRecord): UserActionEntity {
+  return new UserActionEntity({
+    ...userAction,
+    serviceName: userAction.serviceName as ServiceNameValue,
+    action: userAction.action as ActionValue,
+    actionDetails: userAction.actionDetails as GenericObject
+  });
+};
 
 export default class PrismaUserActionRepository implements UserActionRepository {
   private client;
@@ -46,12 +56,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
         undefined
     });
 
-    return res.map(item => new UserActionEntity({
-      ...item,
-      serviceName: item.serviceName as ServiceNameValue,
-      action: item.action as ActionValue,
-      actionDetails: item.actionDetails as GenericObject
-    }));
+    return res.map(item => toEntity(item));
   };
 
   findAllBetweenCreatedAt = async (
@@ -76,12 +81,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
       }
     });
 
-    return res.map(item => new UserActionEntity({
-      ...item,
-      serviceName: item.serviceName as ServiceNameValue,
-      action: item.action as ActionValue,
-      actionDetails: item.actionDetails as GenericObject
-    }));
+    return res.map(item => toEntity(item));
   };
 
   findById = async (
@@ -105,12 +105,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
 
     if (!res) return null;
 
-    return new UserActionEntity({
-      ...res,
-      serviceName: res.serviceName as ServiceNameValue,
-      action: res.action as ActionValue,
-      actionDetails: res.actionDetails as GenericObject
-    });
+    return toEntity(res);
   };
 
   create = async (
@@ -129,12 +124,7 @@ export default class PrismaUserActionRepository implements UserActionRepository 
       data: args.params
     });
 
-    return new UserActionEntity({
-      ...data,
-      serviceName: data.serviceName as ServiceNameValue,
-      action: data.action as ActionValue,
-      actionDetails: data.actionDetails as GenericObject
-    });
+    return toEntity(data);
   };
 
   count = async (

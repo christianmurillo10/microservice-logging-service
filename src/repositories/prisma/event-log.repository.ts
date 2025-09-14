@@ -1,4 +1,5 @@
 import { PrismaClient } from "../../prisma/client";
+import type { EventLog as EventLogRecord } from "../../prisma/client";
 import EventLogEntity from "../../entities/event-log.entity";
 import EventLogRepository from "../event-log.interface";
 import {
@@ -11,6 +12,14 @@ import {
 import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
 import { organizationSubsets, eventLogSubsets } from "../../shared/helpers/select-subset.helper";
 import { GenericObject, ServiceNameValue } from "../../shared/types/common.type";
+
+function toEntity(eventLog: EventLogRecord): EventLogEntity {
+  return new EventLogEntity({
+    ...eventLog,
+    serviceName: eventLog.serviceName as ServiceNameValue,
+    payload: eventLog.payload as GenericObject
+  });
+};
 
 export default class PrismaEventLogRepository implements EventLogRepository {
   private client;
@@ -46,11 +55,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
         undefined
     });
 
-    return res.map(item => new EventLogEntity({
-      ...item,
-      serviceName: item.serviceName as ServiceNameValue,
-      payload: item.payload as GenericObject
-    }));
+    return res.map(item => toEntity(item));
   };
 
   findAllBetweenCreatedAt = async (
@@ -75,11 +80,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
       }
     });
 
-    return res.map(item => new EventLogEntity({
-      ...item,
-      serviceName: item.serviceName as ServiceNameValue,
-      payload: item.payload as GenericObject
-    }));
+    return res.map(item => toEntity(item));
   };
 
   findById = async (
@@ -103,11 +104,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
 
     if (!res) return null;
 
-    return new EventLogEntity({
-      ...res,
-      serviceName: res.serviceName as ServiceNameValue,
-      payload: res.payload as GenericObject
-    });
+    return toEntity(res);
   };
 
   create = async (
@@ -126,11 +123,7 @@ export default class PrismaEventLogRepository implements EventLogRepository {
       data: args.params
     });
 
-    return new EventLogEntity({
-      ...data,
-      serviceName: data.serviceName as ServiceNameValue,
-      payload: data.payload as GenericObject
-    });
+    return toEntity(data);
   };
 
   count = async (

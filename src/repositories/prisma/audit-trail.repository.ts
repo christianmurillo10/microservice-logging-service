@@ -1,4 +1,5 @@
 import { PrismaClient } from "../../prisma/client";
+import type { AuditTrail as AuditTrailRecord } from "../../prisma/client";
 import AuditTrailEntity from "../../entities/audit-trail.entity";
 import AuditTrailRepository from "../audit-trail.interface";
 import {
@@ -11,6 +12,16 @@ import {
 import { parseQueryFilters, setSelectExclude } from "../../shared/helpers/common.helper";
 import { auditTrailSubsets, organizationSubsets } from "../../shared/helpers/select-subset.helper";
 import { ActionValue, GenericObject, ServiceNameValue } from "../../shared/types/common.type";
+
+function toEntity(auditTrail: AuditTrailRecord): AuditTrailEntity {
+  return new AuditTrailEntity({
+    ...auditTrail,
+    serviceName: auditTrail.serviceName as ServiceNameValue,
+    action: auditTrail.action as ActionValue,
+    oldDetails: auditTrail.oldDetails as GenericObject,
+    newDetails: auditTrail.newDetails as GenericObject
+  });
+};
 
 export default class PrismaAuditTrailRepository implements AuditTrailRepository {
   private client;
@@ -46,13 +57,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
         undefined
     });
 
-    return res.map(item => new AuditTrailEntity({
-      ...item,
-      serviceName: item.serviceName as ServiceNameValue,
-      action: item.action as ActionValue,
-      oldDetails: item.oldDetails as GenericObject,
-      newDetails: item.newDetails as GenericObject
-    }));
+    return res.map(item => toEntity(item));
   };
 
   findAllBetweenCreatedAt = async (
@@ -77,13 +82,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
       }
     });
 
-    return res.map(item => new AuditTrailEntity({
-      ...item,
-      serviceName: item.serviceName as ServiceNameValue,
-      action: item.action as ActionValue,
-      oldDetails: item.oldDetails as GenericObject,
-      newDetails: item.newDetails as GenericObject
-    }));
+    return res.map(item => toEntity(item));
   };
 
   findById = async (
@@ -107,13 +106,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
 
     if (!res) return null;
 
-    return new AuditTrailEntity({
-      ...res,
-      serviceName: res.serviceName as ServiceNameValue,
-      action: res.action as ActionValue,
-      oldDetails: res.oldDetails as GenericObject,
-      newDetails: res.newDetails as GenericObject
-    });
+    return toEntity(res);
   };
 
   create = async (
@@ -132,13 +125,7 @@ export default class PrismaAuditTrailRepository implements AuditTrailRepository 
       data: args.params
     });
 
-    return new AuditTrailEntity({
-      ...data,
-      serviceName: data.serviceName as ServiceNameValue,
-      action: data.action as ActionValue,
-      oldDetails: data.oldDetails as GenericObject,
-      newDetails: data.newDetails as GenericObject
-    });
+    return toEntity(data);
   };
 
   count = async (
