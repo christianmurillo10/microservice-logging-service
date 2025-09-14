@@ -2,7 +2,7 @@ import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import PrismaAuditTrailRepository from "../repositories/prisma/audit-trail.repository";
 import AuditTrailEntity from "../entities/audit-trail.entity";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
+import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
 
 export default class AuditTrailService {
   private repository: PrismaAuditTrailRepository;
@@ -15,27 +15,19 @@ export default class AuditTrailService {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
-      // include: ["organization"],
     });
 
     return record;
   };
 
   getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<AuditTrailEntity[]> => {
-    const record = await this.repository.findAllBetweenCreatedAt({
-      ...args,
-      // include: ["organization"],
-    });
+    const record = await this.repository.findAllBetweenCreatedAt(args);
 
     return record;
   };
 
-  getById = async (args: GetByIdArgs<string>): Promise<AuditTrailEntity> => {
-    const record = await this.repository.findById({
-      id: args.id,
-      condition: args?.condition,
-      // include: ["organization"],
-    });
+  getById = async (id: string): Promise<AuditTrailEntity> => {
+    const record = await this.repository.findById({ id });
 
     if (!record) {
       throw new NotFoundException([MESSAGE_DATA_NOT_EXIST]);
@@ -47,7 +39,6 @@ export default class AuditTrailService {
   save = async (data: AuditTrailEntity): Promise<AuditTrailEntity> => {
     return await this.repository.create({
       params: new AuditTrailEntity(data),
-      // include: ["organization"],
     });
   };
 

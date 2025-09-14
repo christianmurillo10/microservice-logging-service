@@ -22,7 +22,7 @@ export default class UserBulkDeletedEventListenerService extends EventListenerAb
     const userIds = this.state.value.newDetails.ids!;
 
     for (const userId of userIds) {
-      const existingUser = await this.userService.getById({ id: userId })
+      const existingUser = await this.userService.getById(userId)
         .catch(err => {
           if (err instanceof NotFoundException) {
             console.log(`User ${userId} not exist!`);

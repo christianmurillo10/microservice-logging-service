@@ -1,7 +1,7 @@
 import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import PrismaUserRepository from "../repositories/prisma/user.repository";
 import UserEntity from "../entities/user.entity";
-import { GetAllArgs, GetByIdArgs } from "../shared/types/service.type";
+import { GetAllArgs } from "../shared/types/service.type";
 import NotFoundException from "../shared/exceptions/not-found.exception";
 
 export default class UserService {
@@ -15,18 +15,15 @@ export default class UserService {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
-      // include: ["roles", "organization"],
       exclude: ["deletedAt"]
     });
 
     return record;
   };
 
-  getById = async (args: GetByIdArgs<string>): Promise<UserEntity> => {
+  getById = async (id: string): Promise<UserEntity> => {
     const record = await this.repository.findById({
-      id: args.id,
-      condition: args?.condition,
-      // include: ["roles", "organization"],
+      id,
       exclude: ["deletedAt"]
     });
 
@@ -40,7 +37,6 @@ export default class UserService {
   create = async (data: UserEntity): Promise<UserEntity> => {
     const option = {
       params: new UserEntity(data),
-      // include: ["roles", "organization"],
       exclude: ["deletedAt"]
     };
 
@@ -50,7 +46,6 @@ export default class UserService {
   update = async (data: UserEntity): Promise<UserEntity> => {
     const option = {
       params: new UserEntity(data),
-      // include: ["roles", "organization"],
       exclude: ["deletedAt"]
     };
 

@@ -20,7 +20,7 @@ const readController = async (
       throw new BadRequestException([MESSAGE_INVALID_PARAMETER]);
     }
 
-    const userAction = await userActionService.getById({ id });
+    const userAction = await userActionService.getById(id);
 
     apiResponse(res, {
       statusCode: 200,

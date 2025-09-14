@@ -20,7 +20,7 @@ const readController = async (
       throw new BadRequestException([MESSAGE_INVALID_PARAMETER]);
     }
 
-    const eventLog = await eventLogService.getById({ id });
+    const eventLog = await eventLogService.getById(id);
 
     apiResponse(res, {
       statusCode: 200,

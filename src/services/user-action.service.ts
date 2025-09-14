@@ -2,7 +2,7 @@ import { MESSAGE_DATA_NOT_EXIST } from "../shared/constants/message.constant";
 import PrismaUserActionRepository from "../repositories/prisma/user-action.repository";
 import UserActionEntity from "../entities/user-action.entity";
 import NotFoundException from "../shared/exceptions/not-found.exception";
-import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs, GetByIdArgs } from "../shared/types/service.type";
+import { CountAllArgs, GetAllArgs, GetAllBetweenCreatedAtArgs } from "../shared/types/service.type";
 
 export default class UserActionService {
   private repository: PrismaUserActionRepository;
@@ -15,27 +15,19 @@ export default class UserActionService {
     const record = await this.repository.findAll({
       condition: args?.condition,
       query: args?.query,
-      // include: ["organization"],
     });
 
     return record;
   };
 
   getAllBetweenCreatedAt = async (args: GetAllBetweenCreatedAtArgs): Promise<UserActionEntity[]> => {
-    const record = await this.repository.findAllBetweenCreatedAt({
-      ...args,
-      // include: ["organization"],
-    });
+    const record = await this.repository.findAllBetweenCreatedAt(args);
 
     return record;
   };
 
-  getById = async (args: GetByIdArgs<string>): Promise<UserActionEntity> => {
-    const record = await this.repository.findById({
-      id: args.id,
-      condition: args?.condition,
-      // include: ["organization"],
-    });
+  getById = async (id: string): Promise<UserActionEntity> => {
+    const record = await this.repository.findById({ id });
 
     if (!record) {
       throw new NotFoundException([MESSAGE_DATA_NOT_EXIST]);
@@ -47,7 +39,6 @@ export default class UserActionService {
   save = async (data: UserActionEntity): Promise<UserActionEntity> => {
     return await this.repository.create({
       params: new UserActionEntity(data),
-      // include: ["organization"],
     });
   };
 

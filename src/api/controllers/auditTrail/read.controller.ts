@@ -20,7 +20,7 @@ const readController = async (
       throw new BadRequestException([MESSAGE_INVALID_PARAMETER]);
     }
 
-    const auditTrail = await auditTrailService.getById({ id });
+    const auditTrail = await auditTrailService.getById(id);
 
     apiResponse(res, {
       statusCode: 200,

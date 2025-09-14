@@ -12,11 +12,6 @@ export type GetAllBetweenCreatedAtArgs = {
   condition?: GenericObject
 };
 
-export type GetByIdArgs<I> = {
-  id: I,
-  condition?: GenericObject
-};
-
 export type CountAllArgs = {
   condition?: GenericObject,
   query?: Query
