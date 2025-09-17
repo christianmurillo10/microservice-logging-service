@@ -16,7 +16,6 @@ const listController = async (
     const { params, query } = req;
     const condition = params.organizationId ? { organizationId: params.organizationId } : undefined;
     const auditTrail = await auditTrailService.getAll({ condition, query });
-    const auditTrailCount = auditTrail.length;
     const allAuditTrailCount = await auditTrailService.count({ query, condition });
     let message = MESSAGE_DATA_FIND_ALL;
 
@@ -30,7 +29,7 @@ const listController = async (
       data: auditTrail,
       pagination: getPagination(
         allAuditTrailCount,
-        auditTrailCount,
+        auditTrail.length,
         Number(query.page ?? 1),
         Number(query.pageSize ?? 10)
       )

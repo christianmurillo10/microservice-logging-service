@@ -16,7 +16,6 @@ const listController = async (
     const { params, query } = req;
     const condition = params.organizationId ? { organizationId: params.organizationId } : undefined;
     const eventLog = await eventLogService.getAll({ condition, query });
-    const eventLogCount = eventLog.length;
     const allEventLogCount = await eventLogService.count({ condition, query });
     let message = MESSAGE_DATA_FIND_ALL;
 
@@ -30,7 +29,7 @@ const listController = async (
       data: eventLog,
       pagination: getPagination(
         allEventLogCount,
-        eventLogCount,
+        eventLog.length,
         Number(query.page ?? 1),
         Number(query.pageSize ?? 10)
       )

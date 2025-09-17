@@ -16,7 +16,6 @@ const listController = async (
     const { params, query } = req;
     const condition = params.organizationId ? { organizationId: params.organizationId } : undefined;
     const userAction = await userActionService.getAll({ condition, query });
-    const userActionCount = userAction.length;
     const allUserActionCount = await userActionService.count({ condition, query });
     let message = MESSAGE_DATA_FIND_ALL;
 
@@ -30,7 +29,7 @@ const listController = async (
       data: userAction,
       pagination: getPagination(
         allUserActionCount,
-        userActionCount,
+        userAction.length,
         Number(query.page ?? 1),
         Number(query.pageSize ?? 10)
       )
