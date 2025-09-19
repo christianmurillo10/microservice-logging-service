@@ -15,6 +15,7 @@ export interface User {
   organizationId?: string | null;
   isActive: boolean;
   isLogged: boolean;
+  isSuperAdmin: boolean;
   lastLoggedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -30,6 +31,7 @@ class UserEntity implements User {
   organizationId?: string | null;
   isActive: boolean;
   isLogged: boolean;
+  isSuperAdmin: boolean;
   lastLoggedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -44,6 +46,7 @@ class UserEntity implements User {
     this.organizationId = props.organizationId;
     this.isActive = props.isActive;
     this.isLogged = props.isLogged;
+    this.isSuperAdmin = props.isSuperAdmin;
     this.lastLoggedAt = props.lastLoggedAt;
     this.createdAt = props.createdAt;
     this.updatedAt = props.updatedAt;
