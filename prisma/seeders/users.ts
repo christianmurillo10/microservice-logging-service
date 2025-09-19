@@ -17,6 +17,7 @@ const up = async () => {
         username: "superadmin",
         email: "superadmin@email.com",
         accessType: "PORTAL",
+        isSuperAdmin: true,
         createdAt: new Date(),
         updatedAt: new Date()
       }
