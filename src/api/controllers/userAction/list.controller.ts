@@ -13,8 +13,8 @@ const listController = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { params, query } = req;
-    const condition = params.organizationId ? { organizationId: params.organizationId } : undefined;
+    const { query, auth } = req;
+    const condition = auth.organizationId ? { organizationId: auth.organizationId } : undefined;
     const userAction = await userActionService.getAll({ condition, query });
     const allUserActionCount = await userActionService.count({ condition, query });
     let message = MESSAGE_DATA_FIND_ALL;
