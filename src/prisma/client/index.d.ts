@@ -239,7 +239,7 @@ export namespace Prisma {
    */
   export import sql = runtime.sqltag
   export import empty = runtime.empty
-  export import Join = runtime.join
+  export import join = runtime.join
   export import raw = runtime.raw
   export import Sql = runtime.Sql
 
